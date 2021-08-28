@@ -1,5 +1,6 @@
 .post-card {
   max-width: 400px;
+  margin: 0 auto;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -7,4 +8,37 @@
 .example-header-image {
   background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
   background-size: cover;
+}
+
+.icon {
+  font-size: 20px;
+  width: 35px;
+  height: 35px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  background-color: hsla(0, 0%, 40%, 0.2);
+}
+
+.text {
+  height: 35px;
+  width: fit-content;
+  font-size: 12px;
+  border-radius: 5px;
+  padding: 0.5px;
+}
+
+.center-middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.center-left {
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }

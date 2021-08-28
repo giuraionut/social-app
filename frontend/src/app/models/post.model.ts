@@ -1,4 +1,5 @@
 export interface Post {
+  id?: string;
   name?: string;
   authorId?: string;
   media?: string;

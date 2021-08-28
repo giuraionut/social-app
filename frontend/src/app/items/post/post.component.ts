@@ -9,7 +9,7 @@ import { Post } from '../../models/post.model';
 export class PostComponent implements OnInit {
   constructor() {}
 
-  @Input() postArray: Post[] = [];
+  @Input() post: Post = {};
 
   ngOnInit(): void {}
 }

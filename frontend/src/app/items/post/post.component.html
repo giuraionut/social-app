@@ -1,7 +1,9 @@
-<mat-card class="post-card" *ngFor="let post of postArray">
+<mat-card class="post-card">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>{{ post.name }}</mat-card-title>
+    <mat-card-title
+      ><span>{{ post.name }}</span>
+    </mat-card-title>
     <mat-card-subtitle>{{ post.authorId }}</mat-card-subtitle>
   </mat-card-header>
   <img
@@ -15,11 +17,14 @@
       {{ post.content }}
     </p>
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
+  <mat-card-actions class="center-left">
     <button mat-button (click)="post.mediaHidden = !post.mediaHidden">
       Toggle Media
     </button>
+    <mat-icon matRipple class="icon center-middle">thumb_up_alt</mat-icon>
+    <span class="text center-middle"> 892.3K </span>
+    <mat-icon matRipple class="icon center-middle">thumb_down_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle">comment</mat-icon>
+    <span class="text center-middle"> 2.4k </span>
   </mat-card-actions>
 </mat-card>
