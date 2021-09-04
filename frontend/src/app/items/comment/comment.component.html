@@ -1,0 +1,30 @@
+<mat-card class="comment-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-subtitle>{{ comment.authorId }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="content">
+    <p>
+      {{ comment.content }}
+    </p>
+  </mat-card-content>
+  <mat-card-actions class="center-left">
+    <mat-icon matRipple class="icon center-middle">thumb_up_alt</mat-icon>
+    <span class="text center-middle"> 892.3K </span>
+    <mat-icon matRipple class="icon center-middle">thumb_down_alt</mat-icon>
+    <mat-icon
+      matRipple
+      class="icon center-middle"
+      (click)="comment.childsHidden = !comment.childsHidden"
+      >comment</mat-icon
+    >
+    <span class="text center-middle"> {{comment.replays}} </span>
+  </mat-card-actions>
+  <div *ngIf="!comment.childsHidden && comment.replays! > 0">
+    <app-comment
+      *ngFor="let child of comment.childs"
+      [comment]="child"
+    ></app-comment>
+  </div>
+</mat-card>

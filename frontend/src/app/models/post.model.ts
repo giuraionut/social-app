@@ -4,7 +4,9 @@ export interface Post {
   authorId?: string;
   media?: string;
   content?: string;
-
+  likes?: number;
+  dislikes?: number;
+  comments?: number;
   //front-end
   mediaHidden?: Boolean;
 }

@@ -1,8 +1,9 @@
-.post-card {
-  max-width: 600px;
+.comment-card {
+  max-width: 400px;
   margin: 0 auto;
   margin-top: 10px;
   margin-bottom: 10px;
+  
 }
 
 .example-header-image {
@@ -41,4 +42,11 @@
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+.content {
+  margin-top: 10px;
+}
+mat-card{
+  border: 1px gray solid;
 }

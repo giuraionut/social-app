@@ -10,9 +10,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
+import { CommentComponent } from './items/comment/comment.component';
+import { PostdetailsComponent } from './pages/postdetails/postdetails.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, PostComponent],
+  declarations: [AppComponent, HomeComponent, PostComponent, CommentComponent, PostdetailsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
