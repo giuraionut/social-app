@@ -1,9 +1,14 @@
 <div class="bg">
-  <div class="post-wrapper">
-    <app-post [post]="post"></app-post>
+  <div>
+    <app-navbar></app-navbar>
   </div>
-  <div class="comments-wrapper">
-    <app-comment *ngFor="let comment of comments" [comment]="comment">
-    </app-comment>
+  <div class="content-wrapper">
+    <div class="post-wrapper">
+      <app-post [post]="post"></app-post>
+    </div>
+    <div class="comments-wrapper">
+      <app-comment *ngFor="let comment of comments" [comment]="comment">
+      </app-comment>
+    </div>
   </div>
 </div>

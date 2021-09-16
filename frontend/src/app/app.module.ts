@@ -12,9 +12,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { CommentComponent } from './items/comment/comment.component';
 import { PostdetailsComponent } from './pages/postdetails/postdetails.component';
-
+import { NavbarComponent } from './items/navbar/navbar.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
 @NgModule({
-  declarations: [AppComponent, HomeComponent, PostComponent, CommentComponent, PostdetailsComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    PostComponent,
+    CommentComponent,
+    PostdetailsComponent,
+    NavbarComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -22,7 +30,8 @@ import { PostdetailsComponent } from './pages/postdetails/postdetails.component'
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatRippleModule
+    MatRippleModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

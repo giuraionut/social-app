@@ -1,16 +1,18 @@
 .comments-wrapper {
   margin: 0 auto;
-  margin-top: 50px;
-  width: 500px;
+  max-width: 600px;
 }
 
 .post-wrapper {
   margin: 0 auto;
-  margin-top: 100px;
-  width: 600px;
+  max-width: 600px;
 }
 .bg {
   background-color: black;
   height: 100vh;
+  overflow: auto;
+}
+.content-wrapper{
+  height: 93vh;
   overflow: auto;
 }

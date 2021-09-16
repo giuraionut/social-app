@@ -20,11 +20,11 @@ export class PostdetailsComponent implements OnInit {
       'https://c4.wallpaperflare.com/wallpaper/586/603/742/minimalism-4k-for-mac-desktop-wallpaper-preview.jpg';
     post.mediaHidden = true;
     this.post = post;
-
+    post.comments = 2;
     let comment: Comment = {};
     comment.content = 'blabla';
     comment.authorId = '2348237752399c8327y32';
-    comment.replays = 3;
+    comment.replays = 1;
     let childs: Comment[] = [];
     let childs2: Comment[] = [];
     let childs3: Comment[] = [];
