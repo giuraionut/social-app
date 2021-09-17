@@ -1,0 +1,16 @@
+.searchbar {
+  width: 500px;
+}
+.searchbar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 55px;
+}
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 15px;
+  align-items: center;
+}

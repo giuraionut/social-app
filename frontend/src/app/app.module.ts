@@ -14,6 +14,10 @@ import { CommentComponent } from './items/comment/comment.component';
 import { PostdetailsComponent } from './pages/postdetails/postdetails.component';
 import { NavbarComponent } from './items/navbar/navbar.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MenubarComponent } from './items/menubar/menubar.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { TopcommunitiesComponent } from './items/topcommunities/topcommunities.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +26,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     CommentComponent,
     PostdetailsComponent,
     NavbarComponent,
+    MenubarComponent,
+    TopcommunitiesComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +38,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatIconModule,
     MatRippleModule,
     MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
