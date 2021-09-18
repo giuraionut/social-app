@@ -18,6 +18,9 @@ import { MenubarComponent } from './items/menubar/menubar.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TopcommunitiesComponent } from './items/topcommunities/topcommunities.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +43,8 @@ import { TopcommunitiesComponent } from './items/topcommunities/topcommunities.c
     MatToolbarModule,
     MatFormFieldModule,
     MatInputModule,
+    MatGridListModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent],

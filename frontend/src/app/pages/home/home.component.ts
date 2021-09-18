@@ -10,7 +10,8 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   public posts: Post[] = [];
- 
+ public communities=false;
+ public nrOfCols=4;
   ngOnInit(): void {
     let post: Post = {};
     post.authorId = '592c834u2uv32c234';
