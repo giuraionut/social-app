@@ -7,6 +7,7 @@ export interface Post {
   likes?: number;
   dislikes?: number;
   comments?: number;
+  dateCreated?: Date;
   //front-end
   mediaHidden?: Boolean;
 }

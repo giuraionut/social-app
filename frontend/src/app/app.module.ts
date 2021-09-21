@@ -9,28 +9,38 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatRippleModule } from '@angular/material/core';
+import { MatOptionModule, MatRippleModule } from '@angular/material/core';
 import { CommentComponent } from './items/comment/comment.component';
-import { PostdetailsComponent } from './pages/postdetails/postdetails.component';
+import { PostDetailsComponent } from './pages/post-details/post-details.component';
 import { NavbarComponent } from './items/navbar/navbar.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MenubarComponent } from './items/menubar/menubar.component';
+import { MenuBarComponent } from './items/menu-bar/menu-bar.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TopcommunitiesComponent } from './items/topcommunities/topcommunities.component';
+import { TopCommunitiesComponent } from './items/top-communities/top-communities.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { RecentPostsComponent } from './items/recent-posts/recent-posts.component';
+import { CommunityDetailsComponent } from './items/community-details/community-details.component';
+import { KNumberFormatterService } from './pipes/k-number-formatter.service';
+import { TimePassed } from './pipes/time-passed.service';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     PostComponent,
     CommentComponent,
-    PostdetailsComponent,
+    PostDetailsComponent,
     NavbarComponent,
-    MenubarComponent,
-    TopcommunitiesComponent,
+    MenuBarComponent,
+    TopCommunitiesComponent,
+    RecentPostsComponent,
+    CommunityDetailsComponent,
+    KNumberFormatterService,
+    TimePassed,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +54,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatFormFieldModule,
     MatInputModule,
     MatGridListModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatDividerModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

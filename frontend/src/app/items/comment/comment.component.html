@@ -11,7 +11,7 @@
   </mat-card-content>
   <mat-card-actions class="center-left">
     <mat-icon matRipple class="icon center-middle">thumb_up_alt</mat-icon>
-    <span class="text center-middle"> 892.3K </span>
+    <span class="text center-middle"> {{comment.likes | kFormatter}} </span>
     <mat-icon matRipple class="icon center-middle">thumb_down_alt</mat-icon>
     <mat-icon
       matRipple
@@ -19,7 +19,7 @@
       (click)="comment.childsHidden = !comment.childsHidden"
       >comment</mat-icon
     >
-    <span class="text center-middle"> {{comment.replays}} </span>
+    <span class="text center-middle"> {{comment.replays | kFormatter}} </span>
   </mat-card-actions>
   <div *ngIf="!comment.childsHidden && comment.replays! > 0">
     <app-comment

@@ -1,9 +1,8 @@
 .bg {
   background-color: black;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
 }
-
 .content-wrapper {
   height: 93vh;
   overflow: auto;
@@ -11,6 +10,5 @@
 }
 
 .main-content {
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-top: 10px;
 }

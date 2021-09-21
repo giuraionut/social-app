@@ -22,9 +22,9 @@
       Toggle Media
     </button>
     <mat-icon matRipple class="icon center-middle">thumb_up_alt</mat-icon>
-    <span class="text center-middle"> 892.3K </span>
+    <span class="text center-middle"> {{post.likes | kFormatter}} </span>
     <mat-icon matRipple class="icon center-middle">thumb_down_alt</mat-icon>
     <mat-icon matRipple class="icon center-middle">comment</mat-icon>
-    <span class="text center-middle">{{ post.comments }} </span>
+    <span class="text center-middle">{{ post.comments | kFormatter}} </span>
   </mat-card-actions>
 </mat-card>

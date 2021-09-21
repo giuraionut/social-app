@@ -1,0 +1,29 @@
+.wrapper {
+  width: 300px;
+  margin: 0 auto;
+  margin-left: 20px;
+  margin-top: 20px;
+  position: fixed;
+}
+
+.title {
+  margin: 0 auto;
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.community {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+mat-icon {
+  margin-left: 5px;
+  font-size: 22px;
+}
+
+.members-count {
+  font-size: 15px;
+}

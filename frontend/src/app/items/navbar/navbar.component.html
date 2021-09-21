@@ -7,7 +7,21 @@
   <div class="searchbar-wrapper">
     <mat-form-field class="searchbar" appearance="fill">
       <mat-label>Search</mat-label>
-      <input matInput placeholder="Ex. Jokes" />
+      <input
+        type="text"
+        placeholder="Ex. Jokes"
+        matInput
+        [formControl]="searchControl"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
   </div>
   <div>

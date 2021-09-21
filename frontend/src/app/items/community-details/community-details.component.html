@@ -1,0 +1,9 @@
+<mat-card class="wrapper">
+  <p class="title">{{ community.name }}</p>
+  <p class="description">{{ community.description }}</p>
+  <mat-divider></mat-divider>
+  <p class="details">Members: {{ community.noOfMembers | kFormatter }}</p>
+  <p class="details">
+    Date created: {{ community.dateCreated | date: "short" }}
+  </p>
+</mat-card>

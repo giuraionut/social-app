@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { PostdetailsComponent } from './pages/postdetails/postdetails.component';
+import { PostDetailsComponent } from './pages/post-details/post-details.component';
 const routes: Routes = [
   { path: 'socialapp/home', component: HomeComponent },
-  { path: 'socialapp/post', component: PostdetailsComponent },
+  { path: 'socialapp/post', component: PostDetailsComponent },
 ];
 
 @NgModule({

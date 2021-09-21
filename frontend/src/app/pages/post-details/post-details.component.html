@@ -13,13 +13,14 @@
     >
       <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
       <div fxFlex="40" class="main-content">
-        <app-menu-bar></app-menu-bar>
-        <app-post *ngFor="let post of posts" [post]="post"></app-post>
+        <app-post [post]="post"></app-post>
+
+        <app-comment *ngFor="let comment of comments" [comment]="comment">
+        </app-comment>
       </div>
 
       <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>
-        <app-top-communities></app-top-communities>
-        <app-recent-posts></app-recent-posts>
+        <app-community-details></app-community-details>
       </div>
       <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
     </div>
