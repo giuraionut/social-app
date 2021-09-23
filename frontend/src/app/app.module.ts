@@ -27,6 +27,9 @@ import { TimePassed } from './pipes/time-passed.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { RouterGuard } from './services/router-guard.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +44,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommunityDetailsComponent,
     KNumberFormatterService,
     TimePassed,
+    WelcomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,9 +63,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatOptionModule,
     MatAutocompleteModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatMenuModule
   ],
-  providers: [],
+  providers: [RouterGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

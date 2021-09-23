@@ -13,7 +13,7 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public goTo(){
-    this.router.navigate(['/socialapp/post']);
+  public goTo() {
+    this.router.navigate([`/socialapp/post/${this.post.id}`]);
   }
 }

@@ -26,7 +26,12 @@
   </div>
   <div>
     <button mat-icon-button>
-      <mat-icon>person</mat-icon>
+      <mat-icon [matMenuTriggerFor]="menu">person</mat-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Profile</button>
+        <button mat-menu-item>Settings</button>
+        <button mat-menu-item>Logout</button>
+      </mat-menu>
     </button>
   </div>
 </mat-toolbar>

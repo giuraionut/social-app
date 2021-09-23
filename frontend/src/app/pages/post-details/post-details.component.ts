@@ -21,9 +21,11 @@ export class PostDetailsComponent implements OnInit {
     post.mediaHidden = true;
     post.comments = 2;
     post.likes = 141131;
+    post.id = '1';
     this.post = post;
- 
+
     let comment: Comment = {};
+    comment.id = '1';
     comment.content = 'blabla';
     comment.authorId = '2348237752399c8327y32';
     comment.replays = 1;
@@ -31,11 +33,24 @@ export class PostDetailsComponent implements OnInit {
     let childs: Comment[] = [];
     let childs2: Comment[] = [];
     let childs3: Comment[] = [];
-    childs3.push({ content: 'child3', replays: 0, likes: 543 });
-    childs2.push({ content: 'child2', childs: childs3, replays: 1, likes: 51321 });
-    childs.push({ content: 'child1', childs: childs2, replays: 1, likes: 4211 });
+    childs3.push({ id: '3', content: 'child3', replays: 0, likes: 543 });
+    childs2.push({
+      id: '4',
+      content: 'child2',
+      childs: childs3,
+      replays: 1,
+      likes: 51321,
+    });
+    childs.push({
+      id: '5',
+      content: 'child1',
+      childs: childs2,
+      replays: 1,
+      likes: 4211,
+    });
     comment.childs = childs;
     let comment2: Comment = {};
+    comment2.id = '2';
     comment2.content = 'blabla';
     comment2.authorId = '2348237752399c8327y32';
     comment2.replays = 0;

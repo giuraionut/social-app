@@ -10,10 +10,11 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   public posts: Post[] = [];
- public communities=false;
- public nrOfCols=4;
+  public communities = false;
+  public nrOfCols = 4;
   ngOnInit(): void {
     let post: Post = {};
+    post.id = '1';
     post.authorId = '592c834u2uv32c234';
     post.content =
       'Random content random content random content random content random content random content';
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
     post.comments = 2;
     post.likes = 194815;
     let post2: Post = {};
+    post2.id = '2';
     post2.authorId = '592c834u2uv32c234';
     post2.content =
       'Random content random content random content random content random content random content';
@@ -35,6 +37,5 @@ export class HomeComponent implements OnInit {
     post2.likes = 494815;
     this.posts.push(post, post2);
     //--------------------------------------------------------------------------------------------------------------
-    
   }
 }
