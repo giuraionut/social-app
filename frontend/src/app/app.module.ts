@@ -30,6 +30,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { RouterGuard } from './services/router-guard.service';
+import { RegisterComponent } from './items/register/register.component';
+import { LoginComponent } from './items/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +47,8 @@ import { RouterGuard } from './services/router-guard.service';
     KNumberFormatterService,
     TimePassed,
     WelcomeComponent,
+    RegisterComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

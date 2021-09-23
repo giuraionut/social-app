@@ -1,1 +1,9 @@
-<p>welcome works!</p>
+<div class="background">
+  <div class="content">
+    <app-register class="form" *ngIf="!switch"></app-register>
+    <app-login class="form" *ngIf="switch"></app-login>
+    <button class="switch" mat-stroked-button color="primary" (click)="changeForm()">
+      {{message}}
+    </button>
+  </div>
+</div>

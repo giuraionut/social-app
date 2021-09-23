@@ -1,0 +1,43 @@
+<div class="background">
+  <div class="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input
+        #username
+        matInput
+        placeholder="Ex. john123"
+        [formControl]="usernameControl"
+      />
+      <mat-error *ngIf="usernameControl.invalid">
+        {{ getErrorMessage("username") }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input #password matInput [formControl]="passwordControl" />
+      <mat-error *ngIf="passwordControl.invalid">
+        {{ getErrorMessage("password") }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        #email
+        matInput
+        placeholder="Ex. john123@gmail.com"
+        [formControl]="emailControl"
+      />
+      <mat-error *ngIf="emailControl.invalid">
+        {{ getErrorMessage("email") }}
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="register(username.value, password.value, email.value)"
+    >
+      Register
+    </button>
+  </div>
+</div>
