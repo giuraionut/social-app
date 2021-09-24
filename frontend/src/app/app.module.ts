@@ -34,6 +34,7 @@ import { RegisterComponent } from './items/register/register.component';
 import { LoginComponent } from './items/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { UserProfileComponent } from './items/user-profile/user-profile.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,7 @@ import { UserProfileComponent } from './items/user-profile/user-profile.componen
     LoginComponent,
     ProfileComponent,
     UserProfileComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

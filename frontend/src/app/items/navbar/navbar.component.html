@@ -3,6 +3,9 @@
     <button mat-icon-button>
       <mat-icon>menu</mat-icon>
     </button>
+    <button mat-icon-button (click)="goTo('home')">
+      <mat-icon>home</mat-icon>
+    </button>
   </div>
   <div class="searchbar-wrapper">
     <mat-form-field class="searchbar" appearance="fill">
@@ -26,10 +29,13 @@
   </div>
   <div>
     <button mat-icon-button>
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <button mat-icon-button>
       <mat-icon [matMenuTriggerFor]="menu">person</mat-icon>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Profile</button>
-        <button mat-menu-item>Settings</button>
+        <button mat-menu-item (click)="goTo('profile')">Profile</button>
+        <button mat-menu-item (click)="goTo('settings')">Settings</button>
         <button mat-menu-item>Logout</button>
       </mat-menu>
     </button>

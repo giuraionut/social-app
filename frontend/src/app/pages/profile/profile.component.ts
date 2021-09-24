@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../models/post.model';
-
+import { Comment } from '../../models/comment.model';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-
-  constructor() { }
+  constructor() {}
 
   public posts: Post[] = [];
   public communities = false;
   public nrOfCols = 4;
+
+  public comments: Comment[] = [];
+  public show: string = 'posts';
   ngOnInit(): void {
     let post: Post = {};
     post.id = '1';
@@ -37,7 +39,28 @@ export class ProfileComponent implements OnInit {
     post2.comments = 2;
     post2.likes = 494815;
     this.posts.push(post, post2);
+
+    let comment: Comment = {};
+    comment.id = '1';
+    comment.content = 'blabla';
+    comment.likes = 1412;
+    comment.dislikes = 120;
+    comment.replays = 20;
+    comment.parentId = '1';
+    comment.authorId = '1';
+
+    let comment2: Comment = {};
+    comment2.id = '1';
+    comment2.content = 'blabla';
+    comment2.likes = 1412;
+    comment2.dislikes = 120;
+    comment2.replays = 20;
+    comment2.parentId = '1';
+    comment2.authorId = '1';
+    this.comments.push(comment, comment2);
     //--------------------------------------------------------------------------------------------------------------
   }
-
+  public change(page: string): void {
+    this.show = page;
+  }
 }

@@ -1,17 +1,37 @@
 .bg {
-    background-color: black;
-    height: 100vh;
-    overflow: auto;
-  }
-  
-  .content-wrapper {
-    height: 93vh;
-    overflow: auto;
-    width: 100%;
-  }
-  
-  .main-content {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-  
+  background-color: black;
+  height: 100vh;
+  overflow: auto;
+}
+
+.content-wrapper {
+  height: 93vh;
+  overflow: auto;
+  width: 100%;
+}
+
+.main-content {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.menu {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  column-gap: 10px;
+}
+
+.menu > .menu-buttons {
+  background-color: gray;
+  width: 100px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-size: 14px;
+}
