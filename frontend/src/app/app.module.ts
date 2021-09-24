@@ -32,6 +32,8 @@ import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { RouterGuard } from './services/router-guard.service';
 import { RegisterComponent } from './items/register/register.component';
 import { LoginComponent } from './items/login/login.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { UserProfileComponent } from './items/user-profile/user-profile.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +51,8 @@ import { LoginComponent } from './items/login/login.component';
     WelcomeComponent,
     RegisterComponent,
     LoginComponent,
+    ProfileComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

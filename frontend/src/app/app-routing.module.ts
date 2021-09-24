@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { PostDetailsComponent } from './pages/post-details/post-details.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
-
+import { ProfileComponent } from './pages/profile/profile.component';
 import { RouterGuard } from './services/router-guard.service';
 const routes: Routes = [
   {
@@ -16,7 +16,16 @@ const routes: Routes = [
     component: PostDetailsComponent,
     canActivate: [RouterGuard],
   },
-  { path: 'socialapp/welcome', component: WelcomeComponent },
+  {
+    path: 'socialapp/welcome',
+    component: WelcomeComponent,
+    canActivate: [RouterGuard],
+  },
+  {
+    path: 'socialapp/profile',
+    component: ProfileComponent,
+    canActivate: [RouterGuard],
+  },
 ];
 
 @NgModule({
