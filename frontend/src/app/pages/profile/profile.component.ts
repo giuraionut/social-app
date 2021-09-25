@@ -38,6 +38,9 @@ export class ProfileComponent implements OnInit {
     post2.mediaHidden = true;
     post2.comments = 2;
     post2.likes = 494815;
+
+    post.hidden = true;
+    post2.hidden = false;
     this.posts.push(post, post2);
 
     let comment: Comment = {};

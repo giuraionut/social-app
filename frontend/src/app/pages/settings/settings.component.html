@@ -12,43 +12,7 @@
       fxFlexFill
     >
       <div fxFlex="60" class="main-content">
-        <mat-card class="content">
-          <div class="title">Account Settings</div>
-          <div class="title-small">Account preferences</div>
-          <mat-divider></mat-divider>
-          <div class="options">
-            <div class="description">
-              <div class="element">
-                <span>Email address</span>
-                <span class="element-small">test@gmail.com</span>
-              </div>
-              <div class="element">
-                <span>Change password</span>
-                <span class="element-small"
-                  >Password must be at least 8 characters long, contain one
-                  uppercase and one special character</span
-                >
-              </div>
-              <div class="element">
-                <span>Set gender</span>
-                <span class="element-small"
-                  >This information is used only to improve content</span
-                >
-              </div>
-              <div class="element">
-                <span>Change country</span>
-                <span class="element-small">Change your location</span>
-              </div>
-            </div>
-            <div class="buttons">
-              <button mat-raised-button class="button">Change</button>
-              <button mat-raised-button class="button">Change</button>
-              <button mat-raised-button class="button">Change</button>
-              <button mat-raised-button class="button">Change</button>
-            </div>
-          </div>
-          <mat-divider></mat-divider>
-        </mat-card>
+        <app-acc-settings></app-acc-settings>
       </div>
 
       <div fxFlex="40" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>

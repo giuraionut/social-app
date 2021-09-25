@@ -1,0 +1,60 @@
+<mat-card class="content">
+  <div class="title">Account Settings</div>
+  <div class="title-small">Account preferences</div>
+  <mat-divider></mat-divider>
+  <div class="options">
+    <div class="description">
+      <div class="element">
+        <span>Email address</span>
+        <span class="element-small">{{ email }}</span>
+      </div>
+      <div class="element">
+        <span>Change password</span>
+        <span class="element-small"
+          >Password must be at least 8 characters long, contain one uppercase
+          and one special character</span
+        >
+      </div>
+      <div class="element">
+        <span>Set gender</span>
+        <span class="element-small"
+          >This information is used only to improve content</span
+        >
+      </div>
+      <div class="element">
+        <span>Change country</span>
+        <span class="element-small">Change your location</span>
+      </div>
+    </div>
+    <div class="buttons">
+      <button
+        mat-raised-button
+        class="button"
+        (click)="openModal('Email', 'test@gmail.com', 'Enter your new email address')">
+        Change
+      </button>
+      <button mat-raised-button class="button" (click)="openModal('Password','Change password','Enter your new password')">
+        Change
+      </button>
+      <form class="button">
+        <mat-form-field appearance="fill" class="button-form">
+          <mat-label>{{gender | titlecase}}</mat-label>
+          <mat-select [(ngModel)]="genderValue" name="gender" (selectionChange)="changeGender($event.value)">
+            <mat-option *ngFor="let gender of genders" [value]="gender.value">
+              {{ gender.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="button-form">
+          <mat-label>{{country }}</mat-label>
+          <mat-select [(ngModel)]="countryValue" name="country" (selectionChange)="changeCountry($event.value)">
+            <mat-option *ngFor="let country of countries" [value]="country.value">
+              {{ country.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+</mat-card>

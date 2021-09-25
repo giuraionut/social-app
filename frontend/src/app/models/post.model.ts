@@ -1,13 +1,17 @@
 export interface Post {
   id?: string;
-  name?: string;
   authorId?: string;
-  media?: string;
   content?: string;
   likes?: number;
   dislikes?: number;
-  comments?: number;
   dateCreated?: Date;
+
+  name?: string;
+  media?: string;
+
+  comments?: number;
+
+  hidden?: Boolean;
   //front-end
   mediaHidden?: Boolean;
 }

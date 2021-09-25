@@ -1,15 +1,17 @@
-export interface Comment{
-    id?: string;
-    postId?: string;
-    parentId?: String;
-    authorId?: string;
-    content?: string;
-    likes?: number;
-    dislikes?: number;
-    replays?: number;
-    childs?: Comment[];
-    
+export interface Comment {
+  id?: string;
+  authorId?: string;
+  content?: string;
+  likes?: number;
+  dislikes?: number;
+  dateCreated?: Date;
 
-    //front-end
-    childsHidden?: Boolean;
+  postId?: string;
+  parentId?: String;
+
+  replays?: number;
+  childs?: Comment[];
+
+  //front-end
+  childsHidden?: Boolean;
 }

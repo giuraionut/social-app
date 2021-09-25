@@ -3,7 +3,6 @@
   margin: 0 auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  
 }
 
 .example-header-image {
@@ -47,6 +46,14 @@
 .content {
   margin-top: 10px;
 }
-mat-card{
+mat-card {
   border: 1px gray solid;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.original-poster{
+  cursor: pointer;
 }

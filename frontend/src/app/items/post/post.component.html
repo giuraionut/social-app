@@ -1,10 +1,10 @@
-<mat-card class="post-card">
+<mat-card class="post-card" *ngIf="(!post.hidden && page !== 'profile-post-hidden') || (post.hidden && page === 'profile-post-hidden')">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title
-      ><span (click)="goTo()">{{ post.name }} ----////---- post id: {{ post.id }}</span>
+    <mat-card-title>
+      <span (click)="goTo(post)" class="post-title">{{ post.name }} ----////---- post id: {{ post.id }} ----////---- {{post.hidden}}</span>
     </mat-card-title>
-    <mat-card-subtitle>{{ post.authorId }}</mat-card-subtitle>
+    <mat-card-subtitle class="post-title">{{ post.authorId }}</mat-card-subtitle>
   </mat-card-header>
   <img
     *ngIf="!post.mediaHidden"
@@ -21,10 +21,13 @@
     <button mat-button (click)="post.mediaHidden = !post.mediaHidden">
       Toggle Media
     </button>
-    <mat-icon matRipple class="icon center-middle">thumb_up_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="upvote(post)">thumb_up_alt</mat-icon>
     <span class="text center-middle"> {{ post.likes | kFormatter }} </span>
-    <mat-icon matRipple class="icon center-middle">thumb_down_alt</mat-icon>
-    <mat-icon matRipple class="icon center-middle">comment</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="downvote(post)">thumb_down_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="goTo(post)">comment</mat-icon>
     <span class="text center-middle">{{ post.comments | kFormatter }} </span>
+    <mat-icon *ngIf="page === 'profile-post' || page === 'profile-post-hidden'" matRipple class="icon center-middle" (click)="delete(post)">delete</mat-icon>
+    <mat-icon *ngIf="page === 'profile-post'" matRipple class="icon center-middle"  (click)="hide(post)">visibility_off</mat-icon>
+    <mat-icon *ngIf="page === 'profile-post-hidden'" matRipple class="icon center-middle"  (click)="unhide(post)">visibility</mat-icon>
   </mat-card-actions>
 </mat-card>

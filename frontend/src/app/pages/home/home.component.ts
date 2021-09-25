@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
       'https://c4.wallpaperflare.com/wallpaper/586/603/742/minimalism-4k-for-mac-desktop-wallpaper-preview.jpg';
     post.mediaHidden = true;
     post.comments = 2;
-    post.likes = 194815;
+    post.likes = 1;
     let post2: Post = {};
     post2.id = '2';
     post2.authorId = '592c834u2uv32c234';

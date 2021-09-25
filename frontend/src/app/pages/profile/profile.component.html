@@ -22,6 +22,13 @@
             Posts
           </button>
           <button
+          mat-raised-button
+          class="menu-buttons"
+          (click)="change('hidden-posts')"
+        >
+          Hidden Posts
+        </button>
+          <button
             mat-raised-button
             class="menu-buttons"
             (click)="change('comments')"
@@ -30,13 +37,25 @@
           </button>
         </mat-card>
         <div *ngIf="show == 'posts'">
-          <app-post *ngFor="let post of posts" [post]="post"></app-post>
+          <app-post
+            *ngFor="let post of posts"
+            [post]="post"
+            [page]="'profile-post'"
+          ></app-post>
         </div>
         <div *ngIf="show == 'comments'">
           <app-comment
             *ngFor="let comment of comments"
             [comment]="comment"
+            [page]="'profile-comment'"
           ></app-comment>
+        </div>
+        <div *ngIf="show == 'hidden-posts'">
+          <app-post
+            *ngFor="let post of posts"
+            [post]="post"
+            [page]="'profile-post-hidden'"
+          ></app-post>
         </div>
       </div>
 

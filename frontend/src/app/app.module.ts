@@ -35,6 +35,12 @@ import { LoginComponent } from './items/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { UserProfileComponent } from './items/user-profile/user-profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ModalComponent } from './items/modal/modal.component';
+import { AccSettingsComponent } from './items/acc-settings/acc-settings.component';
+import { ModalService } from './services/dialog.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +61,8 @@ import { SettingsComponent } from './pages/settings/settings.component';
     ProfileComponent,
     UserProfileComponent,
     SettingsComponent,
+    ModalComponent,
+    AccSettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,9 +82,12 @@ import { SettingsComponent } from './pages/settings/settings.component';
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatSnackBarModule,
   ],
-  providers: [RouterGuard],
+  providers: [RouterGuard, ModalService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
