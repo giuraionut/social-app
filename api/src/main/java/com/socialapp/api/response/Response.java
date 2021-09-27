@@ -11,4 +11,5 @@ public class Response {
     private HttpStatus status;
     private String message;
     private String error;
+    private Object payload;
 }

@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -13,9 +15,12 @@ export class NavbarComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
+
+  public authenticatedUser: User = {};
 
   ngOnInit(): void {
+    this.getAuthenticatedUserDetails();
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map((value) => (value.length >= 1 ? this._filter(value) : []))
@@ -32,5 +37,11 @@ export class NavbarComponent implements OnInit {
 
   public goTo(page: string) {
     this.router.navigate([`socialapp/${page}`]);
+  }
+
+  private getAuthenticatedUserDetails() {
+    this.userService.getAuthenticated().subscribe((authenticatedUser: User) => {
+      this.authenticatedUser = authenticatedUser;
+    });
   }
 }

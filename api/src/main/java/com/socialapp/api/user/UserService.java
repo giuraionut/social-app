@@ -3,15 +3,12 @@ package com.socialapp.api.user;
 
 import com.socialapp.api.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -49,22 +46,15 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
-    }
+        return this.userRepository.findByUsername(username).orElse(null);
 
-    public Set<GrantedAuthority> getUserAuthorities(User user) {
-        User localUser = this.userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new IllegalStateException("User does not exists"));
-        return localUser.getAuthorities();
-    }
-
-    public String getUserId(User user) {
-        User foundUser = this.userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new IllegalStateException("User does not exists"));
-        return foundUser.getId();
     }
 
     public User getByRefreshToken(String refreshToken) {
-        Optional<User> userByRefreshToken = this.userRepository.findByRefreshToken(refreshToken);
-        return userByRefreshToken.orElse(null);
+        return this.userRepository.findByRefreshToken(refreshToken).orElse(null);
+    }
+
+    public User getById(String userId) {
+        return this.userRepository.findById(userId).orElse(null);
     }
 }

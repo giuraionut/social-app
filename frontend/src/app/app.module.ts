@@ -46,6 +46,8 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
+import { Interceptor } from './services/http-interceptor.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,13 @@ import {
     MatSnackBarModule,
     HttpClientModule,
   ],
-  providers: [RouterGuard, ModalService, HttpClient],
+  providers: [
+    RouterGuard,
+    ModalService,
+    HttpClient,
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

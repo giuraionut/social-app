@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.Data;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class JwtValidator extends OncePerRequestFilter {
@@ -44,8 +42,9 @@ public class JwtValidator extends OncePerRequestFilter {
 
         String token;
         if (cookies != null && cookies.length > 0) {
-            Stream<Cookie> jwt = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("jwt"));
-            token = jwt.findFirst().map(Cookie::getValue).orElseThrow(() -> new IllegalStateException("Token not found"));
+            token = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("socialAppJwtToken")).findFirst()
+                    .map(Cookie::getValue).orElseThrow(() -> new IllegalStateException("Token not found"));
+
         } else {
             filterChain.doFilter(request, response);
             return;
