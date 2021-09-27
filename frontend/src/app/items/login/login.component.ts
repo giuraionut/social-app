@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { User } from '../../models/user.model';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {}
 
@@ -59,8 +61,8 @@ export class LoginComponent implements OnInit {
     return 'Ok';
   }
 
-  public login(username: string, password: string)
-  {
-    
+  public login(username: string, password: string) {
+    let user: User = { username: username, password: password };
+    this.authService.login(user);
   }
 }

@@ -41,6 +41,12 @@ import { AccSettingsComponent } from './items/acc-settings/acc-settings.componen
 import { ModalService } from './services/dialog.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,8 +92,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDialogModule,
     MatSelectModule,
     MatSnackBarModule,
+    HttpClientModule,
   ],
-  providers: [RouterGuard, ModalService],
+  providers: [RouterGuard, ModalService, HttpClient],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

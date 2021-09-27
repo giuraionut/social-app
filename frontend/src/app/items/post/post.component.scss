@@ -3,8 +3,16 @@
   margin: 0 auto;
   margin-top: 20px;
   margin-bottom: 10px;
+  animation: fadein 2s;
 }
-
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .example-header-image {
   background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
   background-size: cover;
@@ -43,6 +51,6 @@
   align-items: center;
 }
 
-.post-title:hover{
+.post-title:hover {
   cursor: pointer;
 }

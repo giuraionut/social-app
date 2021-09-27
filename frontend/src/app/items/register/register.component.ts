@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {}
 
@@ -60,10 +62,10 @@ export class RegisterComponent implements OnInit {
     return 'Ok';
   }
 
-  public register(username: string, password: string, email: string)
-  {
-
+  public register(username: string, password: string, email: string) {
+    let user: User = { username: username, password: password, email: email };
+    this.userService.register(user).subscribe((result) => {
+      console.log(result);
+    });
   }
-
- 
 }

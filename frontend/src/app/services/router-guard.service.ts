@@ -7,7 +7,16 @@ export class RouterGuard implements CanActivate {
   constructor(private router: Router, private cookieService: CookieService) {}
 
   canActivate() {
-    console.log('Always logged');
-    return true;
+    let loggedIn = this.cookieService.get('loggedIn');
+    if (loggedIn) {
+      if (JSON.parse(loggedIn) === true) {
+        return true;
+      } else {
+        this.router.navigate(['socialapp/welcome']);
+        return false;
+      }
+    }
+    this.router.navigate(['socialapp/welcome']);
+    return false;
   }
 }

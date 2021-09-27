@@ -20,7 +20,6 @@ const routes: Routes = [
   {
     path: 'socialapp/welcome',
     component: WelcomeComponent,
-    canActivate: [RouterGuard],
   },
   {
     path: 'socialapp/profile',
