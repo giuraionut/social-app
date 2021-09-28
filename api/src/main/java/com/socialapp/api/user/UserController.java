@@ -11,7 +11,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.SecretKey;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
 
@@ -66,5 +68,34 @@ public class UserController {
     }
 
 
+    @PostMapping(path = "signout")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> logout(HttpServletResponse HttpResponse) {
+
+        Cookie jwtToken = new Cookie("socialAppJwtToken", null);
+        jwtToken.setSecure(false);
+        jwtToken.setDomain("localhost");
+        jwtToken.setPath("/");
+        jwtToken.setHttpOnly(true);
+        jwtToken.setMaxAge(0);
+
+        Cookie userInfo = new Cookie("userInfo", null);
+        userInfo.setSecure(false);
+        userInfo.setDomain("localhost");
+        userInfo.setPath("/");
+        userInfo.setHttpOnly(false);
+        userInfo.setMaxAge(0);
+
+        HttpResponse.addCookie(jwtToken);
+        HttpResponse.addCookie(userInfo);
+
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        response.setMessage("Signed out successfully");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }

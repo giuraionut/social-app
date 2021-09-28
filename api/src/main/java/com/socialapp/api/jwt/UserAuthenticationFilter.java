@@ -27,7 +27,6 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
-
     }
 
     @Override
@@ -40,8 +39,12 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                     authenticationRequest.getUsername(),
                     authenticationRequest.getPassword()
             );
-            return authenticationManager.authenticate(authentication);
+            Authentication authenticate = authenticationManager.authenticate(authentication);
+            if (!authenticate.isAuthenticated()) {
+                authenticate.setAuthenticated(false);
 
+            }
+            return authenticate;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,12 +56,20 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                                             FilterChain chain,
                                             Authentication authentication) throws IOException {
 
-        Cookie jwtToken = new Cookie("socialAppJwtToken", jwtUtils.generateToken(authentication));
+        Cookie jwtToken = new Cookie("socialAppJwtToken", jwtUtils.generateJWT(authentication));
         jwtToken.setSecure(false);
         jwtToken.setDomain("localhost");
         jwtToken.setPath("/");
         jwtToken.setHttpOnly(true);
         jwtToken.setMaxAge(86400);
+
+        Cookie userInfo = new Cookie("userInfo", jwtUtils.generateUserInfoToken(authentication));
+        userInfo.setSecure(false);
+        userInfo.setDomain("localhost");
+        userInfo.setPath("/");
+        userInfo.setHttpOnly(false);
+        userInfo.setMaxAge(86400);
+
         AuthenticationResponse authResponse = new AuthenticationResponse();
         authResponse.setStatus(HttpStatus.OK);
         authResponse.setMessage("Authentication successfully");
@@ -67,8 +78,11 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
         String gsonRes = this.gson.toJson(authResponse);
         response.addCookie(jwtToken);
+        response.addCookie(userInfo);
         response.getWriter().print(gsonRes);
         response.getWriter().flush();
+
+
     }
 
     @Override

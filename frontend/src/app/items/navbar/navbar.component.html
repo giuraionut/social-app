@@ -34,9 +34,9 @@
     <button mat-icon-button>
       <mat-icon [matMenuTriggerFor]="menu">person</mat-icon>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="goTo('profile')">Profile</button>
+        <button mat-menu-item (click)="goTo('profile')">{{user.username}}</button>
         <button mat-menu-item (click)="goTo('settings')">Settings</button>
-        <button mat-menu-item>Logout</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </button>
   </div>

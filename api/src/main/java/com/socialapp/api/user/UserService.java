@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -41,12 +42,13 @@ public class UserService implements UserDetailsService {
         user.setRefreshToken(UUID.randomUUID().toString());
         user.setGrantedAuthorities(Roles.USER.getGrantedAuthorities());
         user.setAvatar("test");
+        user.setRegistrationDate(LocalDate.now());
         this.userRepository.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsername(username).orElse(null);
+        return this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("no user found"));
 
     }
 

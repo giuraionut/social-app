@@ -15,11 +15,11 @@ import java.util.Date;
 @Configuration
 public class JwtUtils {
     private final SecretKey secretKey;
+    private final SecretKey userTokenKey;
     private final JwtConfig jwtConfig;
     private final UserService userService;
 
-    public String generateToken(Authentication authentication) {
-
+    public String generateJWT(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         return Jwts.builder()
@@ -32,7 +32,22 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String refreshToken(String refreshToken) {
+
+    public String generateUserInfoToken(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        return Jwts.builder()
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .claim("birthdate", user.getDateOfBirth())
+                .claim("avatar", user.getAvatar())
+                .setIssuedAt(new Date())
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
+                .signWith(userTokenKey)
+                .compact();
+    }
+
+    public String refreshJWT(String refreshToken) {
         User user = this.userService.getByRefreshToken(refreshToken);
         if (user == null) {
             return null;

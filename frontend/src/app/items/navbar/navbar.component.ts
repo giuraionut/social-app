@@ -5,6 +5,8 @@ import { map, startWith } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
+import { AuthService } from '../../services/auth.service';
+import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -15,11 +17,18 @@ export class NavbarComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private authService: AuthService,
+    private userInforTokenDecoder: UserInfoTokenDecoder
+  ) {}
 
   public authenticatedUser: User = {};
 
+  public user: User = this.userInforTokenDecoder.getUserInfoFromToken();
   ngOnInit(): void {
+    console.log(this.user);
     this.getAuthenticatedUserDetails();
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
@@ -44,4 +53,9 @@ export class NavbarComponent implements OnInit {
       this.authenticatedUser = authenticatedUser;
     });
   }
+
+  public logout() {
+    this.authService.logout();
+  }
+
 }

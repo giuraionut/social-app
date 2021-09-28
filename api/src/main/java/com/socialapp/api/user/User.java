@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private LocalDate dateOfBirth;
+    private LocalDate registrationDate;
     private String email;
     private String avatar;
 

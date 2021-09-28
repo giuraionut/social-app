@@ -40,4 +40,16 @@ export class AuthService {
         })
       );
   }
+
+  public logout(): void {
+    this.http
+      .post<APIResponse>(`${this.url}/signout`, null, { withCredentials: true })
+      .pipe(
+        map((result: APIResponse) => {
+          this.cookieService.delete('loggedIn');
+          this.router.navigate(['/socialapp/welcome']);
+        })
+      )
+      .subscribe();
+  }
 }

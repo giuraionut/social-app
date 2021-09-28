@@ -1,5 +1,6 @@
-import { Component, OnInit, Testability } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { User } from '../../models/user.model';
+import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,11 +8,9 @@ import { User } from '../../models/user.model';
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-  constructor() {}
+  constructor(private userInfoTokenDecoder: UserInfoTokenDecoder) {}
 
-  public user: User = {};
+  public user: User = this.userInfoTokenDecoder.getUserInfoFromToken();
   ngOnInit(): void {
-    this.user.email = 'test@gmail.com';
-    this.user.username = 'test';
   }
 }

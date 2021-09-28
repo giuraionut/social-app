@@ -30,7 +30,7 @@
 
 .user-details > .detail {
   font-size: 14px;
-  background-color: gray;
+  background-color: rgba(128, 128, 128, 0.349);
   width: 200px;
   height: 30px;
   display: flex;
@@ -61,7 +61,7 @@
 
 .user-stats > .stat {
   font-size: 12px;
-  background-color: gray;
+  background-color: rgba(128, 128, 128, 0.349);
   width: 80px;
   display: flex;
   flex-direction: column;
@@ -71,4 +71,28 @@
   border-radius: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.settings {
+  margin-top: 5px;
+}
+
+.icon {
+  font-size: 20px;
+  width: 35px;
+  height: 35px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  background-color: hsla(0, 0%, 40%, 0.2);
+}
+
+.center-middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
