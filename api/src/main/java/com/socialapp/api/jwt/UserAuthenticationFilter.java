@@ -42,7 +42,6 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
             Authentication authenticate = authenticationManager.authenticate(authentication);
             if (!authenticate.isAuthenticated()) {
                 authenticate.setAuthenticated(false);
-
             }
             return authenticate;
         } catch (IOException e) {
@@ -56,14 +55,14 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                                             FilterChain chain,
                                             Authentication authentication) throws IOException {
 
-        Cookie jwtToken = new Cookie("socialAppJwtToken", jwtUtils.generateJWT(authentication));
+        Cookie jwtToken = new Cookie("jwt", jwtUtils.generateJWT(authentication));
         jwtToken.setSecure(false);
         jwtToken.setDomain("localhost");
         jwtToken.setPath("/");
         jwtToken.setHttpOnly(true);
         jwtToken.setMaxAge(86400);
 
-        Cookie userInfo = new Cookie("userInfo", jwtUtils.generateUserInfoToken(authentication));
+        Cookie userInfo = new Cookie("userInfoToken", jwtUtils.generateUserInfoToken(authentication));
         userInfo.setSecure(false);
         userInfo.setDomain("localhost");
         userInfo.setPath("/");
@@ -81,8 +80,6 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         response.addCookie(userInfo);
         response.getWriter().print(gsonRes);
         response.getWriter().flush();
-
-
     }
 
     @Override

@@ -48,6 +48,7 @@ import {
 } from '@angular/common/http';
 import { Interceptor } from './services/http-interceptor.service';
 import { AuthService } from './services/auth.service';
+import { CommunityComponent } from './items/community/community.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,8 @@ import { AuthService } from './services/auth.service';
     SettingsComponent,
     ModalComponent,
     AccSettingsComponent,
+    CommunityComponent,
+ 
   ],
   imports: [
     BrowserModule,

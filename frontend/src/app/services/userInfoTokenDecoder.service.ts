@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 export class UserInfoTokenDecoder {
   constructor(private cookieService: CookieService) {}
 
-  private token = this.cookieService.get('userInfo');
+  private token = this.cookieService.get('userInfoToken');
   public getUserInfoFromToken(): User {
     let user: User = {};
 

@@ -2,10 +2,10 @@
   <p class="title">Top communities</p>
   <div *ngFor="let community of communities">
     <p class="community">
-      1. {{ community.name }} - <mat-icon>person</mat-icon>
-      <span class="members-count">{{
+      1. {{ community.title }} - <mat-icon>person</mat-icon>
+      <!-- <span class="members-count">{{
         community.noOfMembers | kFormatter
-      }}</span>
+      }}</span> -->
     </p>
     <mat-divider></mat-divider>
   </div>

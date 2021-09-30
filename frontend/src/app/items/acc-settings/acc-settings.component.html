@@ -7,6 +7,15 @@
       <div class="element">
         <span>Email address</span>
         <span class="element-small">{{ email }}</span>
+        <button
+          mat-raised-button
+          class="button"
+          (click)="
+            openModal('Email', 'test@gmail.com', 'Enter your new email address')
+          "
+        >
+          Change
+        </button>
       </div>
       <div class="element">
         <span>Change password</span>
@@ -14,46 +23,74 @@
           >Password must be at least 8 characters long, contain one uppercase
           and one special character</span
         >
+        <button
+          mat-raised-button
+          class="button"
+          (click)="
+            openModal('Password', 'Change password', 'Enter your new password')
+          "
+        >
+          Change
+        </button>
       </div>
       <div class="element">
         <span>Set gender</span>
         <span class="element-small"
           >This information is used only to improve content</span
         >
+        <form class="button">
+          <mat-form-field appearance="fill" class="button-form">
+            <mat-label>{{ gender | titlecase }}</mat-label>
+            <mat-select
+              [(ngModel)]="genderValue"
+              name="gender"
+              (selectionChange)="changeGender($event.value)"
+            >
+              <mat-option *ngFor="let gender of genders" [value]="gender.value">
+                {{ gender.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
       </div>
       <div class="element">
         <span>Change country</span>
         <span class="element-small">Change your location</span>
+        <form>
+          <mat-form-field appearance="fill" class="button-form">
+            <mat-label>{{ country }}</mat-label>
+            <mat-select
+              [(ngModel)]="countryValue"
+              name="country"
+              (selectionChange)="changeCountry($event.value)"
+            >
+              <mat-option
+                *ngFor="let country of countries"
+                [value]="country.value"
+              >
+                {{ country.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
       </div>
-    </div>
-    <div class="buttons">
-      <button
-        mat-raised-button
-        class="button"
-        (click)="openModal('Email', 'test@gmail.com', 'Enter your new email address')">
-        Change
-      </button>
-      <button mat-raised-button class="button" (click)="openModal('Password','Change password','Enter your new password')">
-        Change
-      </button>
-      <form class="button">
-        <mat-form-field appearance="fill" class="button-form">
-          <mat-label>{{gender | titlecase}}</mat-label>
-          <mat-select [(ngModel)]="genderValue" name="gender" (selectionChange)="changeGender($event.value)">
-            <mat-option *ngFor="let gender of genders" [value]="gender.value">
-              {{ gender.viewValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="button-form">
-          <mat-label>{{country }}</mat-label>
-          <mat-select [(ngModel)]="countryValue" name="country" (selectionChange)="changeCountry($event.value)">
-            <mat-option *ngFor="let country of countries" [value]="country.value">
-              {{ country.viewValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </form>
+      <div class="element">
+        <span>Delete my account</span>
+        <span class="element-small">This action is permanent</span>
+        <button
+          mat-raised-button
+          class="button"
+          (click)="
+            openModal(
+              'Delete my account',
+              'test@gmail.com',
+              'Are you sure you want to delete your account? This action is permanent!'
+            )
+          "
+        >
+          Delete
+        </button>
+      </div>
     </div>
   </div>
   <mat-divider></mat-divider>

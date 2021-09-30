@@ -13,10 +13,10 @@ export class TopCommunitiesComponent implements OnInit {
 
   ngOnInit(): void {
     let community: Community = {
-      noOfMembers: 3432423,
-      authorId: '52341',
-      id: '3c2x3',
-      name: 'Jokes',
+      title: 'Jokes',
+      creationDate: new Date('2021 08 20'),
+      description:
+        'Bla bla bla this is a very nice community here on this very nice site',
     };
     this.communities.push(community);
     this.communities.push(community);

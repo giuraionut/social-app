@@ -8,9 +8,8 @@ import { Community } from '../../models/community.model';
 export class CommunityDetailsComponent implements OnInit {
   constructor() {}
   public community: Community = {
-    name: 'Jokes',
-    noOfMembers: 5438523,
-    dateCreated: new Date('2021 08 20'),
+    title: 'Jokes',
+    creationDate: new Date('2021 08 20'),
     description:
       'Bla bla bla this is a very nice community here on this very nice site',
   };

@@ -17,10 +17,8 @@ public class JwtSecretKey {
         this.jwtConfig = jwtConfig;
     }
 
-
     @Bean
     public SecretKey secretKey() {
         return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
     }
-
 }

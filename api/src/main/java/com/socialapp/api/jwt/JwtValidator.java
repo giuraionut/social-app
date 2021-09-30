@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public class JwtValidator extends OncePerRequestFilter {
 
     private final SecretKey secretKey;
@@ -42,7 +41,7 @@ public class JwtValidator extends OncePerRequestFilter {
 
         String token;
         if (cookies != null && cookies.length > 0) {
-            token = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("socialAppJwtToken")).findFirst()
+            token = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("jwt")).findFirst()
                     .map(Cookie::getValue).orElseThrow(() -> new IllegalStateException("Token not found"));
 
         } else {
@@ -51,7 +50,6 @@ public class JwtValidator extends OncePerRequestFilter {
         }
 
         try {
-
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
@@ -70,7 +68,6 @@ public class JwtValidator extends OncePerRequestFilter {
                     simpleGrantedAuthorities
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         } catch (JwtException e) {
             throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
         }

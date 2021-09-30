@@ -1,4 +1,4 @@
-package com.socialapp.api.user;
+package com.socialapp.api.entities.user;
 
 
 import com.socialapp.api.security.Roles;
@@ -22,7 +22,6 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-
     }
 
     public boolean emailExists(User user) {
@@ -48,7 +47,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("no user found"));
+        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("no user found"));
 
     }
 
@@ -56,7 +55,27 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findByRefreshToken(refreshToken).orElse(null);
     }
 
-    public User getById(String userId) {
+    public User findById(String userId) {
         return this.userRepository.findById(userId).orElse(null);
     }
+
+    public void updateUser(User user) {
+        this.userRepository.save(user);
+    }
+
+    public boolean deleteUser(String id, String password) {
+        User user = getById(id);
+
+        if (this.passwordEncoder.matches(password, user.getPassword())) {
+            this.userRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public User getById(String userId) {
+        return this.userRepository.getById(userId);
+    }
+
 }

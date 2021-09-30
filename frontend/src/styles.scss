@@ -20,4 +20,59 @@ body {
 .mat-divider {
   position: relative !important;
 }
+//------------------------------------------------------------------
+.card {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  animation: fadein 2s;
+}
 
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.icon {
+  font-size: 20px;
+  width: 35px !important;
+  height: 35px !important;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  background-color: hsla(0, 0%, 40%, 0.2);
+}
+
+.center-middle {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+.center-left {
+  display: flex !important;
+  justify-content: left;
+  align-items: center;
+}
+
+.text {
+  height: 35px;
+  width: fit-content;
+  font-size: 12px;
+  border-radius: 5px;
+  padding: 0.5px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+//------------------------------------------------------------------

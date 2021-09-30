@@ -1,22 +1,23 @@
-package com.socialapp.api.user;
+package com.socialapp.api.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.common.base.Joiner;
+import com.socialapp.api.entities.community.Community;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "users")
 @Data
 public class User implements UserDetails {
 
@@ -25,21 +26,41 @@ public class User implements UserDetails {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
+
     private String username;
     private String password;
     private LocalDate dateOfBirth;
     private LocalDate registrationDate;
     private String email;
     private String avatar;
-
     private String grantedAuthorities;
-
     private String refreshToken;
+
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
+    //------------------------------------------------------------------------------------------------------------------
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Community> ownedCommunities = new ArrayList<>();
+
+    public void addOwnedCommunity(Community community) {
+        ownedCommunities.add(community);
+        community.setCreator(this);
+    }
+
+    public void deleteOwnedCommunity(Community community) {
+        ownedCommunities.remove(community);
+        community.setCreator(null);
+    }
+
+    @JsonBackReference
+    public List<Community> getOwnedCommunity() {
+        return ownedCommunities;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public Set<GrantedAuthority> getAuthorities() {
         String[] grantedAuthoritiesArray = grantedAuthorities.split(",");
@@ -50,7 +71,6 @@ public class User implements UserDetails {
         }
         return grantedAuthoritiesSet;
     }
-
 
     public void setGrantedAuthorities(Set<GrantedAuthority> grantedAuthoritiesSet) {
         this.grantedAuthorities = Joiner.on(",").join(grantedAuthoritiesSet);

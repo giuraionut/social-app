@@ -20,7 +20,7 @@ export class AccSettingsComponent implements OnInit {
   public country: string = 'Romania';
   public gender: string = 'Male';
   public email: string = 'test@gmail.com';
-  
+
   modalResult: Modal = {};
 
   genders: SelectModel[] = [
@@ -34,16 +34,13 @@ export class AccSettingsComponent implements OnInit {
     { value: 'US', viewValue: 'United States' },
   ];
 
-
   ngOnInit(): void {}
-  
-  changeGender(value:string)
-  {
+
+  changeGender(value: string) {
     this.gender = value;
   }
 
-  changeCountry(value:string)
-  {
+  changeCountry(value: string) {
     this.country = value;
   }
 
@@ -56,7 +53,7 @@ export class AccSettingsComponent implements OnInit {
 
     this.modal.openDialog(modalDetails);
     let dialogRef = this.modal.getRef();
-    
+
     dialogRef.afterClosed().subscribe((result: Modal) => {
       if (result.title === 'Email' && result.payload) {
         this.email = result.payload;

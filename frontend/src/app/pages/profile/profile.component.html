@@ -9,53 +9,29 @@
       fxLayout.lt-sm="column"
       fxLayout.sm="column"
       fxLayout.md="column"
-      fxFlexFill
-    >
+      fxFlexFill>
+      
       <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
       <div fxFlex="40" class="main-content">
+
         <mat-card class="menu">
-          <button
-            mat-raised-button
-            class="menu-buttons"
-            (click)="change('posts')"
-          >
-            Posts
-          </button>
-          <button
-          mat-raised-button
-          class="menu-buttons"
-          (click)="change('hidden-posts')"
-        >
-          Hidden Posts
-        </button>
-          <button
-            mat-raised-button
-            class="menu-buttons"
-            (click)="change('comments')"
-          >
-            Comments
-          </button>
+          <button mat-raised-button class="menu-buttons" (click)="change('posts')">Posts</button>
+          <button mat-raised-button class="menu-buttons" (click)="change('hidden-posts')">Hidden Posts</button>
+          <button mat-raised-button class="menu-buttons" (click)="change('comments')">Comment</button>
+          <button mat-raised-button class="menu-buttons" (click)="change('communities')">Communities</button>
         </mat-card>
+
         <div *ngIf="show == 'posts'">
-          <app-post
-            *ngFor="let post of posts"
-            [post]="post"
-            [page]="'profile-post'"
-          ></app-post>
+          <app-post *ngFor="let post of posts" [post]="post" [page]="'profile-post'"></app-post>
         </div>
         <div *ngIf="show == 'comments'">
-          <app-comment
-            *ngFor="let comment of comments"
-            [comment]="comment"
-            [page]="'profile-comment'"
-          ></app-comment>
+          <app-comment *ngFor="let comment of comments" [comment]="comment" [page]="'profile-comment'"></app-comment>
         </div>
         <div *ngIf="show == 'hidden-posts'">
-          <app-post
-            *ngFor="let post of posts"
-            [post]="post"
-            [page]="'profile-post-hidden'"
-          ></app-post>
+          <app-post *ngFor="let post of posts" [post]="post" [page]="'profile-post-hidden'"></app-post>
+        </div>
+        <div *ngIf="show == 'communities'">
+          <app-community *ngFor="let community of ownedCommunities" [community]="community"[page]="'profile-community'"></app-community>
         </div>
       </div>
 

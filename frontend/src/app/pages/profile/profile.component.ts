@@ -1,21 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../models/post.model';
 import { Comment } from '../../models/comment.model';
+import { Community } from '../../models/community.model';
+import { CommunityService } from '../../services/community.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  constructor() {}
+  constructor(private communityService: CommunityService) {}
 
   public posts: Post[] = [];
-  public communities = false;
   public nrOfCols = 4;
-
   public comments: Comment[] = [];
-  public show: string = 'posts';
+
+  public pageFromStorage: string = localStorage.getItem('p_page')!;
+  public show: string =this.pageFromStorage !== null ? this.pageFromStorage : 'posts';
+
+  public ownedCommunities: Array<Community> = [];
+
   ngOnInit(): void {
+    if (this.pageFromStorage == 'communities') {
+      this.communityService.getCommunitiesByOwner();
+      this.communityService.getOwnedCommunities().subscribe((communities: Array<Community>)=> {
+        this.ownedCommunities = communities;
+      })
+    }
+   this.testData();
+  }
+ 
+  public change(page: string): void {
+    this.show = page;
+    localStorage.setItem('p_page', page);
+  }
+
+  public testData()
+  {
     let post: Post = {};
     post.id = '1';
     post.authorId = '592c834u2uv32c234';
@@ -61,9 +82,5 @@ export class ProfileComponent implements OnInit {
     comment2.parentId = '1';
     comment2.authorId = '1';
     this.comments.push(comment, comment2);
-    //--------------------------------------------------------------------------------------------------------------
-  }
-  public change(page: string): void {
-    this.show = page;
   }
 }

@@ -1,9 +1,9 @@
 package com.socialapp.api.security;
 
+import com.socialapp.api.entities.user.UserService;
 import com.socialapp.api.jwt.JwtUtils;
 import com.socialapp.api.jwt.JwtValidator;
 import com.socialapp.api.jwt.UserAuthenticationFilter;
-import com.socialapp.api.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -54,11 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new UserAuthenticationFilter(authenticationManager(), jwtUtils))
                 .addFilterAfter(new JwtValidator(secretKey), UserAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*", "/register", "/login").permitAll()
+                .antMatchers("/", "index", "/css/*", "/js/*", "/user/register", "/login").permitAll()
                 .anyRequest()
                 .authenticated()
-                .and()
-        ;
+                .and();
     }
 
     @Bean

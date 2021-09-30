@@ -7,6 +7,8 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
+import { Community } from '../../models/community.model';
+import { CommunityService } from '../../services/community.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -20,8 +22,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private authService: AuthService,
-    private userInforTokenDecoder: UserInfoTokenDecoder
+    private userInforTokenDecoder: UserInfoTokenDecoder,
+    private communityService: CommunityService
   ) {}
 
   public authenticatedUser: User = {};
@@ -29,7 +31,7 @@ export class NavbarComponent implements OnInit {
   public user: User = this.userInforTokenDecoder.getUserInfoFromToken();
   ngOnInit(): void {
     console.log(this.user);
-    this.getAuthenticatedUserDetails();
+
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map((value) => (value.length >= 1 ? this._filter(value) : []))
@@ -48,14 +50,20 @@ export class NavbarComponent implements OnInit {
     this.router.navigate([`socialapp/${page}`]);
   }
 
-  private getAuthenticatedUserDetails() {
-    this.userService.getAuthenticated().subscribe((authenticatedUser: User) => {
-      this.authenticatedUser = authenticatedUser;
-    });
-  }
-
   public logout() {
-    this.authService.logout();
+    this.userService.logout();
   }
 
+  public createCommunity() {
+    let community: Community = {};
+    community.title = 'Joes';
+    community.creationDate = new Date('2021 09 09');
+    community.description = 'A place to tell your jokes';
+
+    this.communityService
+      .create(community)
+      .subscribe((message: string)=>{
+        console.log(message);
+      });
+  }
 }
