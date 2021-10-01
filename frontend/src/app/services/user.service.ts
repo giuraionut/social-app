@@ -21,7 +21,7 @@ export class UserService {
   public register(user: User): Observable<String> {
     return this.http.post<APIResponse>(`${this.url}/register`, user).pipe(
       map((response: APIResponse) => {
-       return response.message!;
+        return response.message!;
       })
     );
   }
@@ -34,11 +34,11 @@ export class UserService {
       })
       .pipe(
         map((response: APIResponse) => {
-         return response.message!;
+          return response.message!;
         })
       );
   }
-  
+
   public logout(): void {
     this.http
       .post<APIResponse>(`${this.url}/signout`, null, { withCredentials: true })
@@ -48,6 +48,58 @@ export class UserService {
           this.router.navigate(['/socialapp/welcome']);
         })
       )
+      .subscribe();
+  }
+
+  public changePassword(oldPass: string, newPass: string): void {
+    this.http
+      .post<APIResponse>(
+        `${this.url}/password/change`,
+        { oldPassword: oldPass, newPassword: newPass },
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(map((result: APIResponse) => {}))
+      .subscribe();
+  }
+
+  public changeEmail(email: string, pass: string): void {
+    this.http
+      .post<APIResponse>(
+        `${this.url}/email/change`,
+        { email: email, password: pass },
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        map((result: APIResponse) => {
+          this.refreshUserInfoToken();
+        })
+      )
+      .subscribe();
+  }
+
+  public refreshJWT(): void {
+    this.http
+      .post<APIResponse>(`${this.url}/jwt/refresh`, null, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((result: APIResponse) => {
+          this.cookieService.set('loggedIn', 'true', 1);
+        })
+      )
+      .subscribe();
+  }
+
+  public refreshUserInfoToken(): void {
+    this.http
+      .post<APIResponse>(`${this.url}/info/token/refresh`, null, {
+        withCredentials: true,
+      })
+      .pipe(map((result: APIResponse) => {}))
       .subscribe();
   }
 }

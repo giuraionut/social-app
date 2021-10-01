@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal } from '../../models/modal.model';
-import { ModalService } from '../../services/dialog.service';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
+import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
+import { ChangeEmailDialogComponent } from '../dialogs/change-email-dialog/change-email-dialog.component';
+import { ChangePasswordDialogComponent } from '../dialogs/change-password-dialog/change-password-dialog.component';
+import { DeleteAccDialogComponent } from '../dialogs/delete-acc-dialog/delete-acc-dialog.component';
 
 interface SelectModel {
   value: string;
@@ -13,7 +22,11 @@ interface SelectModel {
   styleUrls: ['./acc-settings.component.scss'],
 })
 export class AccSettingsComponent implements OnInit {
-  constructor(private modal: ModalService) {}
+  constructor(
+    public dialog: MatDialog,
+    private userInforTokenDecoder: UserInfoTokenDecoder,
+    private userService: UserService
+  ) {}
   genderValue: string = '';
   countryValue: string = '';
 
@@ -21,7 +34,7 @@ export class AccSettingsComponent implements OnInit {
   public gender: string = 'Male';
   public email: string = 'test@gmail.com';
 
-  modalResult: Modal = {};
+  public user: User = this.userInforTokenDecoder.getUserInfoFromToken();
 
   genders: SelectModel[] = [
     { value: 'male', viewValue: 'Male' },
@@ -44,20 +57,56 @@ export class AccSettingsComponent implements OnInit {
     this.country = value;
   }
 
-  openModal(title?: string, subtitle?: string, details?: string) {
-    let modalDetails: Modal = {
-      title: title,
-      subtitle: subtitle,
-      details: details,
-    };
+  openDialog(selector: string) {
+    if (selector === 'email') {
+      this.openEmailDialog();
+    }
+    if (selector === 'password') {
+      this.openPasswordDialog();
+    }
+    if (selector === 'delete-acc') {
+      this.openDeleteAccDialog();
+    }
+  }
 
-    this.modal.openDialog(modalDetails);
-    let dialogRef = this.modal.getRef();
+  openEmailDialog(): void {
+    const dialogRef = this.dialog.open(ChangeEmailDialogComponent, {
+      width: '400px',
+      data: { email: this.user.email },
+    });
 
-    dialogRef.afterClosed().subscribe((result: Modal) => {
-      if (result.title === 'Email' && result.payload) {
-        this.email = result.payload;
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result !== null && result !== '' && result !== 'cancel') {
+        this.user.email = result;
       }
     });
+  }
+
+  openPasswordDialog(): void {
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+      width: '400px',
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+     
+    });
+  }
+
+  openDeleteAccDialog(): void {
+    const dialogRef = this.dialog.open(DeleteAccDialogComponent, {
+      width: '400px',
+      data: { email: this.user.email },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      this.user.email = result;
+    });
+  }
+
+  public refreshJWT()
+  {
+    this.userService.refreshJWT();
   }
 }

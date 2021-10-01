@@ -1,0 +1,22 @@
+<div class="content">
+  <p mat-dialog-title>Email</p>
+  <div mat-dialog-content>
+    <p class="subtitle">{{data.email}}</p>
+    <mat-divider></mat-divider>
+    <p class="details">Enter your new email address</p>
+    <mat-form-field appearance="fill" class="form-input">
+      <mat-label>Email</mat-label>
+      <input matInput #email />
+    </mat-form-field>
+    <p class="details">Enter your password</p>
+    <mat-form-field appearance="fill" class="form-input">
+      <mat-label>Password</mat-label>
+      <input matInput #password />
+    </mat-form-field>
+  </div>
+  <mat-divider></mat-divider>
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button (click)="action(email.value, password.value)">Submit</button>
+    <button mat-raised-button [mat-dialog-close]="'cancel'">Cancel</button>
+  </mat-dialog-actions>
+</div>

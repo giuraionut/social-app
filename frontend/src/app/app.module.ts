@@ -36,9 +36,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { UserProfileComponent } from './items/user-profile/user-profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ModalComponent } from './items/modal/modal.component';
 import { AccSettingsComponent } from './items/acc-settings/acc-settings.component';
-import { ModalService } from './services/dialog.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
@@ -49,6 +47,10 @@ import {
 import { Interceptor } from './services/http-interceptor.service';
 import { AuthService } from './services/auth.service';
 import { CommunityComponent } from './items/community/community.component';
+import { ChangeEmailDialogComponent } from './items/dialogs/change-email-dialog/change-email-dialog.component';
+import { ChangePasswordDialogComponent } from './items/dialogs/change-password-dialog/change-password-dialog.component';
+import { DeleteAccDialogComponent } from './items/dialogs/delete-acc-dialog/delete-acc-dialog.component';
+import { NotFoundCardComponent } from './items/not-found-card/not-found-card.component';
 
 @NgModule({
   declarations: [
@@ -70,10 +72,13 @@ import { CommunityComponent } from './items/community/community.component';
     ProfileComponent,
     UserProfileComponent,
     SettingsComponent,
-    ModalComponent,
     AccSettingsComponent,
     CommunityComponent,
- 
+    ChangeEmailDialogComponent,
+    ChangePasswordDialogComponent,
+    DeleteAccDialogComponent,
+    NotFoundCardComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -101,7 +106,6 @@ import { CommunityComponent } from './items/community/community.component';
   ],
   providers: [
     RouterGuard,
-    ModalService,
     HttpClient,
     AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

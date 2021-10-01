@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { Community } from '../../models/community.model';
 import { CommunityService } from '../../services/community.service';
 

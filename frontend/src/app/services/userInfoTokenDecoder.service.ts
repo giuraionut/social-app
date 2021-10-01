@@ -9,7 +9,7 @@ export class UserInfoTokenDecoder {
   private token = this.cookieService.get('userInfoToken');
   public getUserInfoFromToken(): User {
     let user: User = {};
-
+    //fa-l behavior-subject
     let decoded_token: any = jwt_decode(this.token);
     user.email = decoded_token.email;
     user.username = decoded_token.username;

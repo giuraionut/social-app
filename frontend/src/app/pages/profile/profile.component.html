@@ -31,7 +31,8 @@
           <app-post *ngFor="let post of posts" [post]="post" [page]="'profile-post-hidden'"></app-post>
         </div>
         <div *ngIf="show == 'communities'">
-          <app-community *ngFor="let community of ownedCommunities" [community]="community"[page]="'profile-community'"></app-community>
+          <app-not-found-card *ngIf="ownedCommunities.length === 0" [entry]="'community'"></app-not-found-card> 
+          <app-community *ngFor="let community of ownedCommunities" [community]="community" [page]="'profile-community'"></app-community>
         </div>
       </div>
 

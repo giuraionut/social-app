@@ -51,11 +51,19 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String refreshJWT(String refreshToken) {
-        User user = this.userService.getByRefreshToken(refreshToken);
-        if (user == null) {
-            return null;
-        }
+    public String refreshUserInfoToken(User user) {
+        return Jwts.builder()
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .claim("birthdate", user.getDateOfBirth())
+                .claim("avatar", user.getAvatar())
+                .setIssuedAt(new Date())
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
+                .signWith(userTokenKey)
+                .compact();
+    }
+
+    public String refreshJWT(User user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("authorities", user.getAuthorities())

@@ -30,8 +30,6 @@ export class NavbarComponent implements OnInit {
 
   public user: User = this.userInforTokenDecoder.getUserInfoFromToken();
   ngOnInit(): void {
-    console.log(this.user);
-
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map((value) => (value.length >= 1 ? this._filter(value) : []))

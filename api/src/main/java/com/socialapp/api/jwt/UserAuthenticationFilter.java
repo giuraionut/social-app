@@ -62,12 +62,12 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         jwtToken.setHttpOnly(true);
         jwtToken.setMaxAge(86400);
 
-        Cookie userInfo = new Cookie("userInfoToken", jwtUtils.generateUserInfoToken(authentication));
-        userInfo.setSecure(false);
-        userInfo.setDomain("localhost");
-        userInfo.setPath("/");
-        userInfo.setHttpOnly(false);
-        userInfo.setMaxAge(86400);
+        Cookie userInfoToken = new Cookie("userInfoToken", jwtUtils.generateUserInfoToken(authentication));
+        userInfoToken.setSecure(false);
+        userInfoToken.setDomain("localhost");
+        userInfoToken.setPath("/");
+        userInfoToken.setHttpOnly(false);
+        userInfoToken.setMaxAge(86400);
 
         AuthenticationResponse authResponse = new AuthenticationResponse();
         authResponse.setStatus(HttpStatus.OK);
@@ -77,7 +77,7 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
         String gsonRes = this.gson.toJson(authResponse);
         response.addCookie(jwtToken);
-        response.addCookie(userInfo);
+        response.addCookie(userInfoToken);
         response.getWriter().print(gsonRes);
         response.getWriter().flush();
     }

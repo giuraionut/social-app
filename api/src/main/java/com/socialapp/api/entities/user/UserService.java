@@ -63,19 +63,40 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(user);
     }
 
-    public boolean deleteUser(String id, String password) {
-        User user = getById(id);
-
-        if (this.passwordEncoder.matches(password, user.getPassword())) {
-            this.userRepository.deleteById(id);
+    public boolean deleteUser(String userId, String password) {
+        if (checkPassword(userId, password)) {
+            this.userRepository.deleteById(userId);
             return true;
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    public boolean checkPassword(String userId, String password) {
+        User user = getById(userId);
+        return this.passwordEncoder.matches(password, user.getPassword());
+    }
+
+    public boolean changePassword(String userId, String oldPassword, String newPassword) {
+        User user = getById(userId);
+        if (checkPassword(userId, oldPassword)) {
+            user.setPassword(this.passwordEncoder.encode(newPassword));
+            updateUser(user);
+            return true;
+        }
+        return false;
     }
 
     public User getById(String userId) {
         return this.userRepository.getById(userId);
     }
 
+    public boolean changeEmail(String userId, String email, String password) {
+        User user = getById(userId);
+        if (checkPassword(userId, password)) {
+            user.setEmail(email);
+            updateUser(user);
+            return true;
+        }
+        return false;
+    }
 }

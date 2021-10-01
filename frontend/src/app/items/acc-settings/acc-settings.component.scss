@@ -1,52 +1,42 @@
-
 .content {
-    margin: 0 auto;
-    max-width: 700px;
-    margin-top: 20px;
-  }
-  
-  .title {
-    margin-bottom: 50px;
-  }
-  .title-small {
-    font-size: 12px;
-    margin-bottom: 5px;
-  }
-  
-  .element {
-    margin-top: 50px;
-    margin-bottom: 50px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .element-small {
-    font-size: 12px;
-    color: gray;
-  }
-  
-  .options {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    width: 100px;
-  }
-  
-  .buttons > .button {
-    width: 100px;
-    margin-top: 50px;
-  }
-  
-  .button > .button-form{
-    width: 100px;
-    font-size:12px;
-    margin-bottom:20px;
-  }
+  margin: 0 auto;
+  max-width: 700px;
+  margin-top: 20px;
+}
+
+.title {
+  margin-bottom: 50px;
+}
+.title-small {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.element {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  align-items: center;
+}
+.element-title {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+.element-small {
+  font-size: 12px;
+  color: gray;
+}
+
+.button {
+  width: 100px;
+}
+
+.button > .button-form {
+  width: 100px;
+  font-size: 12px;
+}
