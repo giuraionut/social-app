@@ -63,6 +63,6 @@ export class LoginComponent implements OnInit {
 
   public login(username: string, password: string) {
     let user: User = { username: username, password: password };
-    this.authService.login(user);
+    this.authService.login(user).subscribe();
   }
 }

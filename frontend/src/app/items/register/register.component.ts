@@ -64,8 +64,6 @@ export class RegisterComponent implements OnInit {
 
   public register(username: string, password: string, email: string) {
     let user: User = { username: username, password: password, email: email };
-    this.userService.register(user).subscribe((result) => {
-      console.log(result);
-    });
+    this.userService.register(user).subscribe();
   }
 }

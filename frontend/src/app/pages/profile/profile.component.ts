@@ -3,6 +3,7 @@ import { Post } from '../../models/post.model';
 import { Comment } from '../../models/comment.model';
 import { Community } from '../../models/community.model';
 import { CommunityService } from '../../services/community.service';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -16,27 +17,29 @@ export class ProfileComponent implements OnInit {
   public comments: Comment[] = [];
 
   public pageFromStorage: string = localStorage.getItem('p_page')!;
-  public show: string =this.pageFromStorage !== null ? this.pageFromStorage : 'posts';
+  public show: string =
+    this.pageFromStorage !== null ? this.pageFromStorage : 'posts';
 
   public ownedCommunities: Array<Community> = [];
 
   ngOnInit(): void {
     if (this.pageFromStorage == 'communities') {
-      this.communityService.getCommunitiesByOwner();
-      this.communityService.getOwnedCommunities().subscribe((communities: Array<Community>)=> {
-        this.ownedCommunities = communities;
-      })
+      this.communityService
+        .getOwnedCommunities()
+        .subscribe((communities: Array<Community>) => {
+          this.ownedCommunities = communities;
+        });
     }
-   this.testData();
+
+    this.testData();
   }
- 
+
   public change(page: string): void {
     this.show = page;
     localStorage.setItem('p_page', page);
   }
 
-  public testData()
-  {
+  public testData() {
     let post: Post = {};
     post.id = '1';
     post.authorId = '592c834u2uv32c234';

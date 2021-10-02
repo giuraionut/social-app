@@ -21,7 +21,7 @@ export class Interceptor implements HttpInterceptor {
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           let response: APIResponse = event.body;
-          console.log("Debug:", response.message);
+          console.log('Debug:', response.message);
           if (response.error === 'wrong credentials') {
             this.snackBar.open(
               'Autentificarea a esuat, verifica numele de utilizator si parola',

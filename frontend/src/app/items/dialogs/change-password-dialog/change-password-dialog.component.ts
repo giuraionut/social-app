@@ -16,10 +16,17 @@ export class ChangePasswordDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  action(oldPassword: string, newPassword: string, confirmNewPassword: string): void {
+  changePass(
+    oldPassword: string,
+    newPassword: string,
+    confirmNewPassword: string
+  ): void {
     if (newPassword === confirmNewPassword) {
-      this.userService.changePassword(oldPassword, newPassword);
+      this.userService
+        .changePassword(oldPassword, newPassword)
+        .subscribe(() => {
+          this.dialogRef.close();
+        });
     }
-    this.dialogRef.close();
   }
 }

@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-import { APIResponse } from '../models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -18,88 +16,71 @@ export class UserService {
     private cookieService: CookieService
   ) {}
 
-  public register(user: User): Observable<String> {
-    return this.http.post<APIResponse>(`${this.url}/register`, user).pipe(
-      map((response: APIResponse) => {
-        return response.message!;
-      })
-    );
+  public register(user: User): Observable<void> {
+    return this.http.post(`${this.url}/register`, user).pipe(map(() => {}));
   }
 
-  public deleteAccount(password: string): Observable<String> {
+  public deleteAccount(password: string): Observable<void> {
     return this.http
-      .delete<APIResponse>(`${this.url}/delete`, {
+      .delete(`${this.url}/delete`, {
         withCredentials: true,
         body: password,
       })
+      .pipe(map(() => {}));
+  }
+
+  public logout(): Observable<void> {
+    return this.http
+      .post(`${this.url}/signout`, null, { withCredentials: true })
       .pipe(
-        map((response: APIResponse) => {
-          return response.message!;
+        map(() => {
+          this.cookieService.delete('loggedIn');
+          this.router.navigate(['/socialapp/welcome']);
         })
       );
   }
 
-  public logout(): void {
-    this.http
-      .post<APIResponse>(`${this.url}/signout`, null, { withCredentials: true })
-      .pipe(
-        map((result: APIResponse) => {
-          this.cookieService.delete('loggedIn');
-          this.router.navigate(['/socialapp/welcome']);
-        })
-      )
-      .subscribe();
-  }
-
-  public changePassword(oldPass: string, newPass: string): void {
-    this.http
-      .post<APIResponse>(
+  public changePassword(oldPass: string, newPass: string): Observable<void> {
+    return this.http
+      .post(
         `${this.url}/password/change`,
         { oldPassword: oldPass, newPassword: newPass },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       )
-      .pipe(map((result: APIResponse) => {}))
-      .subscribe();
+      .pipe(map(() => {}));
   }
 
-  public changeEmail(email: string, pass: string): void {
-    this.http
-      .post<APIResponse>(
+  public changeEmail(email: string, pass: string): Observable<void> {
+    return this.http
+      .post(
         `${this.url}/email/change`,
         { email: email, password: pass },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       )
       .pipe(
-        map((result: APIResponse) => {
-          this.refreshUserInfoToken();
+        mergeMap(() => {
+          return this.refreshUserInfoToken();
         })
-      )
-      .subscribe();
+      );
   }
 
-  public refreshJWT(): void {
-    this.http
-      .post<APIResponse>(`${this.url}/jwt/refresh`, null, {
+  public refreshJWT(): Observable<void> {
+    return this.http
+      .post(`${this.url}/jwt/refresh`, null, {
         withCredentials: true,
       })
       .pipe(
-        map((result: APIResponse) => {
+        map(() => {
           this.cookieService.set('loggedIn', 'true', 1);
         })
-      )
-      .subscribe();
+      );
   }
 
-  public refreshUserInfoToken(): void {
-    this.http
-      .post<APIResponse>(`${this.url}/info/token/refresh`, null, {
+  public refreshUserInfoToken(): Observable<void> {
+    return this.http
+      .post(`${this.url}/info/token/refresh`, null, {
         withCredentials: true,
       })
-      .pipe(map((result: APIResponse) => {}))
-      .subscribe();
+      .pipe(map(() => {}));
   }
 }

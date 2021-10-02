@@ -16,8 +16,9 @@ export class ChangeEmailDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  action(email: string, password: string): void {
-    this.userService.changeEmail(email, password);
-    this.dialogRef.close(email);
+  changeEmail(email: string, password: string): void {
+    this.userService.changeEmail(email, password).subscribe(() => {
+      this.dialogRef.close(email);
+    });
   }
 }

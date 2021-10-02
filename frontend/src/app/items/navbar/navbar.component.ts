@@ -5,7 +5,6 @@ import { map, startWith } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
-import { AuthService } from '../../services/auth.service';
 import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
 import { Community } from '../../models/community.model';
 import { CommunityService } from '../../services/community.service';
@@ -49,7 +48,7 @@ export class NavbarComponent implements OnInit {
   }
 
   public logout() {
-    this.userService.logout();
+    this.userService.logout().subscribe();
   }
 
   public createCommunity() {
@@ -60,8 +59,7 @@ export class NavbarComponent implements OnInit {
 
     this.communityService
       .create(community)
-      .subscribe((message: string)=>{
-        console.log(message);
-      });
+      .subscribe();
   }
+
 }

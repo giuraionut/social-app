@@ -17,16 +17,15 @@ export class AuthService {
     private cookieService: CookieService
   ) {}
 
-  public login(user: User): void {
-    this.http
+  public login(user: User): Observable<void> {
+    return this.http
       .post<APIResponse>(`${this.url}/login`, user, { withCredentials: true })
       .pipe(
-        map((response: APIResponse) => {
+        map(() => {
           this.cookieService.set('loggedIn', 'true', 1);
           this.router.navigate(['/socialapp/home']);
         })
-      )
-      .subscribe();
+      );
   }
 
   public refreshToken(refreshToken: RefreshToken): Observable<void> {
@@ -35,10 +34,9 @@ export class AuthService {
         withCredentials: true,
       })
       .pipe(
-        map((result: APIResponse) => {
+        map(() => {
           this.cookieService.set('loggedIn', 'true', 1);
         })
       );
   }
-
 }

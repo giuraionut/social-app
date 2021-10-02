@@ -1,4 +1,4 @@
-import { Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Community } from '../../models/community.model';
 import { CommunityService } from '../../services/community.service';
 
@@ -13,14 +13,9 @@ export class CommunityComponent implements OnInit {
   @Input() community: Community = {};
   @Input() page: string = '';
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   public delete(community: Community) {
-    this.communityService
-      .deleteCommunity(community)
-      .subscribe((message: string) => {
-        console.log(message);
-      });
+    this.communityService.deleteOwnedCommunity(community).subscribe();
   }
 }

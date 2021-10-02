@@ -74,7 +74,6 @@ export class AccSettingsComponent implements OnInit {
       width: '400px',
       data: { email: this.user.email },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if(result !== null && result !== '' && result !== 'cancel') {
         this.user.email = result;
@@ -87,10 +86,7 @@ export class AccSettingsComponent implements OnInit {
       width: '400px',
       data: {},
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-     
-    });
+    dialogRef.afterClosed().subscribe();
   }
 
   openDeleteAccDialog(): void {
@@ -98,7 +94,6 @@ export class AccSettingsComponent implements OnInit {
       width: '400px',
       data: { email: this.user.email },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       this.user.email = result;
@@ -107,6 +102,6 @@ export class AccSettingsComponent implements OnInit {
 
   public refreshJWT()
   {
-    this.userService.refreshJWT();
+    this.userService.refreshJWT().subscribe();
   }
 }

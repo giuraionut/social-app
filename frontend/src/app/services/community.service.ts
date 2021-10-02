@@ -2,19 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { APIResponse } from '../models/api-response.model';
 import { Community } from '../models/community.model';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CommunityService {
   constructor(private http: HttpClient) {}
   private url = 'http://localhost:8080/community';
 
+  //-----------------------------------------------------------------------------------------------
   public ownedCommunities: BehaviorSubject<Array<Community>> =
     new BehaviorSubject(<Array<Community>>[]);
 
   public create(community: Community): Observable<string> {
     return this.http
-      .post<APIResponse>(`${this.url}/create`, community, {
+      .post(`${this.url}/create`, community, {
         withCredentials: true,
       })
       .pipe(
@@ -28,9 +29,9 @@ export class CommunityService {
       );
   }
 
-  public getCommunitiesByOwner(): void {
-    this.http
-      .post<APIResponse>(`${this.url}/getByOwner`, null, {
+  public getOwnedCommunities(): Observable<Array<Community>> {
+    return this.http
+      .post(`${this.url}/getByOwner`, null, {
         withCredentials: true,
       })
       .pipe(
@@ -39,25 +40,26 @@ export class CommunityService {
           this.ownedCommunities.next(communities);
         })
       )
-      .subscribe();
-  }
-
-  public getOwnedCommunities(): Observable<Array<Community>> {
-    return this.ownedCommunities.asObservable();
-  }
-  public deleteCommunity(community: Community): Observable<string> {
-    return this.http
-      .delete<APIResponse>(`${this.url}/delete`, {
-        withCredentials: true,
-        body: community,
-      })
       .pipe(
-        map((response: APIResponse) => {
-          this.ownedCommunities.next(this.ownedCommunities.value.filter(c => c !== community));
-          let message: string = response.message!;
-          return message;
+        mergeMap(() => {
+          return this.ownedCommunities.asObservable();
         })
       );
   }
 
+  public deleteOwnedCommunity(community: Community): Observable<void> {
+    return this.http
+      .delete(`${this.url}/delete`, {
+        withCredentials: true,
+        body: community,
+      })
+      .pipe(
+        map(() => {
+          this.ownedCommunities.next(
+            this.ownedCommunities.value.filter((c) => c !== community)
+          );
+        })
+      );
+  }
 }
+//-----------------------------------------------------------------------------------------------
