@@ -1,17 +1,38 @@
-.searchbar {
+.search-bar {
   width: 400px;
-  font-size:12px;
-}
-.searchbar-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  font-size: 12px;
   height: 45px;
 }
-.navbar {
+
+.communities-select {
+  font-size: 12px;
+  height: 45px;
+}
+
+.left-content {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size: 15px;
+  justify-content: flex-start;
+  height: 100%;
   align-items: center;
+}
+.middle-content {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+  margin: 0 auto;
+}
+.right-content {
+  display: flex;
+  justify-content: flex-end;
+  height: 100%;
+  align-items: center;
+}
+.navbar {
+  height: 64px;
+  min-height: 64px !important;
+  width: 100%;
+}
+.middle {
+  margin: 0 auto;
 }

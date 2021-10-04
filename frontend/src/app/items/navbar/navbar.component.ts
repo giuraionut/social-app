@@ -7,7 +7,8 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
 import { Community } from '../../models/community.model';
-import { CommunityService } from '../../services/community.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateCommunityDialogComponent } from '../dialogs/create-community-dialog/create-community-dialog.component';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -22,13 +23,13 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private userInforTokenDecoder: UserInfoTokenDecoder,
-    private communityService: CommunityService
+    public dialog: MatDialog
   ) {}
 
   public authenticatedUser: User = {};
 
-  public user: User = this.userInforTokenDecoder.getUserInfoFromToken();
   ngOnInit(): void {
+    this.authenticatedUser = this.userInforTokenDecoder.getUserInfoFromToken();
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map((value) => (value.length >= 1 ? this._filter(value) : []))
@@ -51,15 +52,17 @@ export class NavbarComponent implements OnInit {
     this.userService.logout().subscribe();
   }
 
-  public createCommunity() {
-    let community: Community = {};
-    community.title = 'Joes';
-    community.creationDate = new Date('2021 09 09');
-    community.description = 'A place to tell your jokes';
-
-    this.communityService
-      .create(community)
-      .subscribe();
+  public openCreateCommunityDialog(): void {
+    const dialogRef = this.dialog.open(CreateCommunityDialogComponent, {
+      width: '400px',
+    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
+  selectedCommunity: string = '';
+  communities: Community[] = [
+    { title: 'Jokes', avatar: 'blabla' },
+    { title: 'Music', avatar: 'blabla' },
+    { title: 'Movies', avatar: 'blabla' },
+  ];
 }

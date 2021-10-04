@@ -33,8 +33,8 @@ public class CommunityController {
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
         user.addOwnedCommunity(community);
-        this.userService.updateUser(user);
-
+        Community addedCommunity = this.communityService.add(community);
+        response.setPayload(addedCommunity);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -47,7 +47,7 @@ public class CommunityController {
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
 
-        List<Community> communities = user.getOwnedCommunity();
+        List<Community> communities = user.getOwnedCommunities();
         if (!communities.isEmpty()) {
             response.setMessage("Communities obtained successfully");
         } else {
@@ -63,14 +63,14 @@ public class CommunityController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
 
-        if (this.communityService.getById(community) != null) {
-            response.setError("none");
-            response.setMessage("Community deleted successfully");
-            this.communityService.delete(community);
-        } else {
-            response.setError("not found");
-            response.setMessage("Community not found");
-        }
+//        if (this.communityService.getById(community) != null) {
+        response.setError("none");
+        response.setMessage("Community deleted successfully");
+        this.communityService.delete(community);
+//        } else {
+//            response.setError("not found");
+//            response.setMessage("Community not found");
+//        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

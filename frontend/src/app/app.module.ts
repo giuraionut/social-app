@@ -51,6 +51,7 @@ import { ChangeEmailDialogComponent } from './items/dialogs/change-email-dialog/
 import { ChangePasswordDialogComponent } from './items/dialogs/change-password-dialog/change-password-dialog.component';
 import { DeleteAccDialogComponent } from './items/dialogs/delete-acc-dialog/delete-acc-dialog.component';
 import { NotFoundCardComponent } from './items/not-found-card/not-found-card.component';
+import { CreateCommunityDialogComponent } from './items/dialogs/create-community-dialog/create-community-dialog.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { NotFoundCardComponent } from './items/not-found-card/not-found-card.com
     ChangePasswordDialogComponent,
     DeleteAccDialogComponent,
     NotFoundCardComponent,
+    CreateCommunityDialogComponent,
 
   ],
   imports: [

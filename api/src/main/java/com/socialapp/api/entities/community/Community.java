@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Community {
     @Id
     @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
 
     private String title;
@@ -22,7 +22,7 @@ public class Community {
     private LocalDate creationDate;
 
     //------------------------------------------------------------------------------------------------------------------
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
 

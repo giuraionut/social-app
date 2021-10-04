@@ -1,44 +1,70 @@
 <mat-toolbar class="navbar">
-  <div>
-    <button mat-icon-button>
-      <mat-icon>menu</mat-icon>
-    </button>
-    <button mat-icon-button (click)="goTo('home')">
-      <mat-icon>home</mat-icon>
-    </button>
-  </div>
-  <div class="searchbar-wrapper">
-    <mat-form-field class="searchbar" appearance="fill">
-      <mat-label>Search</mat-label>
-      <input
-        type="text"
-        placeholder="Ex. Jokes"
-        matInput
-        [formControl]="searchControl"
-        [matAutocomplete]="auto"
-      />
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let option of filteredOptions | async"
-          [value]="option"
-        >
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </div>
-  <div>
-    <button mat-icon-button>
-      <mat-icon>notifications</mat-icon>
-    </button>
-    <button mat-icon-button>
-      <mat-icon [matMenuTriggerFor]="menu">person</mat-icon>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="goTo('profile')">{{user.username}}</button>
-        <button mat-menu-item (click)="goTo('settings')">Settings</button>
-        <button mat-menu-item (click)="logout()">Logout</button>
-        <button mat-menu-item (click)="createCommunity()">Create community</button>
-      </mat-menu>
-    </button>
+  <div
+    fxLayout="row"
+    fxFlexFill
+    class="navbar-content"
+  >
+    <div fxFlex="10">
+      <div class="left-content">
+        <button mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+        <button mat-icon-button (click)="goTo('home')">
+          <mat-icon>home</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div fxFlex="10" fxHide.xs fxHide.lt-sm fxHide.sm>
+      <div class="left-content">
+        <mat-form-field class="communities-select" appearance="outline">
+          <mat-label>Communities</mat-label>
+          <mat-select [(ngModel)]="selectedCommunity" name="community">
+            <mat-option *ngFor="let community of communities">
+              {{ community.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxFlex="60" class="middle">
+      <div class="middle-content">
+        <mat-form-field class="search-bar" appearance="outline">
+          <mat-label>Search</mat-label>
+          <input
+            type="text"
+            placeholder="Ex. Jokes"
+            matInput
+            [formControl]="searchControl"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm>
+      <div class="right-content">
+        <button mat-icon-button>
+          <mat-icon>notifications</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon [matMenuTriggerFor]="menu">person</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="goTo('profile')">
+              {{ authenticatedUser.username }}
+            </button>
+            <button mat-menu-item (click)="goTo('settings')">Settings</button>
+            <button mat-menu-item (click)="openCreateCommunityDialog()">Create community</button>
+            <button mat-menu-item (click)="logout()">Logout</button>
+          </mat-menu>
+        </button>
+      </div>
+    </div>
   </div>
 </mat-toolbar>

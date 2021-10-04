@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { APIResponse } from '../models/api-response.model';
 import { Community } from '../models/community.model';
 import { map, mergeMap } from 'rxjs/operators';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CommunityService {
   constructor(private http: HttpClient) {}
@@ -21,7 +21,7 @@ export class CommunityService {
       .pipe(
         map((response: APIResponse) => {
           let communities: Array<Community> = this.ownedCommunities.value;
-          communities.push(community);
+          communities.push(response.payload);
           this.ownedCommunities.next(communities);
           let message: string = response.message!;
           return message;

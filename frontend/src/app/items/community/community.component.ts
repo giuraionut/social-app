@@ -13,7 +13,9 @@ export class CommunityComponent implements OnInit {
   @Input() community: Community = {};
   @Input() page: string = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.community);
+  }
 
   public delete(community: Community) {
     this.communityService.deleteOwnedCommunity(community).subscribe();

@@ -1,6 +1,6 @@
 package com.socialapp.api.entities.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Joiner;
 import com.socialapp.api.entities.community.Community;
 import lombok.Data;
@@ -19,12 +19,11 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+
 public class User implements UserDetails {
-
-
     @Id
     @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
 
     private String username;
@@ -41,8 +40,9 @@ public class User implements UserDetails {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
+    //Owned communities ( communities that a user created )
     //------------------------------------------------------------------------------------------------------------------
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "creator", fetch = FetchType.LAZY)
     private List<Community> ownedCommunities = new ArrayList<>();
 
     public void addOwnedCommunity(Community community) {
@@ -55,12 +55,17 @@ public class User implements UserDetails {
         community.setCreator(null);
     }
 
-    @JsonBackReference
-    public List<Community> getOwnedCommunity() {
-        return ownedCommunities;
+    @PreRemove
+    private void preRemove() {
+        ownedCommunities.forEach(ownedCommunity -> ownedCommunity.setCreator(null));
     }
 
+    @JsonManagedReference
+    public List<Community> getOwnedCommunities() {
+        return ownedCommunities;
+    }
     //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Set<GrantedAuthority> getAuthorities() {
         String[] grantedAuthoritiesArray = grantedAuthorities.split(",");

@@ -1,0 +1,23 @@
+<div class="content">
+    <p mat-dialog-title>Create Community</p>
+    <div mat-dialog-content>
+      <p class="subtitle">Create a community</p>
+      <mat-divider></mat-divider>
+      <p class="details">Enter the name</p>
+      <mat-form-field appearance="outline" class="form-input">
+        <mat-label>Name</mat-label>
+        <input matInput #title>
+      </mat-form-field>
+      <p class="details">Provide a short description</p>
+      <mat-form-field appearance="outline" class="form-input">
+        <mat-label>Short description</mat-label>
+        <textarea matInput #description></textarea>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-dialog-actions class="dialog-actions">
+      <button mat-raised-button (click)="createCommunity(title.value, description.value)">Submit</button>
+      <button mat-raised-button [mat-dialog-close]="'cancel'">Cancel</button>
+    </mat-dialog-actions>
+</div>
+  

@@ -1,5 +1,6 @@
 package com.socialapp.api.entities.user;
 
+import com.socialapp.api.entities.community.CommunityService;
 import com.socialapp.api.jwt.JwtUtils;
 import com.socialapp.api.response.Response;
 import lombok.AllArgsConstructor;
@@ -169,7 +170,7 @@ public class UserController {
 
         response.setError("none");
         response.setMessage("User info token refreshed successfully");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }

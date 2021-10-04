@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-
+import { AuthService } from './auth.service';
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private url = 'http://localhost:8080/user';
@@ -13,11 +13,20 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private authService: AuthService
   ) {}
 
   public register(user: User): Observable<void> {
-    return this.http.post(`${this.url}/register`, user).pipe(map(() => {}));
+    return this.http.post(`${this.url}/register`, user).pipe(
+      mergeMap(() => {
+        let userToLogin: User = {
+          username: user.username,
+          password: user.password,
+        };
+        return this.authService.login(userToLogin);
+      })
+    );
   }
 
   public deleteAccount(password: string): Observable<void> {
@@ -26,7 +35,11 @@ export class UserService {
         withCredentials: true,
         body: password,
       })
-      .pipe(map(() => {}));
+      .pipe(
+        mergeMap(() => {
+          return this.logout();
+        })
+      );
   }
 
   public logout(): Observable<void> {
