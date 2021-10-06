@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "communities")
+@Table(name = "communities", indexes = {@Index(name = "title_index", columnList = "title", unique = true)})
 @Data
 public class Community {
     @Id
@@ -17,6 +17,7 @@ public class Community {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
 
+    @Column(name = "title", nullable = false)
     private String title;
     private String description;
     private LocalDate creationDate;

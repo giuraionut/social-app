@@ -91,3 +91,17 @@ body {
   flex-direction: row;
   justify-content: space-between;
 }
+
+
+//-------------------------------------------------------------------
+
+.main-content {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.bg {
+  background-color: black;
+  height: 100vh;
+  overflow: auto;
+}

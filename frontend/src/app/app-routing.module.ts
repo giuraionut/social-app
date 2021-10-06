@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { PostDetailsComponent } from './pages/post-details/post-details.component';
-import { WelcomeComponent } from './pages/welcome/welcome.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { SettingsComponent } from './pages/settings/settings.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { PostDetailsComponent } from './pages/post-page/post-page.component';
+import { WelcomePageComponent } from './pages/welcome-page/welcome-page.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { RouterGuard } from './services/router-guard.service';
+import { CommunityPageComponent } from './pages/community-page/community-page.component';
 const routes: Routes = [
   {
     path: 'socialapp/home',
-    component: HomeComponent,
+    component: HomePageComponent,
     canActivate: [RouterGuard],
   },
   {
@@ -19,16 +20,21 @@ const routes: Routes = [
   },
   {
     path: 'socialapp/welcome',
-    component: WelcomeComponent,
+    component: WelcomePageComponent,
   },
   {
     path: 'socialapp/profile',
-    component: ProfileComponent,
+    component: ProfilePageComponent,
     canActivate: [RouterGuard],
   },
   {
     path: 'socialapp/settings',
-    component: SettingsComponent,
+    component: SettingsPageComponent,
+    canActivate: [RouterGuard],
+  },
+  {
+    path: 'socialapp/community',
+    component: CommunityPageComponent,
     canActivate: [RouterGuard],
   },
 ];

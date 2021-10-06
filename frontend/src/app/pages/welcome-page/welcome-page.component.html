@@ -1,0 +1,9 @@
+<div class="background">
+  <div class="content">
+    <app-register-item class="form" *ngIf="!switch"></app-register-item>
+    <app-login-item class="form" *ngIf="switch"></app-login-item>
+    <button class="switch"  mat-raised-button (click)="changeForm()">
+      {{message}}
+    </button>
+  </div>
+</div>

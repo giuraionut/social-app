@@ -1,0 +1,27 @@
+<div class="bg">
+  <div>
+    <app-navbar-item></app-navbar-item>
+  </div>
+  <div class="content-wrapper">
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayout.lt-sm="column"
+      fxLayout.sm="column"
+      fxLayout.md="column"
+      fxFlexFill
+    >
+      <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
+      <div fxFlex="40" class="main-content">
+        <app-menu-bar></app-menu-bar>
+        <app-post-item *ngFor="let post of posts" [post]="post"></app-post-item>
+      </div>
+
+      <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>
+        <app-top-communities-item></app-top-communities-item>
+        <app-recent-posts-item></app-recent-posts-item>
+      </div>
+      <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
+    </div>
+  </div>
+</div>

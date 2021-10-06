@@ -1,0 +1,35 @@
+<div class="bg">
+    <div>
+      <app-navbar-item></app-navbar-item>
+    </div>
+    <div class="content-wrapper">
+      <div
+        fxLayout="row"
+        fxLayout.xs="column"
+        fxLayout.lt-sm="column"
+        fxLayout.sm="column"
+        fxLayout.md="column"
+        fxFlexFill
+      >
+        <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
+        <div fxFlex="40" class="main-content">
+          <app-menu-bar></app-menu-bar>
+          <!-- <app-post-item *ngFor="let post of posts" [post]="post"></app-post-item> -->
+        </div>
+  
+        <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>
+            <mat-card class="wrapper">
+                <p class="title">{{ community.title }}</p>
+                <p class="description">{{ community.description }}</p>
+                <mat-divider></mat-divider>
+                <!-- <p class="details">Members: {{ community.noOfMembers | kFormatter }}</p> -->
+                <p class="details">
+                  Date created: {{ community.creationDate | date: "short" }}
+                </p>
+              </mat-card>
+        </div>
+        <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
+      </div>
+    </div>
+  </div>
+  

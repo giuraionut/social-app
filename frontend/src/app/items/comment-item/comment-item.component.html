@@ -1,0 +1,28 @@
+<mat-card class="card" [ngClass]="page ==='profile-comment' ? 'clickable' : ''" (click)="goToComment(comment)">
+
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-subtitle class="original-poster">{{ comment.authorId }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="content">
+    <p>comment id: {{comment.id}} ----////---- {{ comment.content }}</p>
+  </mat-card-content>
+
+  <mat-card-actions class="center-left" *ngIf="page !== 'profile-comment'">
+    <mat-icon matRipple class="icon center-middle" (click)="upvote(comment)">thumb_up_alt</mat-icon>
+    <span class="text center-middle"> {{comment.likes | kFormatter}} </span>
+    <mat-icon matRipple class="icon center-middle" (click)="downvote(comment)">thumb_down_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle"(click)="comment.childsHidden = !comment.childsHidden">comment</mat-icon>
+    <span class="text center-middle"> {{comment.replays | kFormatter}} </span> 
+  </mat-card-actions>
+
+  <mat-card-actions class="center-left" *ngIf="page === 'profile-comment'">
+    <mat-icon matRipple class="icon center-middle" (click)="delete(comment)">delete</mat-icon>
+  </mat-card-actions>
+
+  <div *ngIf="comment.childsHidden && comment.replays! > 0 && page !== 'profile-comment'">
+    <app-comment-item *ngFor="let child of comment.childs" [comment]="child"></app-comment-item>
+  </div>
+
+</mat-card>

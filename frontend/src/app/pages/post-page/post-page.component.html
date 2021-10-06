@@ -1,0 +1,28 @@
+<div class="bg">
+  <div>
+    <app-navbar-item></app-navbar-item>
+  </div>
+  <div class="content-wrapper">
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayout.lt-sm="column"
+      fxLayout.sm="column"
+      fxLayout.md="column"
+      fxFlexFill
+    >
+      <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
+      <div fxFlex="40" class="main-content">
+        <app-post-item [post]="post"></app-post-item>
+
+        <app-comment-item *ngFor="let comment of comments" [comment]="comment" [page]="'post-details'">
+        </app-comment-item>
+      </div>
+
+      <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>
+        <app-community-details></app-community-details>
+      </div>
+      <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
+    </div>
+  </div>
+</div>

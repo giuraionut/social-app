@@ -1,0 +1,23 @@
+<div class="bg">
+  <div>
+    <app-navbar-item></app-navbar-item>
+  </div>
+  <div class="content-wrapper">
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayout.lt-sm="column"
+      fxLayout.sm="column"
+      fxLayout.md="column"
+      fxFlexFill
+    >
+      <div fxFlex="60" class="main-content">
+        <app-settings-item></app-settings-item>
+      </div>
+
+      <div fxFlex="40" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>
+        <!-- ----------- -->
+      </div>
+    </div>
+  </div>
+</div>
