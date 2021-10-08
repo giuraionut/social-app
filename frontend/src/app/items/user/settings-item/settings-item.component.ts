@@ -4,12 +4,12 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { User } from '../../models/user.model';
-import { UserService } from '../../services/user.service';
-import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
-import { ChangeEmailDialogComponent } from '../dialogs/change-email-dialog/change-email-dialog.component';
-import { ChangePasswordDialogComponent } from '../dialogs/change-password-dialog/change-password-dialog.component';
-import { DeleteAccDialogComponent } from '../dialogs/delete-acc-dialog/delete-acc-dialog.component';
+import { User } from '../../../models/user.model';
+import { UserService } from '../../../services/user.service';
+import { UserInfoTokenDecoder } from '../../../services/userInfoTokenDecoder.service';
+import { ChangeEmailDialogComponent } from '../../dialogs/change-email-dialog/change-email-dialog.component';
+import { ChangePasswordDialogComponent } from '../../dialogs/change-password-dialog/change-password-dialog.component';
+import { DeleteAccDialogComponent } from '../../dialogs/delete-acc-dialog/delete-acc-dialog.component';
 
 interface SelectModel {
   value: string;

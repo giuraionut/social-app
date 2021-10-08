@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
-import { User } from '../../models/user.model';
-import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
+import { User } from '../../../models/user.model';
+import { UserInfoTokenDecoder } from '../../../services/userInfoTokenDecoder.service';
 
 @Component({
   selector: 'app-profile-item',

@@ -17,9 +17,9 @@
     <div fxFlex="10" fxHide.xs fxHide.lt-sm fxHide.sm>
       <div class="left-content">
         <mat-form-field class="communities-select" appearance="outline">
-          <mat-label>Communities</mat-label>
+          <mat-label>{{selectedCommunityLabel}}</mat-label>
           <mat-select [(ngModel)]="selectedCommunity" name="community">
-            <mat-option *ngFor="let community of communities">
+            <mat-option *ngFor="let community of joinedCommunities" (click)="goToCommunity(community.title!)">
               {{ community.title }}
             </mat-option>
           </mat-select>

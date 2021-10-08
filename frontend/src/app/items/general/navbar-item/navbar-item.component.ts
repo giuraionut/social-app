@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { User } from '../../models/user.model';
-import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
-import { Community } from '../../models/community.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../../services/user.service';
+import { User } from '../../../models/user.model';
+import { UserInfoTokenDecoder } from '../../../services/userInfoTokenDecoder.service';
+import { Community } from '../../../models/community.model';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateCommunityDialogComponent } from '../dialogs/create-community-dialog/create-community-dialog.component';
+import { CreateCommunityDialogComponent } from '../../dialogs/create-community-dialog/create-community-dialog.component';
+import { CommunityService } from '../../../services/community.service';
 @Component({
   selector: 'app-navbar-item',
   templateUrl: './navbar-item.component.html',
@@ -18,15 +19,19 @@ export class NavbarItemComponent implements OnInit {
   searchControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
-
+  selectedCommunityLabel="Joined communities";
   constructor(
     private router: Router,
     private userService: UserService,
     private userInforTokenDecoder: UserInfoTokenDecoder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private communityService: CommunityService
   ) {}
 
   public authenticatedUser: User = {};
+
+  selectedCommunity: string = '';
+  joinedCommunities: Community[] = [];
 
   ngOnInit(): void {
     this.authenticatedUser = this.userInforTokenDecoder.getUserInfoFromToken();
@@ -34,6 +39,14 @@ export class NavbarItemComponent implements OnInit {
       startWith(''),
       map((value) => (value.length >= 1 ? this._filter(value) : []))
     );
+
+    this.communityService.getJoinedCommunities().subscribe((communities) => {
+      this.joinedCommunities = communities;
+    });
+  }
+
+  goToCommunity(title: string) {
+    this.router.navigate([`socialapp/community/${title}`]);
   }
 
   private _filter(value: string): string[] {
@@ -58,11 +71,4 @@ export class NavbarItemComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {});
   }
-
-  selectedCommunity: string = '';
-  communities: Community[] = [
-    { title: 'Jokes', avatar: 'blabla' },
-    { title: 'Music', avatar: 'blabla' },
-    { title: 'Movies', avatar: 'blabla' },
-  ];
 }

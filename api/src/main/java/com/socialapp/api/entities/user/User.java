@@ -1,6 +1,9 @@
 package com.socialapp.api.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Joiner;
 import com.socialapp.api.entities.community.Community;
 import lombok.Data;
@@ -19,7 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -66,6 +69,32 @@ public class User implements UserDetails {
     }
     //------------------------------------------------------------------------------------------------------------------
 
+    //Joined Communities
+    //------------------------------------------------------------------------------------------------------------------
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "joined_communities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "community_id"),
+            indexes = {
+                    @Index(name = "user_id_community_id_index", columnList = "user_id, community_id", unique = true)
+            })
+    private List<Community> joinedCommunities = new ArrayList<>();
+
+    public void addJoinedCommunity(Community community) {
+        joinedCommunities.add(community);
+    }
+
+    public void removeJoinedCommunity(Community community) {
+        joinedCommunities.remove(community);
+    }
+
+    public List<Community> getJoinedCommunities() {
+        return joinedCommunities;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Set<GrantedAuthority> getAuthorities() {
         String[] grantedAuthoritiesArray = grantedAuthorities.split(",");
@@ -100,4 +129,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return this.isEnabled;
     }
+
 }

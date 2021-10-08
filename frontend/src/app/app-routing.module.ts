@@ -33,7 +33,7 @@ const routes: Routes = [
     canActivate: [RouterGuard],
   },
   {
-    path: 'socialapp/community',
+    path: 'socialapp/community/:title',
     component: CommunityPageComponent,
     canActivate: [RouterGuard],
   },

@@ -1,6 +1,5 @@
 package com.socialapp.api.entities.user;
 
-import com.socialapp.api.entities.community.CommunityService;
 import com.socialapp.api.jwt.JwtUtils;
 import com.socialapp.api.response.Response;
 import lombok.AllArgsConstructor;

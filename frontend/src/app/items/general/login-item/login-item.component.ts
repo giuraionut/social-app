@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { User } from '../../models/user.model';
-import { AuthService } from '../../services/auth.service';
+import { User } from '../../../models/user.model';
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-login-item',
   templateUrl: './login-item.component.html',

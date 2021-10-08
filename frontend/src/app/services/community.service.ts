@@ -10,12 +10,17 @@ export class CommunityService {
   private url = 'http://localhost:8080/community';
 
   //-----------------------------------------------------------------------------------------------
-  public ownedCommunities: BehaviorSubject<Array<Community>> =
+  private ownedCommunities: BehaviorSubject<Array<Community>> =
     new BehaviorSubject(<Array<Community>>[]);
 
-  public create(community: Community): Observable<string> {
+  private joinedCommunities: BehaviorSubject<Array<Community>> =
+    new BehaviorSubject(<Array<Community>>[]);
+
+  private community: BehaviorSubject<Community> = new BehaviorSubject({});
+
+  public create(community: Community): Observable<void> {
     return this.http
-      .post(`${this.url}/create`, community, {
+      .post(`${this.url}`, community, {
         withCredentials: true,
       })
       .pipe(
@@ -23,15 +28,13 @@ export class CommunityService {
           let communities: Array<Community> = this.ownedCommunities.value;
           communities.push(response.payload);
           this.ownedCommunities.next(communities);
-          let message: string = response.message!;
-          return message;
         })
       );
   }
 
   public getOwnedCommunities(): Observable<Array<Community>> {
     return this.http
-      .post(`${this.url}/getByOwner`, null, {
+      .get(`${this.url}/owned`, {
         withCredentials: true,
       })
       .pipe(
@@ -47,9 +50,27 @@ export class CommunityService {
       );
   }
 
+  public getJoinedCommunities(): Observable<Array<Community>> {
+    return this.http
+      .get(`${this.url}/joined`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          let communities: Array<Community> = response.payload;
+          this.joinedCommunities.next(communities);
+        })
+      )
+      .pipe(
+        mergeMap(() => {
+          return this.joinedCommunities.asObservable();
+        })
+      );
+  }
+
   public deleteOwnedCommunity(community: Community): Observable<void> {
     return this.http
-      .delete(`${this.url}/delete`, {
+      .delete(`${this.url}`, {
         withCredentials: true,
         body: community,
       })
@@ -61,5 +82,44 @@ export class CommunityService {
         })
       );
   }
+
+  public getByTitle(title: string): Observable<Community> {
+    return this.http
+      .get(`${this.url}/${title}`, { withCredentials: true })
+      .pipe(
+        map((response: APIResponse) => {
+          this.community.next(response.payload);
+        })
+      )
+      .pipe(
+        mergeMap(() => {
+          return this.community.asObservable();
+        })
+      );
+  }
+
+  public join(communityId: string): Observable<void> {
+    return this.http
+      .put(`${this.url}/join`, communityId, { withCredentials: true })
+      .pipe(
+        map((response: APIResponse) => {
+          let communities: Array<Community> = this.joinedCommunities.value;
+          communities.push(response.payload);
+          this.joinedCommunities.next(communities);
+        })
+      );
+  }
+  public leave(communityId: string): Observable<void> {
+    return this.http
+      .put(`${this.url}/leave`, communityId, { withCredentials: true })
+      .pipe(
+        map((response: APIResponse) => {
+          let communities: Array<Community> = this.joinedCommunities.value;
+          communities.push(response.payload);
+          this.joinedCommunities.next(communities.filter((c) => c.id !== response.payload.id));
+        })
+      );
+  }
 }
+
 //-----------------------------------------------------------------------------------------------
