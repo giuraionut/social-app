@@ -2,7 +2,7 @@
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>
-      <span (click)="goTo(post)" class="clickable">{{ post.name }} ----////---- post id: {{ post.id }} ----////---- {{post.hidden}}</span>
+      <span (click)="goTo(post)" class="clickable">{{ post.title }} ----////---- post id: {{ post.id }} ----////---- {{post.hidden}}</span>
     </mat-card-title>
     <mat-card-subtitle *ngIf="page !== 'profile-post-hidden'" class="clickable">{{ post.authorId }}</mat-card-subtitle>
   </mat-card-header>

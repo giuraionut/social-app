@@ -14,8 +14,13 @@
       <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
       <div fxFlex="40" class="main-content">
         <app-post-item [post]="post"></app-post-item>
-
-        <app-comment-item *ngFor="let comment of comments" [comment]="comment" [page]="'post-details'">
+        <mat-card class="card add-comment">
+          <app-create-comment-item></app-create-comment-item></mat-card>
+        <app-comment-item
+          *ngFor="let comment of comments"
+          [comment]="comment"
+          [page]="'post-details'"
+        >
         </app-comment-item>
       </div>
 

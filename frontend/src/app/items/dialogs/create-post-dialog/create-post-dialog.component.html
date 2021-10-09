@@ -1,0 +1,23 @@
+<div class="content">
+    <p mat-dialog-title>Create Post</p>
+    <div mat-dialog-content>
+      <p class="subtitle">Create a new post</p>
+      <mat-divider></mat-divider>
+      <p class="details">Enter the title of the post</p>
+      <mat-form-field appearance="outline" class="form-input">
+        <mat-label>Title</mat-label>
+        <input matInput #title placeholder="Should be something short and suggestive">
+      </mat-form-field>
+      <p class="details">Tell everyone what you think</p>
+      <mat-form-field appearance="outline" class="form-input">
+        <mat-label>Content</mat-label>
+        <textarea matInput #description placeholder="Remember to follow the rules and be polite"></textarea>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-dialog-actions class="dialog-actions">
+      <button mat-raised-button (click)="createPost(title.value, description.value)">Submit</button>
+      <button mat-raised-button [mat-dialog-close]="'cancel'">Cancel</button>
+    </mat-dialog-actions>
+</div>
+  

@@ -22,23 +22,16 @@ export class ProfilePostItemComponent implements OnInit {
     this.router.navigate([`/socialapp/post/${post.id}`]);
   }
 
-  public upvote(post: Post):void{
-    this.snackBar.open(`Post ${post.name} upvoted!`, "Close", {duration:4000});
-  }
-  public downvote(post: Post):void{
-    this.snackBar.open(`Post ${post.name} downvoted!`, "Close", {duration:4000});
-  }
-
   public delete(post: Post):void{
-    this.snackBar.open(`Post ${post.name} deleted!`, "Close", {duration:4000});
+    this.snackBar.open(`Post ${post.title} deleted!`, "Close", {duration:4000});
   }
 
   public hide(post: Post): void{
-    this.snackBar.open(`Post ${post.name} hidden!`, "Close", {duration:4000});
+    this.snackBar.open(`Post ${post.title} hidden!`, "Close", {duration:4000});
     post.hidden = true;
   }
   public unhide(post: Post): void{
-    this.snackBar.open(`Post ${post.name} made visible!`, "Close", {duration:4000});
+    this.snackBar.open(`Post ${post.title} made visible!`, "Close", {duration:4000});
     post.hidden = false;
   }
 }

@@ -13,7 +13,7 @@ export class RecentPostsItemComponent implements OnInit {
     let date: Date = new Date('2021 09 21');
 
     let post: Post = {
-      name: 'I really like potatoes',
+      title: 'I really like potatoes',
       likes: 145234,
       comments: 5025,
       dateCreated: date,

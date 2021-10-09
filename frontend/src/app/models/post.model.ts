@@ -6,7 +6,7 @@ export interface Post {
   dislikes?: number;
   dateCreated?: Date;
 
-  name?: string;
+  title?: string;
   media?: string;
 
   comments?: number;

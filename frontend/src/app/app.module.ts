@@ -31,7 +31,7 @@ import { RouterGuard } from './services/router-guard.service';
 import { RegisterItemComponent } from './items/general/register-item/register-item.component';
 import { LoginItemComponent } from './items/general/login-item/login-item.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { ProfileItemComponent } from './items/user/profile-item/profile-item.component';
+import { ProfileItemComponent } from './items/profile/profile-item/profile-item.component';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AccSettingsItemComponent } from './items/user/settings-item/settings-item.component';
@@ -54,7 +54,8 @@ import { CommunityPageComponent } from './pages/community-page/community-page.co
 import { ProfilePostItemComponent } from './items/profile/profile-post-item/profile-post-item.component';
 import { ProfileCommentItemComponent } from './items/profile/profile-comment-item/profile-comment-item.component';
 import { ProfileCommunityItemComponent } from './items/profile/profile-community-item/profile-community-item.component';
-
+import { CreatePostDialogComponent } from './items/dialogs/create-post-dialog/create-post-dialog.component';
+import { CreateCommentItemComponent } from './items/create-comment-item/create-comment-item.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,6 +86,8 @@ import { ProfileCommunityItemComponent } from './items/profile/profile-community
     ProfilePostItemComponent,
     ProfileCommentItemComponent,
     ProfileCommunityItemComponent,
+    CreatePostDialogComponent,
+    CreateCommentItemComponent,
 
   ],
   imports: [

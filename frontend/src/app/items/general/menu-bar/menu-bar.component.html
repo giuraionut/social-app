@@ -1,16 +1,14 @@
-<div>
-  <mat-card class="menu">
-    <div class="menu-content">
-      <mat-form-field class="newpost-input" appearance="outline">
-        <mat-label>Create new post</mat-label>
-        <input matInput placeholder="Ex. I like guitar" />
-      </mat-form-field>
-      <div>
-        <img
-          class="avatar-mini"
-          src="https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png"
-        />
-      </div>
+<mat-card class="menu">
+  <div class="menu-content">
+    <mat-form-field class="newpost-input" appearance="outline"  (click)="openCreatePostDialog()" >
+      <input #input matInput placeholder="Create a new post"/>
+    </mat-form-field>
+
+    <div class="avatar-wrapper">
+      <img
+        class="avatar-mini"
+        src="https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png"
+      />
     </div>
-  </mat-card>
-</div>
+  </div>
+</mat-card>

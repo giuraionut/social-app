@@ -20,22 +20,10 @@ export class PostItemComponent implements OnInit {
   }
 
   public upvote(post: Post):void{
-    this.snackBar.open(`Post ${post.name} upvoted!`, "Close", {duration:4000});
+    this.snackBar.open(`Post ${post.title} upvoted!`, "Close", {duration:4000});
   }
   public downvote(post: Post):void{
-    this.snackBar.open(`Post ${post.name} downvoted!`, "Close", {duration:4000});
+    this.snackBar.open(`Post ${post.title} downvoted!`, "Close", {duration:4000});
   }
 
-  public delete(post: Post):void{
-    this.snackBar.open(`Post ${post.name} deleted!`, "Close", {duration:4000});
-  }
-
-  public hide(post: Post): void{
-    this.snackBar.open(`Post ${post.name} hidden!`, "Close", {duration:4000});
-    post.hidden = true;
-  }
-  public unhide(post: Post): void{
-    this.snackBar.open(`Post ${post.name} made visible!`, "Close", {duration:4000});
-    post.hidden = false;
-  }
 }

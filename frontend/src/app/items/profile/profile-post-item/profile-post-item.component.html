@@ -1,6 +1,6 @@
 <mat-card class="card" *ngIf="(!post.hidden && page !== 'profile-post-hidden') || (post.hidden && page === 'profile-post-hidden')">
       <mat-card-title>
-        <p (click)="goTo(post)" class="clickable">{{ post.name }}</p>
+        <p (click)="goTo(post)" class="clickable">{{ post.title }}</p>
       </mat-card-title>
     <mat-card-content>
       <p>{{ post.content }}</p>
