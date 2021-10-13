@@ -12,7 +12,7 @@ import { DeleteAccDialogComponent } from '../delete-acc-dialog/delete-acc-dialog
 export class CreateCommunityDialogComponent implements OnInit {
   constructor(private communityService: CommunityService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<DeleteAccDialogComponent>,) {}
+    public dialogRef: MatDialogRef<CreateCommunityDialogComponent>) {}
 
   ngOnInit(): void {}
 

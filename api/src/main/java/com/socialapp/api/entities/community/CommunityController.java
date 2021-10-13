@@ -19,9 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 public class CommunityController {
 
-    private CommunityService communityService;
-    private JwtUtils jwtUtils;
-    private UserService userService;
+    private final CommunityService communityService;
+    private final JwtUtils jwtUtils;
+    private final UserService userService;
 
     @PostMapping()
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -30,7 +30,7 @@ public class CommunityController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        response.setMessage("Community create successfully");
+        response.setMessage("Community created successfully");
 
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
@@ -52,11 +52,12 @@ public class CommunityController {
 
         List<Community> communities = user.getOwnedCommunities();
         if (!communities.isEmpty()) {
-            response.setMessage("Communities obtained successfully");
+            response.setPayload(communities);
+            response.setMessage("Owned communities by user obtained successfully");
         } else {
-            response.setMessage("No communities found for user");
+            response.setMessage("No owned communities found for user");
         }
-        response.setPayload(communities);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -71,7 +72,7 @@ public class CommunityController {
         Community community = this.communityService.getByTitle(title);
 
         if (community != null) {
-            response.setMessage("Community obtained successfully");
+            response.setMessage("Community obtained {by title} successfully");
         } else {
             response.setMessage("No community found with title " + title);
         }
@@ -117,7 +118,7 @@ public class CommunityController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        response.setMessage("You joined the community successfully");
+        response.setMessage("You left the community successfully");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
         Community community = this.communityService.getById(communityId);
@@ -139,9 +140,9 @@ public class CommunityController {
 
         List<Community> communities = user.getJoinedCommunities();
         if (!communities.isEmpty()) {
-            response.setMessage("Communities obtained successfully");
+            response.setMessage("Joined communities by user obtained successfully");
         } else {
-            response.setMessage("No communities found for user");
+            response.setMessage("No joined communities found for user");
         }
         response.setPayload(communities);
         return new ResponseEntity<>(response, HttpStatus.OK);

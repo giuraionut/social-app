@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Community } from '../../models/community.model';
+import { Post } from '../../models/post.model';
 import { CommunityService } from '../../services/community.service';
+import { PostService } from '../../services/post.service';
 @Component({
   selector: 'app-community-details',
   templateUrl: './community-details.component.html',
@@ -11,8 +13,22 @@ export class CommunityDetailsComponent implements OnInit {
   @Input() community: Community = {};
 
   joined: boolean = false;
+  label: string = 'Join';
   ngOnInit(): void {
-    this.isJoined();
+    this.communityService.getJoined().subscribe((communities) => {
+      if (
+        communities.filter(
+          (c) =>
+            JSON.stringify(c.title) === JSON.stringify(this.community.title)
+        ).length > 0
+      ) {
+        this.joined = true;
+        this.label = "Leave";
+      } else {
+        this.joined = false;
+        this.label = "Join";
+      }
+    });
   }
 
   joinCommunity() {
@@ -22,13 +38,15 @@ export class CommunityDetailsComponent implements OnInit {
     this.communityService.leave(this.community.id!).subscribe();
   }
 
-  public isJoined(): void {
-    this.communityService.getJoinedCommunities().subscribe((communities) => {
-      if (communities.filter((c) => JSON.stringify(c) === JSON.stringify(this.community)).length > 0) {
-        this.joined = true;
-      } else {
-        this.joined = false;
-      }
-    });
+  public posts: Array<Post> = [];
+
+  action() {
+    if (this.joined) {
+      this.communityService.leave(this.community.id!).subscribe();
+      this.label = "Join";
+    } else {
+      this.communityService.join(this.community.id!).subscribe();
+      this.label = "Leave";
+    }
   }
 }

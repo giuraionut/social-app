@@ -1,29 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { Comment } from '../../models/comment.model';
 import { Post } from '../../models/post.model';
+import { PostService } from '../../services/post.service';
+import { ActivatedRoute } from '@angular/router';
+import { map, mergeMap } from 'rxjs/operators';
+import { Community } from '../../models/community.model';
 @Component({
   selector: 'app-post-page',
   templateUrl: './post-page.component.html',
   styleUrls: ['./post-page.component.scss'],
 })
 export class PostDetailsComponent implements OnInit {
-  constructor() {}
+  constructor(private postService: PostService, private route: ActivatedRoute) {}
   public post: Post = {};
   public comments: Comment[] = [];
+  public community: Community = {};
   ngOnInit(): void {
-    let post: Post = {};
-    post.authorId = '592c834u2uv32c234';
-    post.content =
-      'Random content random content random content random content random content random content';
-    post.title = 'Random title';
-    post.media =
-      'https://c4.wallpaperflare.com/wallpaper/586/603/742/minimalism-4k-for-mac-desktop-wallpaper-preview.jpg';
-    post.mediaHidden = true;
-    post.comments = 2;
-    post.likes = 141131;
-    post.id = '1';
-    this.post = post;
-
+    this.route.params
+    .pipe(
+      mergeMap((params) => {
+        return this.postService.getById(params['postId']);
+      }))
+    .pipe(
+      map((post) => {
+        this.post = post;
+        console.log(post);
+        this.post.mediaHidden = true;
+        this.community = this.post.community!;
+      })).subscribe();
+    
     let comment: Comment = {};
     comment.id = '1';
     comment.content = 'blabla';

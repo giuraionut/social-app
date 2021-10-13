@@ -34,10 +34,6 @@ public class UserService implements UserDetailsService {
 
     public void add(User user) {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        user.setEnabled(true);
         user.setRefreshToken(UUID.randomUUID().toString());
         user.setGrantedAuthorities(Roles.USER.getGrantedAuthorities());
         user.setAvatar("test");

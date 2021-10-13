@@ -5,6 +5,7 @@
   <p class="details">
     Date created: {{ community.creationDate | date: "dd/MM/yyyy" }}
   </p>
-  <button *ngIf="!joined" mat-button (click)="joinCommunity()">Join</button>
-  <button *ngIf="joined" mat-button (click)="leaveCommunity()">Leave</button>
+  <!-- <button *ngIf="!joined" mat-button (click)="joinCommunity()">{{label}}</button> -->
+  <button mat-button (click)="action()">{{label}}</button>
+  <!-- <button *ngIf="joined" mat-button (click)="leaveCommunity()">Leave</button> -->
 </mat-card>

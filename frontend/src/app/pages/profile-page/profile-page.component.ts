@@ -3,70 +3,55 @@ import { Post } from '../../models/post.model';
 import { Comment } from '../../models/comment.model';
 import { Community } from '../../models/community.model';
 import { CommunityService } from '../../services/community.service';
-
+import { PostService } from '../../services/post.service';
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.scss'],
 })
 export class ProfilePageComponent implements OnInit {
-  constructor(private communityService: CommunityService) {}
+  constructor(
+    private communityService: CommunityService,
+    private postService: PostService
+  ) {}
 
   public posts: Post[] = [];
-  public nrOfCols = 4;
   public comments: Comment[] = [];
-
-  public pageFromStorage: string = localStorage.getItem('p_page')!;
-  public show: string =
-    this.pageFromStorage !== null ? this.pageFromStorage : 'posts';
+  public page: string =
+    localStorage.getItem('p_page')! !== null
+      ? localStorage.getItem('p_page')!
+      : 'posts';
 
   public ownedCommunities: Array<Community> = [];
+  public ownedPosts: Array<Post> = [];
 
   ngOnInit(): void {
-    if (this.pageFromStorage == 'communities') {
-      this.communityService
-        .getOwnedCommunities()
-        .subscribe((communities: Array<Community>) => {
-          this.ownedCommunities = communities;
-        });
-    }
-
+    this.changeCategory(this.page);
     this.testData();
   }
 
+  public changeCategory(page: string) {
+    if (page === 'communities') {
+      this.communityService.getOwned().subscribe((communities: Array<Community>) => {
+          this.ownedCommunities = communities;
+        });
+    }
+    if (page === 'posts' || page ==="hidden-posts") {
+      this.postService.getOwned().subscribe((posts: Array<Post>) => {
+        this.ownedPosts = posts;
+      });
+    }
+  }
+
   public change(page: string): void {
-    this.show = page;
     localStorage.setItem('p_page', page);
+    if (page != this.page) {
+      this.changeCategory(page);
+      this.page = page;
+    }
   }
 
   public testData() {
-    let post: Post = {};
-    post.id = '1';
-    post.authorId = '592c834u2uv32c234';
-    post.content =
-      'Random content random content random content random content random content random content';
-    post.title = 'Random title';
-    post.media =
-      'https://c4.wallpaperflare.com/wallpaper/586/603/742/minimalism-4k-for-mac-desktop-wallpaper-preview.jpg';
-    post.mediaHidden = true;
-    post.comments = 2;
-    post.likes = 194815;
-    let post2: Post = {};
-    post2.id = '2';
-    post2.authorId = '592c834u2uv32c234';
-    post2.content =
-      'Random content random content random content random content random content random content';
-    post2.title = 'Random title';
-    post2.media =
-      'https://c4.wallpaperflare.com/wallpaper/586/603/742/minimalism-4k-for-mac-desktop-wallpaper-preview.jpg';
-    post2.mediaHidden = true;
-    post2.comments = 2;
-    post2.likes = 494815;
-
-    post.hidden = true;
-    post2.hidden = false;
-    this.posts.push(post, post2);
-
     let comment: Comment = {};
     comment.id = '1';
     comment.content = 'blabla';

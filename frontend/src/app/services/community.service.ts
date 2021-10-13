@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { APIResponse } from '../models/api-response.model';
 import { Community } from '../models/community.model';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CommunityService {
@@ -10,10 +10,10 @@ export class CommunityService {
   private url = 'http://localhost:8080/community';
 
   //-----------------------------------------------------------------------------------------------
-  private ownedCommunities: BehaviorSubject<Array<Community>> =
+  private owned: BehaviorSubject<Array<Community>> =
     new BehaviorSubject(<Array<Community>>[]);
 
-  private joinedCommunities: BehaviorSubject<Array<Community>> =
+  private joined: BehaviorSubject<Array<Community>> =
     new BehaviorSubject(<Array<Community>>[]);
 
   private community: BehaviorSubject<Community> = new BehaviorSubject({});
@@ -25,32 +25,33 @@ export class CommunityService {
       })
       .pipe(
         map((response: APIResponse) => {
-          let communities: Array<Community> = this.ownedCommunities.value;
+          let communities: Array<Community> = this.owned.value;
           communities.push(response.payload);
-          this.ownedCommunities.next(communities);
+          this.owned.next(communities);
         })
       );
   }
 
-  public getOwnedCommunities(): Observable<Array<Community>> {
+  public getOwned(): Observable<Array<Community>> {
     return this.http
       .get(`${this.url}/owned`, {
         withCredentials: true,
       })
       .pipe(
-        map((response: APIResponse) => {
+        mergeMap((response: APIResponse) => {
           let communities: Array<Community> = response.payload;
-          this.ownedCommunities.next(communities);
+          this.owned.next(communities);
+          return this.owned;
         })
       )
       .pipe(
         mergeMap(() => {
-          return this.ownedCommunities.asObservable();
+          return this.owned.asObservable();
         })
       );
   }
 
-  public getJoinedCommunities(): Observable<Array<Community>> {
+  public getJoined(): Observable<Array<Community>> {
     return this.http
       .get(`${this.url}/joined`, {
         withCredentials: true,
@@ -58,17 +59,17 @@ export class CommunityService {
       .pipe(
         map((response: APIResponse) => {
           let communities: Array<Community> = response.payload;
-          this.joinedCommunities.next(communities);
+          this.joined.next(communities);
         })
       )
       .pipe(
         mergeMap(() => {
-          return this.joinedCommunities.asObservable();
+          return this.joined.asObservable();
         })
       );
   }
 
-  public deleteOwnedCommunity(community: Community): Observable<void> {
+  public deleteOwned(community: Community): Observable<void> {
     return this.http
       .delete(`${this.url}`, {
         withCredentials: true,
@@ -76,8 +77,8 @@ export class CommunityService {
       })
       .pipe(
         map(() => {
-          this.ownedCommunities.next(
-            this.ownedCommunities.value.filter((c) => c !== community)
+          this.owned.next(
+            this.owned.value.filter((c) => c !== community)
           );
         })
       );
@@ -89,8 +90,7 @@ export class CommunityService {
       .pipe(
         map((response: APIResponse) => {
           this.community.next(response.payload);
-        })
-      )
+        }))
       .pipe(
         mergeMap(() => {
           return this.community.asObservable();
@@ -103,9 +103,9 @@ export class CommunityService {
       .put(`${this.url}/join`, communityId, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
-          let communities: Array<Community> = this.joinedCommunities.value;
+          let communities: Array<Community> = this.joined.value;
           communities.push(response.payload);
-          this.joinedCommunities.next(communities);
+          this.joined.next(communities);
         })
       );
   }
@@ -114,9 +114,9 @@ export class CommunityService {
       .put(`${this.url}/leave`, communityId, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
-          let communities: Array<Community> = this.joinedCommunities.value;
+          let communities: Array<Community> = this.joined.value;
           communities.push(response.payload);
-          this.joinedCommunities.next(communities.filter((c) => c.id !== response.payload.id));
+          this.joined.next(communities.filter((c) => c.id !== response.payload.id));
         })
       );
   }

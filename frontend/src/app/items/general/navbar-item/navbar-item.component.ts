@@ -40,7 +40,7 @@ export class NavbarItemComponent implements OnInit {
       map((value) => (value.length >= 1 ? this._filter(value) : []))
     );
 
-    this.communityService.getJoinedCommunities().subscribe((communities) => {
+    this.communityService.getJoined().subscribe((communities) => {
       this.joinedCommunities = communities;
     });
   }

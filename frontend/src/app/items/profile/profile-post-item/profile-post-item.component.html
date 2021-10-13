@@ -1,4 +1,4 @@
-<mat-card class="card" *ngIf="(!post.hidden && page !== 'profile-post-hidden') || (post.hidden && page === 'profile-post-hidden')">
+<mat-card class="card" *ngIf="(!post.visible && page === 'not-visible') || (post.visible && page === 'visible')">
       <mat-card-title>
         <p (click)="goTo(post)" class="clickable">{{ post.title }}</p>
       </mat-card-title>
@@ -7,8 +7,8 @@
     </mat-card-content>
     <mat-card-actions class="center-left">
       <mat-icon (click)="delete(post)">delete</mat-icon>
-      <mat-icon *ngIf="page === '!hidden'" matRipple class="icon center-middle"  (click)="hide(post)">visibility_off</mat-icon>
-      <mat-icon *ngIf="page === 'hidden'" matRipple class="icon center-middle"  (click)="unhide(post)">visibility</mat-icon>
+      <mat-icon *ngIf="page === 'not-visible'" matRipple class="icon center-middle"  (click)="unhide(post)">visibility</mat-icon>
+      <mat-icon *ngIf="page === 'visible'" matRipple class="icon center-middle"  (click)="hide(post)">visibility_off</mat-icon>
     </mat-card-actions>
   </mat-card>
   

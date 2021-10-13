@@ -13,6 +13,6 @@ export class ProfileCommunityItemComponent implements OnInit {
   ngOnInit(): void {
   }
   goToCommunity() {
-    this.router.navigate([`socialapp/community/${this.community.id}`]);
+    this.router.navigate([`socialapp/community/${this.community.title}`]);
   }
 }

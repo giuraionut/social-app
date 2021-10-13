@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+
 public class CommunityService {
 
     private final CommunityRepository communityRepository;
@@ -28,5 +29,6 @@ public class CommunityService {
     public Community getByTitle(String title) {
         return this.communityRepository.getByTitle(title).orElse(null);
     }
+
 
 }

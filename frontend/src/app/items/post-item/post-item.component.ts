@@ -13,7 +13,10 @@ export class PostItemComponent implements OnInit {
 
   @Input() post: Post = {};
   @Input() page: string = '';
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.post.mediaHidden = true;
+    console.log(this.post);
+  }
 
   public goTo(post: Post) {
     this.router.navigate([`/socialapp/post/${post.id}`]);

@@ -13,9 +13,9 @@
       >
         <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md></div>
         <div fxFlex="40" class="main-content">
-          <app-menu-bar *ngIf="community"></app-menu-bar>
+          <app-menu-bar *ngIf="community" [community]="community"></app-menu-bar>
           <app-not-found-item [entry]="'community'" *ngIf="!community"></app-not-found-item>
-          <!-- <app-post-item *ngFor="let post of posts" [post]="post"></app-post-item> -->
+          <app-post-item *ngFor="let post of posts" [post]="post"></app-post-item>
         </div>
   
         <div fxFlex="20" fxHide.xs fxHide.lt-sm fxHide.sm fxHide.md>

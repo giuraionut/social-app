@@ -1,6 +1,10 @@
+import { Community } from "./community.model";
+import { User } from "./user.model";
+
 export interface Post {
   id?: string;
-  authorId?: string;
+  op?: User;
+  community?: Community;
   content?: string;
   likes?: number;
   dislikes?: number;
@@ -11,7 +15,7 @@ export interface Post {
 
   comments?: number;
 
-  hidden?: Boolean;
+  visible?: boolean;
   //front-end
-  mediaHidden?: Boolean;
+  mediaHidden?: boolean;
 }

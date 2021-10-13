@@ -1,11 +1,12 @@
 package com.socialapp.api.entities.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Joiner;
 import com.socialapp.api.entities.community.Community;
+import com.socialapp.api.entities.post.Post;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,14 +22,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
-
     private String username;
     private String password;
     private LocalDate dateOfBirth;
@@ -37,40 +37,15 @@ public class User implements UserDetails {
     private String avatar;
     private String grantedAuthorities;
     private String refreshToken;
-
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
-
-    //Owned communities ( communities that a user created )
-    //------------------------------------------------------------------------------------------------------------------
+    private boolean isAccountNonExpired = true;
+    private boolean isAccountNonLocked = true;
+    private boolean isCredentialsNonExpired = true;
+    private boolean isEnabled = true;
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "op", fetch = FetchType.LAZY)
+    private final List<Post> ownedPosts = new ArrayList<>();
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "creator", fetch = FetchType.LAZY)
-    private List<Community> ownedCommunities = new ArrayList<>();
-
-    public void addOwnedCommunity(Community community) {
-        ownedCommunities.add(community);
-        community.setCreator(this);
-    }
-
-    public void deleteOwnedCommunity(Community community) {
-        ownedCommunities.remove(community);
-        community.setCreator(null);
-    }
-
-    @PreRemove
-    private void preRemove() {
-        ownedCommunities.forEach(ownedCommunity -> ownedCommunity.setCreator(null));
-    }
-
-    @JsonManagedReference
-    public List<Community> getOwnedCommunities() {
-        return ownedCommunities;
-    }
-    //------------------------------------------------------------------------------------------------------------------
-
-    //Joined Communities
-    //------------------------------------------------------------------------------------------------------------------
+    private final List<Community> ownedCommunities = new ArrayList<>();
+    //ManyToMany for joined communities
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "joined_communities",
@@ -81,21 +56,80 @@ public class User implements UserDetails {
             })
     private List<Community> joinedCommunities = new ArrayList<>();
 
+    //add---------------------------------------------------------------------------------------------------------------
+    public void addPost(Post post) {
+        ownedPosts.add(post);
+        post.setOp(this);
+    }
+
     public void addJoinedCommunity(Community community) {
         joinedCommunities.add(community);
+    }
+
+    public void addOwnedCommunity(Community community) {
+        ownedCommunities.add(community);
+        community.setCreator(this);
+    }
+
+    public void addOwnedPost(Post post) {
+        ownedPosts.add(post);
+        post.setOp(this);
+    }
+    //remove------------------------------------------------------------------------------------------------------------
+    @PreRemove
+    private void preRemove() {
+        ownedCommunities.forEach(ownedCommunity -> ownedCommunity.setCreator(null));
+        ownedPosts.forEach(ownedPost -> ownedPost.setOp(null));
     }
 
     public void removeJoinedCommunity(Community community) {
         joinedCommunities.remove(community);
     }
 
-    public List<Community> getJoinedCommunities() {
-        return joinedCommunities;
+    public void removeOwnedCommunity(Community community) {
+        ownedCommunities.remove(community);
+        community.setCreator(null);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    //getters-----------------------------------------------------------------------------------------------------------
+    public String getId() {
+        return id;
+    }
 
     @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    @JsonIgnore
+    public String getGrantedAuthorities() {
+        return grantedAuthorities;
+    }
+
+    @Override
+    @JsonIgnore
     public Set<GrantedAuthority> getAuthorities() {
         String[] grantedAuthoritiesArray = grantedAuthorities.split(",");
 
@@ -106,28 +140,106 @@ public class User implements UserDetails {
         return grantedAuthoritiesSet;
     }
 
-    public void setGrantedAuthorities(Set<GrantedAuthority> grantedAuthoritiesSet) {
-        this.grantedAuthorities = Joiner.on(",").join(grantedAuthoritiesSet);
+    @JsonIgnore
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
+    @JsonIgnore
+    public List<Community> getOwnedCommunities() {
+        return ownedCommunities;
+    }
+
+    @JsonIgnore
+    public List<Post> getOwnedPosts() {
+        return ownedPosts;
+    }
+
+    @JsonIgnore
+    public List<Community> getJoinedCommunities() {
+        return joinedCommunities;
+    }
+
+    //is----------------------------------------------------------------------------------------------------------------
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return this.isAccountNonExpired;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return this.isAccountNonLocked;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return this.isCredentialsNonExpired;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return this.isEnabled;
+    }
+
+    //setters-----------------------------------------------------------------------------------------------------------
+    public void setGrantedAuthorities(Set<GrantedAuthority> grantedAuthoritiesSet) {
+        this.grantedAuthorities = Joiner.on(",").join(grantedAuthoritiesSet);
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void setGrantedAuthorities(String grantedAuthorities) {
+        this.grantedAuthorities = grantedAuthorities;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        isAccountNonExpired = accountNonExpired;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
 }
