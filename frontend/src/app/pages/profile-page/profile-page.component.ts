@@ -4,6 +4,7 @@ import { Comment } from '../../models/comment.model';
 import { Community } from '../../models/community.model';
 import { CommunityService } from '../../services/community.service';
 import { PostService } from '../../services/post.service';
+import { CommentService } from '../../services/comment.service';
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
@@ -12,7 +13,8 @@ import { PostService } from '../../services/post.service';
 export class ProfilePageComponent implements OnInit {
   constructor(
     private communityService: CommunityService,
-    private postService: PostService
+    private postService: PostService,
+    private commentService: CommentService
   ) {}
 
   public posts: Post[] = [];
@@ -24,10 +26,10 @@ export class ProfilePageComponent implements OnInit {
 
   public ownedCommunities: Array<Community> = [];
   public ownedPosts: Array<Post> = [];
-
+  public ownedComments: Array<Comment> = [];
   ngOnInit(): void {
     this.changeCategory(this.page);
-    this.testData();
+
   }
 
   public changeCategory(page: string) {
@@ -41,6 +43,13 @@ export class ProfilePageComponent implements OnInit {
         this.ownedPosts = posts;
       });
     }
+    if(page === "comments")
+    {
+      this.commentService.getOwned().subscribe((comments: Array<Comment>) => {
+        console.log(comments);
+        this.ownedComments = comments;
+      })
+    }
   }
 
   public change(page: string): void {
@@ -49,26 +58,5 @@ export class ProfilePageComponent implements OnInit {
       this.changeCategory(page);
       this.page = page;
     }
-  }
-
-  public testData() {
-    let comment: Comment = {};
-    comment.id = '1';
-    comment.content = 'blabla';
-    comment.likes = 1412;
-    comment.dislikes = 120;
-    comment.replays = 20;
-    comment.parentId = '1';
-    comment.authorId = '1';
-
-    let comment2: Comment = {};
-    comment2.id = '1';
-    comment2.content = 'blabla';
-    comment2.likes = 1412;
-    comment2.dislikes = 120;
-    comment2.replays = 20;
-    comment2.parentId = '1';
-    comment2.authorId = '1';
-    this.comments.push(comment, comment2);
   }
 }

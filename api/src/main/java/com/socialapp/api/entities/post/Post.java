@@ -3,12 +3,15 @@ package com.socialapp.api.entities.post;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.user.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -34,6 +37,8 @@ public class Post {
     @JoinColumn(name = "op_id")
     private User op;
 
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
     //getters-----------------------------------------------------------------------------------------------------------
     public String getId() {
         return id;
@@ -91,5 +96,12 @@ public class Post {
 
     public void setVisible(Boolean visible) {
         this.visible = visible;
+    }
+
+    //add---------------------------------------------------------------------------------------------------------------
+    public void addComment(Comment comment)
+    {
+       comments.add(comment);
+       comment.setPost(this);
     }
 }

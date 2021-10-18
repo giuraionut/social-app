@@ -24,7 +24,7 @@ export class CreatePostDialogComponent implements OnInit {
     let post: Post = {
       title: title,
       content: content,
-      dateCreated: new Date(),
+      creationDate: new Date(),
     };
     let community: Community = this.data.community;
     console.log(community);

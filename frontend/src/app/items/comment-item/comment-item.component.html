@@ -2,11 +2,11 @@
 
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-subtitle class="original-poster">{{ comment.authorId }}</mat-card-subtitle>
+    <mat-card-subtitle class="original-poster" *ngIf="comment.author">{{ comment.author.username }}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content class="content">
-    <p>comment id: {{comment.id}} ----////---- {{ comment.content }}</p>
+    <p>{{ comment.content }}</p>
   </mat-card-content>
 
   <mat-card-actions class="center-left" *ngIf="page !== 'profile-comment'">

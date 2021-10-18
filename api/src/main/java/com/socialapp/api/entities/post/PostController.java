@@ -126,6 +126,6 @@ public class PostController {
         response.setMessage("Post "+ post.getTitle() +" hidden");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
+
 }

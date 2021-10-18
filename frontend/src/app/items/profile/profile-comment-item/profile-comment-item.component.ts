@@ -25,6 +25,7 @@ export class ProfileCommentItemComponent implements OnInit {
   }
 
   goToComment() {
-    this.router.navigate([`socialapp/post/${this.comment.postId}`]);
+    if(this.comment.post)
+    this.router.navigate([`socialapp/post/${this.comment.post.id}`]);
   }
 }

@@ -15,7 +15,6 @@ export class PostItemComponent implements OnInit {
   @Input() page: string = '';
   ngOnInit(): void {
     this.post.mediaHidden = true;
-    console.log(this.post);
   }
 
   public goTo(post: Post) {

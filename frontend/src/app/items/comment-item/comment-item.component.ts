@@ -14,20 +14,19 @@ export class CommentItemComponent implements OnInit {
   @Input() page?: string = '';
   ngOnInit(): void {}
 
- 
-  public upvote(comment: Comment):void{
-    this.snackBar.open(`Comment upvoted!`, "Close", {duration:4000});
+  public upvote(comment: Comment): void {
+    this.snackBar.open(`Comment upvoted!`, 'Close', { duration: 4000 });
   }
-  public downvote(comment: Comment):void{
-    this.snackBar.open(`Comment downvoted!`, "Close", {duration:4000});
-  }
-
-  public delete(comment: Comment):void{
-    this.snackBar.open(`Comment deleted!`, "Close", {duration:4000});
+  public downvote(comment: Comment): void {
+    this.snackBar.open(`Comment downvoted!`, 'Close', { duration: 4000 });
   }
 
-  goToComment(comment: Comment)
-  {
-      this.router.navigate([`socialapp/post/${comment.postId}`]);
+  public delete(comment: Comment): void {
+    this.snackBar.open(`Comment deleted!`, 'Close', { duration: 4000 });
+  }
+
+  goToComment(comment: Comment) {
+    if (comment.post)
+      this.router.navigate([`socialapp/post/${comment.post.id}`]);
   }
 }

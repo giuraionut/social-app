@@ -22,7 +22,7 @@ export class PostService {
 
   public create(post: Post, communityTitle: string): Observable<Post> {
     return this.http
-      .post(`${this.url}/${communityTitle}`, post, { withCredentials: true })
+      .post(`${this.url}/community/${communityTitle}`, post, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           let posts: Array<Post> = this.owned.value;

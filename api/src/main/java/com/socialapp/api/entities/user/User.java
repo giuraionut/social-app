@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Joiner;
+import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.post.Post;
 import lombok.Data;
@@ -45,6 +46,8 @@ public class User implements UserDetails {
     private final List<Post> ownedPosts = new ArrayList<>();
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "creator", fetch = FetchType.LAZY)
     private final List<Community> ownedCommunities = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "author", fetch = FetchType.LAZY)
+    private final List<Comment> ownedComments = new ArrayList<>();
     //ManyToMany for joined communities
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -62,6 +65,11 @@ public class User implements UserDetails {
         post.setOp(this);
     }
 
+    public void addComment(Comment comment)
+    {
+        ownedComments.add(comment);
+        comment.setAuthor(this);
+    }
     public void addJoinedCommunity(Community community) {
         joinedCommunities.add(community);
     }
@@ -143,6 +151,11 @@ public class User implements UserDetails {
     @JsonIgnore
     public String getRefreshToken() {
         return refreshToken;
+    }
+
+    @JsonIgnore
+    public List<Comment> getOwnedComments() {
+        return ownedComments;
     }
 
     @JsonIgnore

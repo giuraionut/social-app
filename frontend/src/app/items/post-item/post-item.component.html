@@ -4,7 +4,7 @@
     <mat-card-title>
       <span (click)="goTo(post)" class="clickable">{{ post.title }}</span>
     </mat-card-title>
-    <mat-card-subtitle *ngIf="page !== 'profile-post-hidden'" class="clickable">{{ post.op!.username }}</mat-card-subtitle>
+    <mat-card-subtitle class="clickable" *ngIf = "post.op">{{ post.op.username }}</mat-card-subtitle>
   </mat-card-header>
   <img *ngIf="!post.mediaHidden" mat-card-image [src]="post.media" alt="media"/>
   <mat-card-content>

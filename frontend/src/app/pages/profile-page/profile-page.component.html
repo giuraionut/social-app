@@ -25,7 +25,7 @@
           <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post" [page]="'visible'"></app-profile-post-item>
         </div>
         <div *ngIf="page === 'comments'">
-          <app-profile-comment-item *ngFor="let comment of comments" [comment]="comment"></app-profile-comment-item>
+          <app-profile-comment-item *ngFor="let comment of ownedComments" [comment]="comment"></app-profile-comment-item>
         </div>
         <div *ngIf="page === 'hidden-posts'">
           <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post" [page]="'not-visible'"></app-profile-post-item>

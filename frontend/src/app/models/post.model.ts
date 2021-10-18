@@ -8,7 +8,7 @@ export interface Post {
   content?: string;
   likes?: number;
   dislikes?: number;
-  dateCreated?: Date;
+  creationDate?: Date;
 
   title?: string;
   media?: string;
