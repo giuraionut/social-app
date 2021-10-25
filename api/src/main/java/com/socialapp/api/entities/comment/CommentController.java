@@ -34,17 +34,39 @@ public class CommentController {
         response.setStatus(HttpStatus.OK);
         response.setError("none");
         response.setMessage("Comment added successfully");
-
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
 
         Post post = this.postService.getById(postId);
-
+        comment.setParent(true);
         post.addComment(comment);
         user.addComment(comment);
         Comment addedComment = this.commentService.add(comment);
 
         response.setPayload(addedComment);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "reply/{commentId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> replyToComment(@RequestBody Comment comment, @PathVariable("commentId") String commentId, HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        response.setMessage("Comment added successfully");
+
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+
+        Comment parentComment = this.commentService.getById(commentId);
+        comment.setParent(parentComment);
+        comment.setAuthor(user);
+        comment.setPost(parentComment.getPost());
+        parentComment.addChild(comment);
+        Comment childComment = this.commentService.add(comment);
+        response.setPayload(childComment);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -58,8 +80,24 @@ public class CommentController {
         response.setError("none");
         response.setMessage("Comments {by postId} obtained successfully");
 
-
         List<Comment> comments = this.commentService.getByPostId(postId);
+
+        response.setPayload(comments);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "{commentId}/childs")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getChilds(@PathVariable("commentId") String commentId, HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        response.setMessage("Comments {by postId} obtained successfully");
+
+        Comment parentComment = this.commentService.getById(commentId);
+        List<Comment> comments = parentComment.getChilds();
 
         response.setPayload(comments);
 

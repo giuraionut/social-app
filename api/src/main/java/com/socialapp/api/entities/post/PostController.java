@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,6 @@ public class PostController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        response.setMessage("Post created successfully");
 
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
@@ -42,13 +42,21 @@ public class PostController {
         user.addPost(post);
         community.addPost(post);
         Post addedPost = this.postService.add(post);
-        response.setPayload(addedPost);
+        if(addedPost != null){
+            response.setMessage("Post created successfully");
+            response.setPayload(addedPost);
+        }
+        else
+        {
+            response.setMessage("Cannot create new post, try again later");
+        }
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path="community/{communityTitle}")
+    @GetMapping(path = "community/{communityTitle}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getByCommunity(HttpServletRequest request, @PathVariable("communityTitle") String communityTitle){
+    public ResponseEntity<Object> getByCommunity(HttpServletRequest request, @PathVariable("communityTitle") String communityTitle) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -57,11 +65,10 @@ public class PostController {
         Community community = this.communityService.getByTitle(communityTitle);
 
         List<Post> posts = this.postService.getByCommunity(community);
-        if(posts.isEmpty()) {
+        if (posts.isEmpty()) {
             response.setMessage(communityTitle + " has no posts yet");
-        }
-        else{
-            response.setMessage("Posts from "+ communityTitle +" obtained successfully");
+        } else {
+            response.setMessage("Posts from " + communityTitle + " obtained successfully");
             response.setPayload(posts);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -80,11 +87,34 @@ public class PostController {
         List<Post> posts = user.getOwnedPosts();
         if (!posts.isEmpty()) {
             response.setPayload(posts);
-            response.setMessage("Owned communities by user obtained successfully");
+            response.setMessage("Owned posts by user obtained successfully");
         } else {
-            response.setMessage("No owned communities found for user");
+            response.setMessage("No owned posts found for user");
         }
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "feed")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getFeedPosts(HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+
+        List<Community> joinedCommunities = user.getJoinedCommunities();
+
+        List<Post> posts = new ArrayList<>();
+        joinedCommunities.forEach(community -> posts.addAll(community.getPosts()));
+        if (!posts.isEmpty()) {
+            response.setPayload(posts);
+            response.setMessage("Feed obtained successfully");
+        } else {
+            response.setMessage("No feed found for user");
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -108,10 +138,9 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping(path="hidden/{value}")
+    @PutMapping(path = "hidden/{value}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> setHidden(HttpServletRequest request, @RequestBody Post post, @PathVariable("value") Boolean value)
-    {
+    public ResponseEntity<Object> setHidden(HttpServletRequest request, @RequestBody Post post, @PathVariable("value") Boolean value) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -120,12 +149,13 @@ public class PostController {
         post.setVisible(value);
         this.postService.update(post);
 
-        if(value)
-        response.setMessage("Post "+ post.getTitle() +" made visible");
+        if (value)
+            response.setMessage("Post " + post.getTitle() + " made visible");
         else
-        response.setMessage("Post "+ post.getTitle() +" hidden");
+            response.setMessage("Post " + post.getTitle() + " hidden");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

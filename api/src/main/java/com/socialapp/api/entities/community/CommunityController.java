@@ -33,7 +33,9 @@ public class CommunityController {
         response.setMessage("Community created successfully");
 
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
-        User user = this.userService.getById(userId);
+        User user = this.userService.findById(userId);
+        community.setCreator(user);
+        community.addMember(user);
         user.addOwnedCommunity(community);
         Community addedCommunity = this.communityService.add(community);
         response.setPayload(addedCommunity);

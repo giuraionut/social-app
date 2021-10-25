@@ -11,7 +11,7 @@ export interface Comment {
 
   post?: Post;
   parent?: Comment;
-
+  isParent?: boolean;
   replays?: number;
   childs?: Comment[];
 

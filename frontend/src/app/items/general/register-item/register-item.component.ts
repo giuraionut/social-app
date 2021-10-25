@@ -63,6 +63,7 @@ export class RegisterItemComponent implements OnInit {
 
   public register(username: string, password: string, email: string) {
     let user: User = { username: username, password: password, email: email };
+    console.log(user.password);
     this.userService.register(user).subscribe();
   }
 }

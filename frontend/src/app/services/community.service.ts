@@ -25,9 +25,12 @@ export class CommunityService {
       })
       .pipe(
         map((response: APIResponse) => {
-          let communities: Array<Community> = this.owned.value;
-          communities.push(response.payload);
-          this.owned.next(communities);
+          let ownedCommunities: Array<Community> = this.owned.value;
+          ownedCommunities.push(response.payload);
+          let joinedCommunities: Array<Community> = this.joined.value;
+          joinedCommunities.push(response.payload);
+          this.owned.next(ownedCommunities);
+          this.joined.next(joinedCommunities);
         })
       );
   }

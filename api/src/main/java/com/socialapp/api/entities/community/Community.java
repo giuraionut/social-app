@@ -9,7 +9,9 @@ import com.socialapp.api.entities.user.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,14 +26,14 @@ public class Community {
     @Column(name = "title", nullable = false)
     private String title;
     private String description;
-    private LocalDate creationDate;
+    private Instant creationDate;
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
     @ManyToMany(mappedBy = "joinedCommunities", fetch = FetchType.LAZY)
-    private List<User> members;
+    private List<User> members = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "community", fetch = FetchType.LAZY)
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
     //getters-----------------------------------------------------------------------------------------------------------
     public User getCreator() {
@@ -50,7 +52,7 @@ public class Community {
         return description;
     }
 
-    public LocalDate getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 
@@ -77,7 +79,7 @@ public class Community {
         this.description = description;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
     }
 

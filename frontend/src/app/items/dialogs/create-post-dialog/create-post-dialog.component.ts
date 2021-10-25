@@ -3,7 +3,6 @@ import { PostService } from '../../../services/post.service';
 import { Post } from '../../../models/post.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Community } from '../../../models/community.model';
-import { DeleteAccDialogComponent } from '../delete-acc-dialog/delete-acc-dialog.component';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-post-dialog',

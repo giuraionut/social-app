@@ -20,7 +20,6 @@ export class CreateCommentItemComponent implements OnInit {
     comment.creationDate = new Date();
 
     this.route.params.subscribe((params) => {
-      console.log(params['postId']);
       this.commentService.create(comment, params['postId']).subscribe();
     });
   }

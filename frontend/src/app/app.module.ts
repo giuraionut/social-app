@@ -56,6 +56,7 @@ import { ProfileCommentItemComponent } from './items/profile/profile-comment-ite
 import { ProfileCommunityItemComponent } from './items/profile/profile-community-item/profile-community-item.component';
 import { CreatePostDialogComponent } from './items/dialogs/create-post-dialog/create-post-dialog.component';
 import { CreateCommentItemComponent } from './items/create-comment-item/create-comment-item.component';
+import { CreateCommentDialogComponent } from './items/dialogs/create-comment-dialog/create-comment-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -88,6 +89,7 @@ import { CreateCommentItemComponent } from './items/create-comment-item/create-c
     ProfileCommunityItemComponent,
     CreatePostDialogComponent,
     CreateCommentItemComponent,
+    CreateCommentDialogComponent,
 
   ],
   imports: [

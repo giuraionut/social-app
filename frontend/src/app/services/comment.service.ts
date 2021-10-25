@@ -19,6 +19,7 @@ export class CommentService {
     <Array<Comment>>[]
   );
 
+  
   private byId: BehaviorSubject<Comment> = new BehaviorSubject({});
 
   public create(comment: Comment, postId: string): Observable<Comment> {
@@ -37,12 +38,25 @@ export class CommentService {
       );
   }
 
+  public reply(comment: Comment, parentId: string): Observable<Comment> {
+    return this.http
+      .post(`${this.url}/reply/${parentId}`, comment, { withCredentials: true })
+      .pipe(
+        map((response: APIResponse) => {
+          let comment: Comment = response.payload;
+          return comment;
+        })
+      );
+  }
+
+
   public getByPost(postId: string): Observable<Array<Comment>> {
     return this.http
       .get(`${this.url}/post/${postId}`, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
-          this.byPost.next(response.payload);
+          let comments: Comment[] = response.payload;
+          this.byPost.next(comments.filter(comment => comment.isParent));
         })
       )
       .pipe(
@@ -51,7 +65,6 @@ export class CommentService {
         })
       );
   }
-
 
   public getOwned(): Observable<Array<Comment>> {
     return this.http

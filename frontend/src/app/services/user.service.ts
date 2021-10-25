@@ -20,11 +20,7 @@ export class UserService {
   public register(user: User): Observable<void> {
     return this.http.post(`${this.url}/register`, user).pipe(
       mergeMap(() => {
-        let userToLogin: User = {
-          username: user.username,
-          password: user.password,
-        };
-        return this.authService.login(userToLogin);
+        return this.authService.login(user);
       })
     );
   }

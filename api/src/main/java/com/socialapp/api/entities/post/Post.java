@@ -9,6 +9,7 @@ import com.socialapp.api.entities.user.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,9 @@ public class Post {
     private String title;
     private String content;
 
-    private LocalDate creationDate;
+    private Instant creationDate;
 
-    private Boolean visible = true;
+    private boolean visible = true;
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
@@ -39,6 +40,7 @@ public class Post {
 
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
     //getters-----------------------------------------------------------------------------------------------------------
     public String getId() {
         return id;
@@ -52,7 +54,7 @@ public class Post {
         return content;
     }
 
-    public LocalDate getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 
@@ -65,7 +67,7 @@ public class Post {
     }
 
     //is----------------------------------------------------------------------------------------------------------------
-    public Boolean isVisible() {
+    public boolean isVisible() {
         return visible;
     }
 
@@ -82,7 +84,7 @@ public class Post {
         this.content = content;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -94,7 +96,7 @@ public class Post {
         this.op = op;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
 

@@ -25,7 +25,6 @@ export class PostDetailsComponent implements OnInit {
       .pipe(
         mergeMap((params) => {
           this.commentService.getByPost(params["postId"]).subscribe(comments => {
-            console.log(comments);
             this.comments = comments;
           })
           return this.postService.getById(params['postId']);

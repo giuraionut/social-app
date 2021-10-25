@@ -1,21 +1,18 @@
 package com.socialapp.api.entities.user;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Joiner;
 import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.post.Post;
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,8 +29,8 @@ public class User implements UserDetails {
     private String id;
     private String username;
     private String password;
-    private LocalDate dateOfBirth;
-    private LocalDate registrationDate;
+    private Instant dateOfBirth;
+    private Instant registrationDate;
     private String email;
     private String avatar;
     private String grantedAuthorities;
@@ -104,22 +101,19 @@ public class User implements UserDetails {
         return id;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Instant getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public LocalDate getRegistrationDate() {
+    public Instant getRegistrationDate() {
         return registrationDate;
     }
 
@@ -215,11 +209,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(Instant dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setRegistrationDate(LocalDate registrationDate) {
+    public void setRegistrationDate(Instant registrationDate) {
         this.registrationDate = registrationDate;
     }
 

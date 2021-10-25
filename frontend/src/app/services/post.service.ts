@@ -18,11 +18,16 @@ export class PostService {
     <Array<Post>>[]
   );
 
+  private feed: BehaviorSubject<Array<Post>> = new BehaviorSubject(
+    <Array<Post>>[]
+  );
   private byId: BehaviorSubject<Post> = new BehaviorSubject({});
 
   public create(post: Post, communityTitle: string): Observable<Post> {
     return this.http
-      .post(`${this.url}/community/${communityTitle}`, post, { withCredentials: true })
+      .post(`${this.url}/community/${communityTitle}`, post, {
+        withCredentials: true,
+      })
       .pipe(
         map((response: APIResponse) => {
           let posts: Array<Post> = this.owned.value;
@@ -65,6 +70,25 @@ export class PostService {
           return this.owned.asObservable();
         })
       );
+  }
+
+  public getFeed(): Observable<Array<Post>> {
+    return this.http
+    .get(`${this.url}/feed`, {
+      withCredentials: true,
+    })
+    .pipe(
+      mergeMap((response: APIResponse) => {
+        let posts: Array<Post> = response.payload;
+        this.feed.next(posts);
+        return this.feed;
+      })
+    )
+    .pipe(
+      mergeMap(() => {
+        return this.feed.asObservable();
+      })
+    );
   }
 
   public getById(postId: string): Observable<Post> {

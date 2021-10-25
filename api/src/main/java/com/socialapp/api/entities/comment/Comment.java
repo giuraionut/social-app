@@ -2,12 +2,16 @@ package com.socialapp.api.entities.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.socialapp.api.entities.post.Post;
 import com.socialapp.api.entities.user.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDate creationDate;
+    private Instant creationDate;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -39,6 +43,8 @@ public class Comment {
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "parent", fetch = FetchType.LAZY)
     private final List<Comment> childs = new ArrayList<>();
 
+    private boolean isParent = false;
+
     //getters-----------------------------------------------------------------------------------------------------------
 
 
@@ -50,7 +56,7 @@ public class Comment {
         return content;
     }
 
-    public LocalDate getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 
@@ -69,10 +75,16 @@ public class Comment {
         return parent;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public List<Comment> getChilds() {
         return childs;
     }
+
+    @JsonProperty(value="isParent")
+    public boolean isParent() {
+        return isParent;
+    }
+
     //setters-----------------------------------------------------------------------------------------------------------
 
     public void setId(String id) {
@@ -83,7 +95,7 @@ public class Comment {
         this.content = content;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -97,6 +109,10 @@ public class Comment {
 
     public void setParent(Comment parent) {
         this.parent = parent;
+    }
+
+    public void setParent(boolean bool) {
+        isParent = bool;
     }
 
     //add----------------------------------------------------------------------------------------------------------------
