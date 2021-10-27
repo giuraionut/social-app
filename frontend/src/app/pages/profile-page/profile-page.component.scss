@@ -20,14 +20,16 @@
   margin: 0 auto;
   margin-top: 20px;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-start;
   column-gap: 10px;
+  row-gap: 10px;
 }
 
 .menu > .menu-buttons {
   background-color: gray;
-  width: 100px;
+  width: 112px;
   height: 30px;
   display: flex;
   align-items: center;

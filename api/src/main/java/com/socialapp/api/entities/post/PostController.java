@@ -4,6 +4,9 @@ import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.community.CommunityService;
 import com.socialapp.api.entities.user.User;
 import com.socialapp.api.entities.user.UserService;
+import com.socialapp.api.entities.votes.PVKey;
+import com.socialapp.api.entities.votes.PostVote;
+import com.socialapp.api.entities.votes.PostVoteService;
 import com.socialapp.api.jwt.JwtUtils;
 import com.socialapp.api.response.Response;
 import lombok.AllArgsConstructor;
@@ -26,7 +29,7 @@ public class PostController {
     private final JwtUtils jwtUtils;
     private final UserService userService;
     private final PostService postService;
-
+    private final PostVoteService postVoteService;
 
     @PostMapping(path = "community/{communityTitle}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -42,12 +45,10 @@ public class PostController {
         user.addPost(post);
         community.addPost(post);
         Post addedPost = this.postService.add(post);
-        if(addedPost != null){
+        if (addedPost != null) {
             response.setMessage("Post created successfully");
             response.setPayload(addedPost);
-        }
-        else
-        {
+        } else {
             response.setMessage("Cannot create new post, try again later");
         }
 
@@ -157,5 +158,77 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping(path = "{postId}/vote/{value}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> votePost(HttpServletRequest request, @PathVariable("postId") String postId, @PathVariable("value") boolean value) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
 
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+        Post post = this.postService.getById(postId);
+
+        PostVote postVote = new PostVote();
+        postVote.setId(new PVKey(user, post));
+        postVote.setValue(value);
+        boolean voted = this.postVoteService.vote(postVote);
+        if (voted) {
+            response.setMessage("added");
+        } else {
+            response.setMessage("removed");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "{postId}/votes/{value}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getVotes(HttpServletRequest request, @PathVariable("postId") String postId, @PathVariable("value") boolean value) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+
+        Post post = this.postService.getById(postId);
+        int votes = this.postVoteService.countVotes(post);
+        response.setPayload(votes);
+        response.setMessage("Votes obtained succesfully");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @GetMapping(path = "voted/all")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getVotesPosts(HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+        List<Post> posts = this.postVoteService.votedPosts(true, user);
+
+        response.setPayload(posts);
+        response.setError("none");
+        response.setMessage("Voted posts obtained successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "{postId}/comments/count")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getCommentsCount(HttpServletRequest request, @PathVariable("postId") String postId) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+
+        Post post = this.postService.getById(postId);
+        int comments = post.getComments().size();
+        response.setPayload(comments);
+        response.setMessage("Number of comments obtained successfully");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
 }

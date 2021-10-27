@@ -42,7 +42,7 @@ public class CommunityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "owned")
+    @GetMapping(path = "owned/all")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> getOwnedCommunities(HttpServletRequest request) {
         Response response = new Response();
@@ -120,17 +120,42 @@ public class CommunityController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        response.setMessage("You left the community successfully");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
         Community community = this.communityService.getById(communityId);
         community.removeMember(user);
+        user.removeJoinedCommunity(community);
         Community leftCommunity = this.communityService.add(community);
+        response.setMessage("You left the community successfully");
         response.setPayload(leftCommunity);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "joined")
+    @GetMapping(path = "{communityId}/joined")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> checkJoined(HttpServletRequest request, @PathVariable("communityId") String communityId) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+
+        List<Community> communities = user.getJoinedCommunities();
+        if (!communities.isEmpty()) {
+            if(communities.stream().anyMatch(community -> community.getId().equals(communityId)))
+            {
+                response.setPayload(true);
+                response.setMessage("User is member of this community");
+            }
+        } else {
+            response.setPayload(false);
+            response.setMessage("User is not member of this community");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "joined/all")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> getJoinedCommunities(HttpServletRequest request) {
         Response response = new Response();

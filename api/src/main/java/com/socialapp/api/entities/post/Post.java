@@ -1,16 +1,15 @@
 package com.socialapp.api.entities.post;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.user.User;
+import com.socialapp.api.entities.votes.PostVote;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +65,11 @@ public class Post {
         return op;
     }
 
+    @JsonIgnore
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     //is----------------------------------------------------------------------------------------------------------------
     public boolean isVisible() {
         return visible;
@@ -106,4 +110,7 @@ public class Post {
        comments.add(comment);
        comment.setPost(this);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
 }

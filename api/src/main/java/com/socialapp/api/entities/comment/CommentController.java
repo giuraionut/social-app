@@ -94,13 +94,12 @@ public class CommentController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        response.setMessage("Comments {by postId} obtained successfully");
 
         Comment parentComment = this.commentService.getById(commentId);
         List<Comment> comments = parentComment.getChilds();
 
         response.setPayload(comments);
-
+        response.setMessage("Child comments of comment with id: " + commentId + " obtained successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -121,6 +120,23 @@ public class CommentController {
         } else {
             response.setMessage("No owned communities found for user");
         }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "{commentId}/childs/count")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> countChilds(@PathVariable("commentId") String commentId, HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        response.setMessage("Number of child comments of comment with id:" + commentId + " obtained successfully");
+
+        Comment parentComment = this.commentService.getById(commentId);
+        List<Comment> comments = parentComment.getChilds();
+
+        response.setPayload(comments.size());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

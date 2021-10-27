@@ -74,21 +74,21 @@ export class PostService {
 
   public getFeed(): Observable<Array<Post>> {
     return this.http
-    .get(`${this.url}/feed`, {
-      withCredentials: true,
-    })
-    .pipe(
-      mergeMap((response: APIResponse) => {
-        let posts: Array<Post> = response.payload;
-        this.feed.next(posts);
-        return this.feed;
+      .get(`${this.url}/feed`, {
+        withCredentials: true,
       })
-    )
-    .pipe(
-      mergeMap(() => {
-        return this.feed.asObservable();
-      })
-    );
+      .pipe(
+        mergeMap((response: APIResponse) => {
+          let posts: Array<Post> = response.payload;
+          this.feed.next(posts);
+          return this.feed;
+        })
+      )
+      .pipe(
+        mergeMap(() => {
+          return this.feed.asObservable();
+        })
+      );
   }
 
   public getById(postId: string): Observable<Post> {
@@ -114,6 +114,56 @@ export class PostService {
           let posts: Array<Post> = this.owned.value;
           posts.find((p) => p === post)!.visible = value;
           this.owned.next(posts);
+        })
+      );
+  }
+
+  public vote(value: boolean, postId: string): Observable<string> {
+    return this.http
+      .post(`${this.url}/${postId}/vote/${value}`, null, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          if (response.message) return response.message;
+          else return '';
+        })
+      );
+  }
+
+  public getVotes(value: boolean, postId: string): Observable<number> {
+    return this.http
+      .get(`${this.url}/${postId}/votes/${value}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          return response.payload;
+        })
+      );
+  }
+
+  public getCommentsCount(postId: string):Observable<number>{
+    return this.http
+    .get(`${this.url}/${postId}/comments/count`, {
+      withCredentials: true,
+    })
+    .pipe(
+      map((response: APIResponse) => {
+        return response.payload;
+      })
+    );
+  }
+
+  public getVotedPosts(): Observable<Array<Post>>
+  {
+    return this.http
+      .get(`${this.url}/voted/all`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          return response.payload;
         })
       );
   }

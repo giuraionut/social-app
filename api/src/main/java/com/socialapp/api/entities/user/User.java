@@ -62,11 +62,11 @@ public class User implements UserDetails {
         post.setOp(this);
     }
 
-    public void addComment(Comment comment)
-    {
+    public void addComment(Comment comment) {
         ownedComments.add(comment);
         comment.setAuthor(this);
     }
+
     public void addJoinedCommunity(Community community) {
         joinedCommunities.add(community);
     }
@@ -80,6 +80,7 @@ public class User implements UserDetails {
         ownedPosts.add(post);
         post.setOp(this);
     }
+
     //remove------------------------------------------------------------------------------------------------------------
     @PreRemove
     private void preRemove() {
@@ -88,7 +89,7 @@ public class User implements UserDetails {
     }
 
     public void removeJoinedCommunity(Community community) {
-        joinedCommunities.remove(community);
+         joinedCommunities.remove(community);
     }
 
     public void removeOwnedCommunity(Community community) {
@@ -248,5 +249,9 @@ public class User implements UserDetails {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
+
+
+    //------------------------------------------------------------------------------------------------------------------
+
 
 }

@@ -37,7 +37,7 @@ export class CommunityService {
 
   public getOwned(): Observable<Array<Community>> {
     return this.http
-      .get(`${this.url}/owned`, {
+      .get(`${this.url}/owned/all`, {
         withCredentials: true,
       })
       .pipe(
@@ -56,7 +56,7 @@ export class CommunityService {
 
   public getJoined(): Observable<Array<Community>> {
     return this.http
-      .get(`${this.url}/joined`, {
+      .get(`${this.url}/joined/all`, {
         withCredentials: true,
       })
       .pipe(
@@ -68,6 +68,20 @@ export class CommunityService {
       .pipe(
         mergeMap(() => {
           return this.joined.asObservable();
+        })
+      );
+  }
+
+  public isJoined(communityId: string): Observable<boolean>
+  {
+    return this.http
+      .get(`${this.url}/${communityId}/joined`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          console.log(response);
+          return response.payload;
         })
       );
   }

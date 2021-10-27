@@ -15,9 +15,10 @@
       <div fxFlex="40" class="main-content">
 
         <mat-card class="menu">
-          <button mat-raised-button class="menu-buttons" (click)="change('posts')">Posts</button>
+          <button mat-raised-button class="menu-buttons" (click)="change('posts')">My Posts</button>
           <button mat-raised-button class="menu-buttons" (click)="change('hidden-posts')">Hidden Posts</button>
-          <button mat-raised-button class="menu-buttons" (click)="change('comments')">Comments</button>
+          <button mat-raised-button class="menu-buttons" (click)="change('up-voted-posts')">Voted Posts</button>
+          <button mat-raised-button class="menu-buttons" (click)="change('comments')">My Comments</button>
           <button mat-raised-button class="menu-buttons" (click)="change('communities')">Communities</button>
         </mat-card>
 
@@ -30,6 +31,11 @@
         <div *ngIf="page === 'hidden-posts'">
           <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post" [page]="'not-visible'"></app-profile-post-item>
         </div>
+
+        <div *ngIf="page === 'up-voted-posts'">
+          <app-profile-post-item *ngFor="let post of votedPosts" [post]="post" [page]="'voted'"></app-profile-post-item>
+        </div>
+
         <div *ngIf="page ==='communities'">
           <app-not-found-item *ngIf="ownedCommunities.length === 0" [entry]="'community'"></app-not-found-item> 
           <app-profile-community-item *ngFor="let community of ownedCommunities" [community]="community"></app-profile-community-item>

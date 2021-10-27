@@ -12,9 +12,9 @@
   </mat-card-content>
   <mat-card-actions class="center-left">
     <button mat-button (click)="post.mediaHidden = !post.mediaHidden">Toggle Media</button>
-    <mat-icon matRipple class="icon center-middle" (click)="upvote(post)">thumb_up_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="upvote()">thumb_up_alt</mat-icon>
     <span class="text center-middle"> {{ post.likes | kFormatter }} </span>
-    <mat-icon matRipple class="icon center-middle" (click)="downvote(post)">thumb_down_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="downvote()">thumb_down_alt</mat-icon>
     <mat-icon matRipple class="icon center-middle" (click)="goTo(post)">comment</mat-icon>
     <span class="text center-middle">{{ post.comments | kFormatter }} </span>
   </mat-card-actions>

@@ -84,6 +84,16 @@ export class CommentService {
         })
       );
   }
-
+  public countChilds(commentId: string): Observable<number>{
+    return this.http
+    .get(`${this.url}/${commentId}/childs/count`, {
+      withCredentials: true,
+    })
+    .pipe(
+      map((response: APIResponse) => {
+        return response.payload;
+      })
+    );
+  }
   //-----------------------------------------------------------------------------------------------
 }

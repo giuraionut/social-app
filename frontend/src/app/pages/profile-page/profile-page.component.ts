@@ -27,6 +27,7 @@ export class ProfilePageComponent implements OnInit {
   public ownedCommunities: Array<Community> = [];
   public ownedPosts: Array<Post> = [];
   public ownedComments: Array<Comment> = [];
+  public votedPosts: Array<Post> = [];
   ngOnInit(): void {
     this.changeCategory(this.page);
 
@@ -46,8 +47,14 @@ export class ProfilePageComponent implements OnInit {
     if(page === "comments")
     {
       this.commentService.getOwned().subscribe((comments: Array<Comment>) => {
-        console.log(comments);
         this.ownedComments = comments;
+      })
+    }
+    if(page === "up-voted-posts")
+    {
+      this.postService.getVotedPosts().subscribe((posts: Array<Post>) => {
+        this.votedPosts = posts;
+        console.log(posts);
       })
     }
   }

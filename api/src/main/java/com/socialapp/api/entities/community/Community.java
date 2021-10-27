@@ -100,8 +100,8 @@ public class Community {
 
     //remove------------------------------------------------------------------------------------------------------------
     public void removeMember(User member) {
-        this.members.remove(member);
         member.removeJoinedCommunity(this);
+        this.members.remove(member);
     }
 
     public void removePost(Post post)

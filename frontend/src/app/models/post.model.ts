@@ -6,8 +6,6 @@ export interface Post {
   op?: User;
   community?: Community;
   content?: string;
-  likes?: number;
-  dislikes?: number;
   creationDate?: Date;
 
   title?: string;
@@ -18,4 +16,5 @@ export interface Post {
   visible?: boolean;
   //front-end
   mediaHidden?: boolean;
+  likes?: number;
 }

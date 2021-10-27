@@ -3,29 +3,79 @@ import { Post } from '../../models/post.model';
 import { Router } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PostService } from '../../services/post.service';
 @Component({
   selector: 'app-post-item',
   templateUrl: './post-item.component.html',
   styleUrls: ['./post-item.component.scss'],
 })
 export class PostItemComponent implements OnInit {
-  constructor(private router: Router, public snackBar: MatSnackBar) {}
+  constructor(
+    private router: Router,
+    public snackBar: MatSnackBar,
+    private postService: PostService
+  ) {}
 
   @Input() post: Post = {};
   @Input() page: string = '';
-  ngOnInit(): void {
-    this.post.mediaHidden = true;
-  }
 
+  ngOnInit(): void {}
+
+  ngOnChanges() {
+    this.post.mediaHidden = true;
+    this.getVotes();
+    this.countComments();
+  }
   public goTo(post: Post) {
     this.router.navigate([`/socialapp/post/${post.id}`]);
   }
 
-  public upvote(post: Post):void{
-    this.snackBar.open(`Post ${post.title} upvoted!`, "Close", {duration:4000});
-  }
-  public downvote(post: Post):void{
-    this.snackBar.open(`Post ${post.title} downvoted!`, "Close", {duration:4000});
-  }
 
+public countComments():void{
+  if (this.post.id) this.postService.getCommentsCount(this.post.id).subscribe((c) => {
+    this.post.comments = c;
+   });
+}
+
+  public getVotes():void{
+    if (this.post.id) this.postService.getVotes(true, this.post.id).subscribe((v) => {
+      this.post.likes = v;
+     });
+  }
+  public upvote(): void {
+    if (this.post.id) {
+      this.postService.vote(true, this.post.id).subscribe((message) => {
+        this.getVotes();
+        this.snackBar.open(`Up vote to ${this.post.title} ${message}!`, 'Close', {
+          duration: 4000,
+        });
+      });
+    } else {
+      this.snackBar.open(
+        `Something went wrong, please try again later`,
+        'Close',
+        {
+          duration: 4000,
+        }
+      );
+    }
+  }
+  public downvote(): void {
+    if (this.post.id) {
+      this.postService.vote(false, this.post.id).subscribe((message) => {
+        this.getVotes();
+        this.snackBar.open(`Down vote ${this.post.title} ${message}`, 'Close', {
+          duration: 4000,
+        });
+      });
+    } else {
+      this.snackBar.open(
+        `Something went wrong, please try again later`,
+        'Close',
+        {
+          duration: 4000,
+        }
+      );
+    }
+  }
 }
