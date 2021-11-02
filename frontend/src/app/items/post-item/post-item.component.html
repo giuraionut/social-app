@@ -2,7 +2,7 @@
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>
-      <span (click)="goTo(post)" class="clickable">{{ post.title }}</span>
+      <span (click)="goTo()" class="clickable">{{ post.title }}</span>
     </mat-card-title>
     <mat-card-subtitle class="clickable" *ngIf = "post.op">{{ post.op.username }}</mat-card-subtitle>
   </mat-card-header>
@@ -15,7 +15,8 @@
     <mat-icon matRipple class="icon center-middle" (click)="upvote()">thumb_up_alt</mat-icon>
     <span class="text center-middle"> {{ post.likes | kFormatter }} </span>
     <mat-icon matRipple class="icon center-middle" (click)="downvote()">thumb_down_alt</mat-icon>
-    <mat-icon matRipple class="icon center-middle" (click)="goTo(post)">comment</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="goTo()">comment</mat-icon>
     <span class="text center-middle">{{ post.comments | kFormatter }} </span>
+    <mat-icon matRipple class="icon center-middle" (click)="hide()">remove_red_eye</mat-icon>
   </mat-card-actions>
 </mat-card>

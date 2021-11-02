@@ -10,9 +10,9 @@
   </mat-card-content>
 
   <mat-card-actions class="center-left">
-    <mat-icon matRipple class="icon center-middle" (click)="upvote(comment)">thumb_up_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="upvote()">thumb_up_alt</mat-icon>
     <span class="text center-middle"> {{comment.likes | kFormatter}} </span>
-    <mat-icon matRipple class="icon center-middle" (click)="downvote(comment)">thumb_down_alt</mat-icon>
+    <mat-icon matRipple class="icon center-middle" (click)="downvote()">thumb_down_alt</mat-icon>
     <mat-icon matRipple class="icon center-middle" (click)="comment.childsHidden = !comment.childsHidden">comment</mat-icon>
     <span class="text center-middle"> {{comment.replays | kFormatter}} </span> 
     <mat-icon matRipple class="icon center-middle" *ngIf="comment.id" (click)="replyToComment()">reply</mat-icon>

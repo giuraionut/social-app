@@ -19,9 +19,6 @@ export class CommentService {
     <Array<Comment>>[]
   );
 
-  
-  private byId: BehaviorSubject<Comment> = new BehaviorSubject({});
-
   public create(comment: Comment, postId: string): Observable<Comment> {
     return this.http
       .post(`${this.url}/post/${postId}`, comment, { withCredentials: true })
@@ -38,6 +35,18 @@ export class CommentService {
       );
   }
 
+  public delete(commentId: string): Observable<string> {
+    return this.http
+      .delete(`${this.url}/${commentId}`, { withCredentials: true })
+      .pipe(
+        map((response: APIResponse) => {
+          let comments: Array<Comment> = this.owned.value;
+          comments.find(c => c.id === commentId)!.content = "[deleted]";
+          return response.message!;
+        })
+      );
+  }
+
   public reply(comment: Comment, parentId: string): Observable<Comment> {
     return this.http
       .post(`${this.url}/reply/${parentId}`, comment, { withCredentials: true })
@@ -49,14 +58,13 @@ export class CommentService {
       );
   }
 
-
   public getByPost(postId: string): Observable<Array<Comment>> {
     return this.http
       .get(`${this.url}/post/${postId}`, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           let comments: Comment[] = response.payload;
-          this.byPost.next(comments.filter(comment => comment.isParent));
+          this.byPost.next(comments.filter((comment) => comment.isParent));
         })
       )
       .pipe(
@@ -84,16 +92,54 @@ export class CommentService {
         })
       );
   }
-  public countChilds(commentId: string): Observable<number>{
+  public countChilds(commentId: string): Observable<number> {
     return this.http
-    .get(`${this.url}/${commentId}/childs/count`, {
-      withCredentials: true,
-    })
-    .pipe(
-      map((response: APIResponse) => {
-        return response.payload;
+      .get(`${this.url}/${commentId}/childs/count`, {
+        withCredentials: true,
       })
-    );
+      .pipe(
+        map((response: APIResponse) => {
+          return response.payload;
+        })
+      );
   }
+
+  public getVotes(value: boolean, commentId: string): Observable<number> {
+    return this.http
+      .get(`${this.url}/${commentId}/votes/${value}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          return response.payload;
+        })
+      );
+  }
+
+  public vote(value: boolean, commentId: string): Observable<string> {
+    return this.http
+      .post(`${this.url}/${commentId}/vote/${value}`, null, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          if (response.message) return response.message;
+          else return '';
+        })
+      );
+  }
+
+  public getVotedComments(): Observable<Array<Comment>> {
+    return this.http
+      .get(`${this.url}/voted/all`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          return response.payload;
+        })
+      );
+  }
+
   //-----------------------------------------------------------------------------------------------
 }

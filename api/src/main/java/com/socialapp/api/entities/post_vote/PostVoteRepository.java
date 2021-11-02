@@ -1,4 +1,4 @@
-package com.socialapp.api.entities.votes;
+package com.socialapp.api.entities.post_vote;
 
 import com.socialapp.api.entities.post.Post;
 import com.socialapp.api.entities.user.User;

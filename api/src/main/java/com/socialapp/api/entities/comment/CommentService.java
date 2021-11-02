@@ -13,8 +13,7 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public Comment add (Comment comment)
-    {
+    public Comment add(Comment comment) {
         return this.commentRepository.save(comment);
     }
 
@@ -22,8 +21,14 @@ public class CommentService {
         return this.commentRepository.getByPostId(postId).orElse(null);
     }
 
-    public Comment getById(String commentId)
-    {
+    public Comment getById(String commentId) {
         return this.commentRepository.getById(commentId);
+    }
+
+    public void delete(String commentId) {
+        Comment comment = getById(commentId);
+        comment.setContent("[deleted]");
+        comment.setDeleted(true);
+        add(comment);
     }
 }

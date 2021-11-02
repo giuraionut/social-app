@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.user.User;
-import com.socialapp.api.entities.votes.PostVote;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -28,7 +27,7 @@ public class Post {
 
     private Instant creationDate;
 
-    private boolean visible = true;
+    private boolean deleted = false;
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
@@ -40,7 +39,14 @@ public class Post {
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "hiddenPosts", fetch = FetchType.LAZY)
+    private List<User> hiddenByUsers = new ArrayList<>();
+
     //getters-----------------------------------------------------------------------------------------------------------
+    @JsonIgnore
+    public List<User> getHiddenByUsers() {
+        return hiddenByUsers;
+    }
     public String getId() {
         return id;
     }
@@ -71,8 +77,13 @@ public class Post {
     }
 
     //is----------------------------------------------------------------------------------------------------------------
-    public boolean isVisible() {
-        return visible;
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public boolean isHiddenForUser(User user)
+    {
+        return this.hiddenByUsers.contains(user);
     }
 
     //setters-----------------------------------------------------------------------------------------------------------
@@ -100,8 +111,8 @@ public class Post {
         this.op = op;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     //add---------------------------------------------------------------------------------------------------------------
@@ -111,6 +122,12 @@ public class Post {
        comment.setPost(this);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    public void addHiddenByUsers(User user) {
+        user.addHiddenPost(this);
+    }
 
+    //remove------------------------------------------------------------------------------------------------------------
+    public void removeHiddenByUser(User user) {
+        user.removeHiddenPost(this);
+    }
 }

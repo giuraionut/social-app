@@ -26,8 +26,8 @@ export class PostItemComponent implements OnInit {
     this.getVotes();
     this.countComments();
   }
-  public goTo(post: Post) {
-    this.router.navigate([`/socialapp/post/${post.id}`]);
+  public goTo() {
+    this.router.navigate([`/socialapp/post/${this.post.id}`]);
   }
 
 
@@ -77,5 +77,16 @@ public countComments():void{
         }
       );
     }
+  }
+
+  
+  public hide(): void {
+    if(this.post.id)
+    this.postService.hide(this.post.id).subscribe(() => {
+      this.snackBar.open(`Post ${this.post.title} hidden!`, 'Close', {
+        duration: 4000,
+      });
+      this.router.navigate(["socialapp/home"]);
+    });
   }
 }

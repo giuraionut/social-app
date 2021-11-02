@@ -51,12 +51,13 @@ import { NotFoundItemComponent } from './items/general/not-found-item/not-found-
 import { CreateCommunityDialogComponent } from './items/dialogs/create-community-dialog/create-community-dialog.component';
 import { CommentItemComponent } from './items/comment-item/comment-item.component';
 import { CommunityPageComponent } from './pages/community-page/community-page.component';
-import { ProfilePostItemComponent } from './items/profile/profile-post-item/profile-post-item.component';
+import { ProfilePostItemComponent } from './items/profile/post/profile-post-item/profile-post-item.component';
 import { ProfileCommentItemComponent } from './items/profile/profile-comment-item/profile-comment-item.component';
 import { ProfileCommunityItemComponent } from './items/profile/profile-community-item/profile-community-item.component';
 import { CreatePostDialogComponent } from './items/dialogs/create-post-dialog/create-post-dialog.component';
 import { CreateCommentItemComponent } from './items/create-comment-item/create-comment-item.component';
 import { CreateCommentDialogComponent } from './items/dialogs/create-comment-dialog/create-comment-dialog.component';
+import { ProfileHiddenPostsItemComponent } from './items/profile/post/profile-hidden-post-item/profile-hidden-post-item.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -90,7 +91,7 @@ import { CreateCommentDialogComponent } from './items/dialogs/create-comment-dia
     CreatePostDialogComponent,
     CreateCommentItemComponent,
     CreateCommentDialogComponent,
-
+    ProfileHiddenPostsItemComponent,
   ],
   imports: [
     BrowserModule,

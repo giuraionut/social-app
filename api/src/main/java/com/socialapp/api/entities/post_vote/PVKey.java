@@ -1,4 +1,4 @@
-package com.socialapp.api.entities.votes;
+package com.socialapp.api.entities.post_vote;
 
 
 import com.socialapp.api.entities.post.Post;
@@ -22,6 +22,7 @@ public class PVKey implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;

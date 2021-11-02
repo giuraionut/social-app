@@ -1,5 +1,8 @@
 package com.socialapp.api.entities.comment;
 
+import com.socialapp.api.entities.comment_vote.CVKey;
+import com.socialapp.api.entities.comment_vote.CommentVote;
+import com.socialapp.api.entities.comment_vote.CommentVoteService;
 import com.socialapp.api.entities.post.Post;
 import com.socialapp.api.entities.post.PostService;
 import com.socialapp.api.entities.user.User;
@@ -25,6 +28,7 @@ public class CommentController {
     private final PostService postService;
     private final JwtUtils jwtUtils;
     private final UserService userService;
+    private CommentVoteService commentVoteService;
 
     @PostMapping(path = "post/{postId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -45,6 +49,28 @@ public class CommentController {
 
         response.setPayload(addedComment);
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "{commentId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> deleteComment(@PathVariable("commentId") String commentId, HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+
+        Comment comment = this.commentService.getById(commentId);
+        if(comment.getAuthor().equals(user)) {
+            this.commentService.delete(commentId);
+            response.setMessage("Comment deleted successfully");
+        }
+        else
+        {
+            response.setMessage("Something went wrong");
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -138,6 +164,65 @@ public class CommentController {
 
         response.setPayload(comments.size());
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "{commentId}/votes/{value}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getVotes(HttpServletRequest request, @PathVariable("commentId") String commentId, @PathVariable("value") boolean value) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+
+        Comment comment = this.commentService.getById(commentId);
+        int votes = this.commentVoteService.countVotes(comment);
+        response.setPayload(votes);
+        response.setMessage("Votes obtained successfully");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+
+    @PostMapping(path = "{commentId}/vote/{value}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> voteComment(HttpServletRequest request, @PathVariable("commentId") String commentId, @PathVariable("value") boolean value) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+        Comment comment = this.commentService.getById(commentId);
+
+        CommentVote commentVote = new CommentVote();
+        commentVote.setId(new CVKey(user, comment));
+        commentVote.setValue(value);
+        boolean voted = this.commentVoteService.vote(commentVote);
+        if (voted) {
+            response.setMessage("added");
+        } else {
+            response.setMessage("removed");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "voted/all")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getVotedComments(HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
+        User user = this.userService.getById(userId);
+        List<Comment> comments = this.commentVoteService.votedComments(true, user);
+
+        response.setPayload(comments);
+        response.setError("none");
+        response.setMessage("Voted posts obtained successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

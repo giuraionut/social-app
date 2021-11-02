@@ -14,6 +14,10 @@ export class PostService {
     <Array<Post>>[]
   );
 
+  private hidden: BehaviorSubject<Array<Post>> = new BehaviorSubject(
+    <Array<Post>>[]
+  );
+
   private byCommunity: BehaviorSubject<Array<Post>> = new BehaviorSubject(
     <Array<Post>>[]
   );
@@ -21,6 +25,7 @@ export class PostService {
   private feed: BehaviorSubject<Array<Post>> = new BehaviorSubject(
     <Array<Post>>[]
   );
+
   private byId: BehaviorSubject<Post> = new BehaviorSubject({});
 
   public create(post: Post, communityTitle: string): Observable<Post> {
@@ -34,6 +39,19 @@ export class PostService {
           posts.push(response.payload);
           this.owned.next(posts);
           return response.payload;
+        })
+      );
+  }
+
+  public delete(postId: string): Observable<string> {
+    return this.http
+      .delete(`${this.url}/${postId}`, { withCredentials: true })
+      .pipe(
+        map((response: APIResponse) => {
+          let posts: Array<Post> = this.owned.value;
+          posts = posts.filter((p) => p.id != postId);
+          this.owned.next(posts);
+          return response.message!;
         })
       );
   }
@@ -53,9 +71,9 @@ export class PostService {
       );
   }
 
-  public getOwned(): Observable<Array<Post>> {
+  public getOwned(deleted: boolean): Observable<Array<Post>> {
     return this.http
-      .get(`${this.url}/owned`, {
+      .get(`${this.url}/owned/${deleted}`, {
         withCredentials: true,
       })
       .pipe(
@@ -72,6 +90,24 @@ export class PostService {
       );
   }
 
+  public getHidden(): Observable<Array<Post>> {
+    return this.http
+      .get(`${this.url}/hidden`, {
+        withCredentials: true,
+      })
+      .pipe(
+        mergeMap((response: APIResponse) => {
+          let posts: Array<Post> = response.payload;
+          this.hidden.next(posts);
+          return this.hidden;
+        })
+      )
+      .pipe(
+        mergeMap(() => {
+          return this.hidden.asObservable();
+        })
+      );
+  }
   public getFeed(): Observable<Array<Post>> {
     return this.http
       .get(`${this.url}/feed`, {
@@ -106,18 +142,35 @@ export class PostService {
       );
   }
 
-  public changeVisibility(post: Post, value: boolean): Observable<void> {
+  public hide(postId: string): Observable<string> {
     return this.http
-      .put(`${this.url}/hidden/${value}`, post, { withCredentials: true })
+      .post(`${this.url}/hide/${postId}`, null, {
+        withCredentials: true,
+      })
       .pipe(
         map((response: APIResponse) => {
-          let posts: Array<Post> = this.owned.value;
-          posts.find((p) => p === post)!.visible = value;
-          this.owned.next(posts);
+          let feedPosts: Array<Post> = this.feed.value;
+          feedPosts = feedPosts.filter(p => p.id != postId);
+          this.feed.next(feedPosts);
+          return response.message!;
         })
       );
   }
 
+  public unHide(postId: string): Observable<string> {
+    return this.http
+      .post(`${this.url}/unHide/${postId}`, null, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          let hiddenPosts: Array<Post> = this.hidden.value;
+          hiddenPosts = hiddenPosts.filter(p => p.id != postId);
+          this.hidden.next(hiddenPosts);
+          return response.message!;
+        })
+      );
+  }
   public vote(value: boolean, postId: string): Observable<string> {
     return this.http
       .post(`${this.url}/${postId}/vote/${value}`, null, {
@@ -125,8 +178,7 @@ export class PostService {
       })
       .pipe(
         map((response: APIResponse) => {
-          if (response.message) return response.message;
-          else return '';
+          return response.message!;
         })
       );
   }
@@ -143,20 +195,19 @@ export class PostService {
       );
   }
 
-  public getCommentsCount(postId: string):Observable<number>{
+  public getCommentsCount(postId: string): Observable<number> {
     return this.http
-    .get(`${this.url}/${postId}/comments/count`, {
-      withCredentials: true,
-    })
-    .pipe(
-      map((response: APIResponse) => {
-        return response.payload;
+      .get(`${this.url}/${postId}/comments/count`, {
+        withCredentials: true,
       })
-    );
+      .pipe(
+        map((response: APIResponse) => {
+          return response.payload;
+        })
+      );
   }
 
-  public getVotedPosts(): Observable<Array<Post>>
-  {
+  public getVotedPosts(): Observable<Array<Post>> {
     return this.http
       .get(`${this.url}/voted/all`, {
         withCredentials: true,

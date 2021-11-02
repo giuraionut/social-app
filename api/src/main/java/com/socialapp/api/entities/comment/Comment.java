@@ -28,6 +28,7 @@ public class Comment {
 
     private Instant creationDate;
 
+    private boolean deleted;
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
@@ -47,6 +48,10 @@ public class Comment {
 
     //getters-----------------------------------------------------------------------------------------------------------
 
+
+    public boolean isDeleted() {
+        return deleted;
+    }
 
     public String getId() {
         return id;
@@ -86,6 +91,10 @@ public class Comment {
     }
 
     //setters-----------------------------------------------------------------------------------------------------------
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public void setId(String id) {
         this.id = id;

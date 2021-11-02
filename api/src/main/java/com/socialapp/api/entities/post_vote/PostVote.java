@@ -1,4 +1,4 @@
-package com.socialapp.api.entities.votes;
+package com.socialapp.api.entities.post_vote;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

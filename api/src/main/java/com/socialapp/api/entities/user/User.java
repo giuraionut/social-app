@@ -56,6 +56,17 @@ public class User implements UserDetails {
             })
     private List<Community> joinedCommunities = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "hidden_posts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id"),
+            indexes = {
+                    @Index(name = "user_id_post_id_index", columnList = "user_id, post_id", unique = true)
+            })
+    private List<Post> hiddenPosts = new ArrayList<>();
+
+
     //add---------------------------------------------------------------------------------------------------------------
     public void addPost(Post post) {
         ownedPosts.add(post);
@@ -65,6 +76,10 @@ public class User implements UserDetails {
     public void addComment(Comment comment) {
         ownedComments.add(comment);
         comment.setAuthor(this);
+    }
+
+    public void addHiddenPost(Post post) {
+        hiddenPosts.add(post);
     }
 
     public void addJoinedCommunity(Community community) {
@@ -89,15 +104,23 @@ public class User implements UserDetails {
     }
 
     public void removeJoinedCommunity(Community community) {
-         joinedCommunities.remove(community);
+        joinedCommunities.remove(community);
     }
 
     public void removeOwnedCommunity(Community community) {
         ownedCommunities.remove(community);
         community.setCreator(null);
     }
+    public void removeHiddenPost(Post post) {
+        hiddenPosts.remove(post);
+    }
 
     //getters-----------------------------------------------------------------------------------------------------------
+    @JsonIgnore
+    public List<Post> getHiddenPosts()
+    {
+        return hiddenPosts;
+    }
     public String getId() {
         return id;
     }
@@ -249,9 +272,6 @@ public class User implements UserDetails {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
-
-
-    //------------------------------------------------------------------------------------------------------------------
 
 
 }

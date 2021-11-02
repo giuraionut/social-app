@@ -80,7 +80,6 @@ export class CommunityService {
       })
       .pipe(
         map((response: APIResponse) => {
-          console.log(response);
           return response.payload;
         })
       );

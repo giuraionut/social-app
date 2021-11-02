@@ -27,35 +27,39 @@ export class ProfilePageComponent implements OnInit {
   public ownedCommunities: Array<Community> = [];
   public ownedPosts: Array<Post> = [];
   public ownedComments: Array<Comment> = [];
+  public hiddenPosts: Array<Post> = [];
   public votedPosts: Array<Post> = [];
   ngOnInit(): void {
     this.changeCategory(this.page);
-
   }
 
   public changeCategory(page: string) {
     if (page === 'communities') {
-      this.communityService.getOwned().subscribe((communities: Array<Community>) => {
+      this.communityService
+        .getOwned().subscribe((communities: Array<Community>) => {
           this.ownedCommunities = communities;
         });
     }
-    if (page === 'posts' || page ==="hidden-posts") {
-      this.postService.getOwned().subscribe((posts: Array<Post>) => {
+    if (page === 'posts') {
+      this.postService.getOwned(false).subscribe((posts: Array<Post>) => {
         this.ownedPosts = posts;
       });
     }
-    if(page === "comments")
-    {
+    if (page === 'hidden-posts') {
+      this.postService.getHidden().subscribe((posts: Array<Post>) => {
+        this.hiddenPosts = posts;
+        console.log(posts);
+      });
+    }
+    if (page === 'comments') {
       this.commentService.getOwned().subscribe((comments: Array<Comment>) => {
         this.ownedComments = comments;
-      })
+      });
     }
-    if(page === "up-voted-posts")
-    {
+    if (page === 'up-voted-posts') {
       this.postService.getVotedPosts().subscribe((posts: Array<Post>) => {
         this.votedPosts = posts;
-        console.log(posts);
-      })
+      });
     }
   }
 

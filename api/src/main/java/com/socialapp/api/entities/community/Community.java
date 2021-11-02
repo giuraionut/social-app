@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "communities", indexes = {@Index(name = "title_index", columnList = "title", unique = true)})
@@ -58,7 +59,7 @@ public class Community {
 
     @JsonIgnore
     public List<Post> getPosts() {
-        return posts;
+        return posts.stream().filter(p -> !p.isDeleted()).collect(Collectors.toList());
     }
 
     @JsonIgnore

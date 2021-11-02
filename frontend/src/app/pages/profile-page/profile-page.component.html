@@ -23,17 +23,16 @@
         </mat-card>
 
         <div *ngIf="page === 'posts'">
-          <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post" [page]="'visible'"></app-profile-post-item>
+          <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post"></app-profile-post-item>
         </div>
         <div *ngIf="page === 'comments'">
           <app-profile-comment-item *ngFor="let comment of ownedComments" [comment]="comment"></app-profile-comment-item>
         </div>
         <div *ngIf="page === 'hidden-posts'">
-          <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post" [page]="'not-visible'"></app-profile-post-item>
+          <app-profile-hidden-post-item *ngFor="let post of hiddenPosts" [post]="post"></app-profile-hidden-post-item>
         </div>
-
         <div *ngIf="page === 'up-voted-posts'">
-          <app-profile-post-item *ngFor="let post of votedPosts" [post]="post" [page]="'voted'"></app-profile-post-item>
+          <app-profile-post-item *ngFor="let post of votedPosts" [post]="post"></app-profile-post-item>
         </div>
 
         <div *ngIf="page ==='communities'">

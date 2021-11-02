@@ -1,9 +1,11 @@
 package com.socialapp.api.entities.post;
 
 import com.socialapp.api.entities.community.Community;
+import com.socialapp.api.entities.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -22,15 +24,34 @@ public class PostService {
 
     public List<Post> getByCommunity(Community community)
     {
-        return this.postRepository.getByCommunity(community).orElse(null);
+        return this.postRepository.getByCommunityAndDeleted(community, false).orElse(null);
     }
 
     public Post getById(String postId) {
         return this.postRepository.getById(postId);
     }
 
-    public void update(Post post)
-    {
-        this.postRepository.save(post);
+    public void delete(String postId) {
+        Post post = getById(postId);
+        post.setContent("[deleted]");
+        post.setTitle("[deleted]");
+        post.setDeleted(true);
+        add(post);
     }
+
+    public void hidePost(Post post, User user)
+    {
+        post.addHiddenByUsers(user);
+        add(post);
+    }
+
+    public void unHidePost(Post post, User user)
+    {
+        post.removeHiddenByUser(user);
+        user.removeHiddenPost(post);
+        add(post);
+    }
+
+
+
 }

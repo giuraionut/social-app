@@ -1,4 +1,4 @@
-package com.socialapp.api.entities.votes;
+package com.socialapp.api.entities.post_vote;
 
 import com.socialapp.api.entities.post.Post;
 import com.socialapp.api.entities.user.User;
@@ -30,8 +30,7 @@ public class PostVoteService {
     public List<Post> votedPosts(boolean value, User user) {
 
         List<PostVote> allByValueAndIdUser = this.postVoteRepository.findAllByValueAndIdUser(value, user);
-        List<Post> posts = allByValueAndIdUser.stream().map(postVote -> postVote.getId().getPost()).collect(Collectors.toList());
-        return posts;
+        return allByValueAndIdUser.stream().map(postVote -> postVote.getId().getPost()).collect(Collectors.toList());
     }
 
     public int countVotes(Post post) {
