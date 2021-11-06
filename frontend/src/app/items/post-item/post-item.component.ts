@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Post } from '../../models/post.model';
 import { Router } from '@angular/router';
-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PostService } from '../../services/post.service';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-post-item',
   templateUrl: './post-item.component.html',
@@ -13,7 +13,8 @@ export class PostItemComponent implements OnInit {
   constructor(
     private router: Router,
     public snackBar: MatSnackBar,
-    private postService: PostService
+    private postService: PostService,
+    private sanitizer: DomSanitizer
   ) {}
 
   @Input() post: Post = {};
@@ -38,6 +39,11 @@ export class PostItemComponent implements OnInit {
     this.router.navigate([`/socialapp/post/${this.post.id}`]);
   }
 
+
+  public sanitizedUrl(url: string)
+  {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
 public countComments():void{
   if (this.post.id) this.postService.getCommentsCount(this.post.id).subscribe((c) => {
     this.post.comments = c;

@@ -24,7 +24,7 @@
         <span> OR </span>
         <mat-form-field appearance="outline" class="form-input form-link">
           <mat-label>Link to media</mat-label>
-          <textarea matInput #mediaLink placeholder="Should end in .png/.jpg/.mp4, etc" (change)="checkLink(mediaLink.value)"></textarea>
+          <input matInput #mediaLink placeholder="Should end in .png/.jpg/.mp4, etc" (change)="checkLink(mediaLink.value)"/>
         </mat-form-field>
         <input #fileInput style ="display:none" type="file" (change)="getImage($event)" />
         <p></p>

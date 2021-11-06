@@ -1,4 +1,5 @@
 <mat-card class="card">
+
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>
@@ -6,10 +7,19 @@
     </mat-card-title>
     <mat-card-subtitle class="clickable" *ngIf = "post.op">{{ post.op.username }}</mat-card-subtitle>
   </mat-card-header>
+
   <img *ngIf="!post.mediaHidden && post.postMedia && post.postMedia.type === 'image'" mat-card-image [src]="post.postMedia.url" alt="media"/>
+
+  <video *ngIf="!post.mediaHidden && post.postMedia && post.postMedia.type === 'video' && !post.postMedia.external" 
+    muted controls mat-card-image>
+    <source [src] = "post.postMedia.url"/>
+    Your browser does not support the video tag.
+  </video>
+
   <mat-card-content>
     <p>{{ post.content }}</p>
   </mat-card-content>
+
   <mat-card-actions class="center-left">
     <button mat-button (click)="post.mediaHidden = !post.mediaHidden">Toggle Media</button>
     <mat-icon matRipple class="icon center-middle" (click)="upvote()">thumb_up_alt</mat-icon>
