@@ -20,6 +20,7 @@ export class NavbarItemComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
   selectedCommunityLabel="Joined communities";
+  
   constructor(
     private router: Router,
     private userService: UserService,

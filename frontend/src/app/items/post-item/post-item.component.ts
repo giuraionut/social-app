@@ -19,10 +19,13 @@ export class PostItemComponent implements OnInit {
   @Input() post: Post = {};
   @Input() page: string = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngOnChanges() {
-    this.post.mediaHidden = true;
+    if(this.post.mediaUrl && !this.post.mediaUrl.match("https://"))
+    this.post.mediaUrl = "assets/"+this.post.mediaUrl;
+    this.post.mediaHidden = false;
     this.getVotes();
     this.countComments();
   }

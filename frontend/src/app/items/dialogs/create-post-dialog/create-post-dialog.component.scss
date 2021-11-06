@@ -1,3 +1,22 @@
-textarea{
-    max-height: 200px;
+textarea {
+  max-height: 200px;
+}
+
+.communities-select {
+  margin-top: 10px;
+  font-size: 12px;
+  height: 45px;
+  margin-bottom: 20px;
+}
+
+.form-link {
+  margin-top: 15px;
+  font-size: 12px;
+  width: 500px;
+}
+
+.media-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

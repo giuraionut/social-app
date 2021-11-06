@@ -67,7 +67,7 @@ public class User implements UserDetails {
     private List<Post> hiddenPosts = new ArrayList<>();
 
 
-    //add---------------------------------------------------------------------------------------------------------------
+    //create---------------------------------------------------------------------------------------------------------------
     public void addPost(Post post) {
         ownedPosts.add(post);
         post.setOp(this);

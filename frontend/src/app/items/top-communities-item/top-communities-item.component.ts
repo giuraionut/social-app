@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Community } from '../../models/community.model';
+import { CommunityService } from '../../services/community.service';
 
 @Component({
   selector: 'app-top-communities-item',
@@ -7,21 +8,15 @@ import { Community } from '../../models/community.model';
   styleUrls: ['./top-communities-item.component.scss'],
 })
 export class TopCommunitiesItemComponent implements OnInit {
-  constructor() {}
+  constructor(private communityService: CommunityService) {}
 
   public communities: Community[] = [];
 
   ngOnInit(): void {
-    let community: Community = {
-      title: 'Jokes',
-      creationDate: new Date('2021 08 20'),
-      description:
-        'Bla bla bla this is a very nice community here on this very nice site',
-    };
-    this.communities.push(community);
-    this.communities.push(community);
-    this.communities.push(community);
-    this.communities.push(community);
-    this.communities.push(community);
+    this.communityService
+      .getTopCommunities(10)
+      .subscribe((communities: Array<Community>) => {
+        this.communities = communities;
+      });
   }
 }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "community")
@@ -96,8 +98,7 @@ public class CommunityController {
 
     @PutMapping(path = "join")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> join(@RequestBody String communityId, HttpServletRequest request)
-    {
+    public ResponseEntity<Object> join(@RequestBody String communityId, HttpServletRequest request) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -114,8 +115,7 @@ public class CommunityController {
 
     @PutMapping(path = "leave")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> leave(@RequestBody String communityId, HttpServletRequest request)
-    {
+    public ResponseEntity<Object> leave(@RequestBody String communityId, HttpServletRequest request) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -143,8 +143,7 @@ public class CommunityController {
 
         List<Community> communities = user.getJoinedCommunities();
         if (!communities.isEmpty()) {
-            if(communities.stream().anyMatch(community -> community.getId().equals(communityId)))
-            {
+            if (communities.stream().anyMatch(community -> community.getId().equals(communityId))) {
                 response.setPayload(true);
                 response.setMessage("User is member of this community");
             }
@@ -172,6 +171,20 @@ public class CommunityController {
             response.setMessage("No joined communities found for user");
         }
         response.setPayload(communities);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("multiple/{quantity}/top")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getTopCommunities(@PathVariable("quantity") Integer quantity, HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        final List<Community> allCommunities = this.communityService.getAll();
+        allCommunities.sort(Comparator.comparingInt(o -> o.getMembers().size()));
+        final List<Community> limited = allCommunities.stream().limit(quantity).collect(Collectors.toList());
+        response.setPayload(limited);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

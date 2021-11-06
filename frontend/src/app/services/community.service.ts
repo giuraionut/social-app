@@ -10,11 +10,17 @@ export class CommunityService {
   private url = 'http://localhost:8080/community';
 
   //-----------------------------------------------------------------------------------------------
-  private owned: BehaviorSubject<Array<Community>> =
-    new BehaviorSubject(<Array<Community>>[]);
+  private owned: BehaviorSubject<Array<Community>> = new BehaviorSubject(
+    <Array<Community>>[]
+  );
 
-  private joined: BehaviorSubject<Array<Community>> =
-    new BehaviorSubject(<Array<Community>>[]);
+  private joined: BehaviorSubject<Array<Community>> = new BehaviorSubject(
+    <Array<Community>>[]
+  );
+
+  private topCommunities: BehaviorSubject<Array<Community>> = new BehaviorSubject(
+    <Array<Community>>[]
+  );
 
   private community: BehaviorSubject<Community> = new BehaviorSubject({});
 
@@ -72,8 +78,7 @@ export class CommunityService {
       );
   }
 
-  public isJoined(communityId: string): Observable<boolean>
-  {
+  public isJoined(communityId: string): Observable<boolean> {
     return this.http
       .get(`${this.url}/${communityId}/joined`, {
         withCredentials: true,
@@ -93,9 +98,7 @@ export class CommunityService {
       })
       .pipe(
         map(() => {
-          this.owned.next(
-            this.owned.value.filter((c) => c !== community)
-          );
+          this.owned.next(this.owned.value.filter((c) => c !== community));
         })
       );
   }
@@ -106,10 +109,29 @@ export class CommunityService {
       .pipe(
         map((response: APIResponse) => {
           this.community.next(response.payload);
-        }))
+        })
+      )
       .pipe(
         mergeMap(() => {
           return this.community.asObservable();
+        })
+      );
+  }
+
+  public getTopCommunities(quantity: number): Observable<Array<Community>> {
+    return this.http
+      .get(`${this.url}/multiple/${quantity}/top`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          let communities: Array<Community> = response.payload;
+          this.topCommunities.next(communities);
+        })
+      )
+      .pipe(
+        mergeMap(() => {
+          return this.topCommunities.asObservable();
         })
       );
   }
@@ -132,7 +154,9 @@ export class CommunityService {
         map((response: APIResponse) => {
           let communities: Array<Community> = this.joined.value;
           communities.push(response.payload);
-          this.joined.next(communities.filter((c) => c.id !== response.payload.id));
+          this.joined.next(
+            communities.filter((c) => c.id !== response.payload.id)
+          );
         })
       );
   }

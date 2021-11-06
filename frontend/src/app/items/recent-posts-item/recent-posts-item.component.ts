@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../models/post.model';
+import { PostService } from '../../services/post.service';
 
 @Component({
   selector: 'app-recent-posts-item',
@@ -7,20 +8,23 @@ import { Post } from '../../models/post.model';
   styleUrls: ['./recent-posts-item.component.scss'],
 })
 export class RecentPostsItemComponent implements OnInit {
-  constructor() {}
+  constructor(private postService: PostService) {}
   public posts: Post[] = [];
   ngOnInit(): void {
-   
-    let post: Post = {
-      title: 'I really like potatoes',
-      likes: 145234,
-      comments: 5025,
-      creationDate: new Date(),
-    };
-    this.posts.push(post);
-    this.posts.push(post);
-    this.posts.push(post);
-    this.posts.push(post);
-    this.posts.push(post);
+    this.postService.getRecentPosts(4).subscribe((posts: Array<Post>) => {
+      this.posts = posts;
+    });
+  }
+  ngOnChanges(): void {
+    this.posts.forEach((post) => {
+      if (post && post.id) {
+        this.postService.getCommentsCount(post.id).subscribe((noOfComments) => {
+          this.posts.find((p) => p.id == post.id)!.comments = noOfComments;
+        });
+        this.postService.getVotes(true, post.id).subscribe((noOfVotes) => {
+          this.posts.find((p) => p.id == post.id)!.likes = noOfVotes;
+        });
+      }
+    });
   }
 }

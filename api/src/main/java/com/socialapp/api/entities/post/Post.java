@@ -27,6 +27,8 @@ public class Post {
 
     private Instant creationDate;
 
+    private String mediaUrl;
+
     private boolean deleted = false;
     @ManyToOne
     @JoinColumn(name = "community_id")
@@ -43,10 +45,17 @@ public class Post {
     private List<User> hiddenByUsers = new ArrayList<>();
 
     //getters-----------------------------------------------------------------------------------------------------------
+
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
     @JsonIgnore
     public List<User> getHiddenByUsers() {
         return hiddenByUsers;
     }
+
     public String getId() {
         return id;
     }
@@ -87,6 +96,12 @@ public class Post {
     }
 
     //setters-----------------------------------------------------------------------------------------------------------
+
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -115,7 +130,7 @@ public class Post {
         this.deleted = deleted;
     }
 
-    //add---------------------------------------------------------------------------------------------------------------
+    //create---------------------------------------------------------------------------------------------------------------
     public void addComment(Comment comment)
     {
        comments.add(comment);

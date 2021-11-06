@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { APIResponse } from '../models/api-response.model';
 import { Post } from '../models/post.model';
@@ -26,17 +26,24 @@ export class PostService {
     <Array<Post>>[]
   );
 
+  private mostRecent: BehaviorSubject<Array<Post>> = new BehaviorSubject(
+    <Array<Post>>[]
+  );
+
+
   private byId: BehaviorSubject<Post> = new BehaviorSubject({});
 
-  public create(post: Post, communityTitle: string): Observable<Post> {
+  public create(formData: FormData, communityTitle: string): Observable<Post> {
+    console.log(formData.get("post")!.toString);
     return this.http
-      .post(`${this.url}/community/${communityTitle}`, post, {
+      .post(`${this.url}/community/${communityTitle}`, formData, {
         withCredentials: true,
       })
       .pipe(
         map((response: APIResponse) => {
+          let post: Post = response.payload;
           let posts: Array<Post> = this.owned.value;
-          posts.push(response.payload);
+          posts.push(post);
           this.owned.next(posts);
           return response.payload;
         })
@@ -150,7 +157,7 @@ export class PostService {
       .pipe(
         map((response: APIResponse) => {
           let feedPosts: Array<Post> = this.feed.value;
-          feedPosts = feedPosts.filter(p => p.id != postId);
+          feedPosts = feedPosts.filter((p) => p.id != postId);
           this.feed.next(feedPosts);
           return response.message!;
         })
@@ -165,7 +172,7 @@ export class PostService {
       .pipe(
         map((response: APIResponse) => {
           let hiddenPosts: Array<Post> = this.hidden.value;
-          hiddenPosts = hiddenPosts.filter(p => p.id != postId);
+          hiddenPosts = hiddenPosts.filter((p) => p.id != postId);
           this.hidden.next(hiddenPosts);
           return response.message!;
         })
@@ -215,6 +222,24 @@ export class PostService {
       .pipe(
         map((response: APIResponse) => {
           return response.payload;
+        })
+      );
+  }
+
+  public getRecentPosts(quantity: number): Observable<Array<Post>> {
+    return this.http
+      .get(`${this.url}/multiple/${quantity}/mostRecent`, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: APIResponse) => {
+          let posts: Array<Post> = response.payload;
+          this.mostRecent.next(posts);
+        })
+      )
+      .pipe(
+        mergeMap(() => {
+          return this.mostRecent.asObservable();
         })
       );
   }

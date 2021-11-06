@@ -3,6 +3,8 @@ package com.socialapp.api.entities.community;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 
 public class CommunityService {
@@ -30,5 +32,8 @@ public class CommunityService {
         return this.communityRepository.getByTitle(title).orElse(null);
     }
 
-
+    public List<Community> getAll()
+    {
+        return this.communityRepository.findAll();
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ public class PostController {
 
     @PostMapping(path = "community/{communityTitle}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> create(@RequestBody Post post, @PathVariable("communityTitle") String communityTitle, HttpServletRequest request) {
+    public ResponseEntity<Object> create(@RequestPart("post") Post post, @RequestPart("media") MultipartFile media, @PathVariable("communityTitle") String communityTitle, HttpServletRequest request) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -45,7 +46,7 @@ public class PostController {
         Community community = this.communityService.getByTitle(communityTitle);
         user.addPost(post);
         community.addPost(post);
-        Post addedPost = this.postService.add(post);
+        Post addedPost = this.postService.create(post, media);
         if (addedPost != null) {
             response.setMessage("Post created successfully");
             response.setPayload(addedPost);
@@ -139,9 +140,9 @@ public class PostController {
 
         if (post != null) {
             response.setPayload(post);
-            response.setMessage("Owned posts by user obtained successfully");
+            response.setMessage("Post found!");
         } else {
-            response.setMessage("No owned posts found for user");
+            response.setMessage("No post found");
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -292,6 +293,29 @@ public class PostController {
         }
         response.setPayload(hiddenPosts);
         response.setMessage("Hidden posts obtained successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("multiple/{quantity}/mostRecent")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Object> getRecentPosts(@PathVariable("quantity") Integer quantity, HttpServletRequest request) {
+        Response response = new Response();
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.OK);
+        response.setError("none");
+        final List<Post> allPosts = this.postService.getAll();
+        allPosts.sort((o1, o2) -> {
+            if (o1.getCreationDate().isAfter(o2.getCreationDate())) {
+                return -1;
+            }
+            if (o1.getCreationDate().isBefore(o2.getCreationDate())) {
+                return 1;
+            }
+            return 0;
+        });
+        final List<Post> limited = allPosts.stream().limit(quantity).collect(Collectors.toList());
+        response.setPayload(limited);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

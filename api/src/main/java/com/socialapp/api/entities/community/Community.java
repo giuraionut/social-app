@@ -88,7 +88,7 @@ public class Community {
         this.creator = creator;
     }
 
-    //add---------------------------------------------------------------------------------------------------------------
+    //create---------------------------------------------------------------------------------------------------------------
     public void addMember(User member) {
         this.members.add(member);
         member.addJoinedCommunity(this);

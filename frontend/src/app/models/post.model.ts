@@ -1,5 +1,5 @@
-import { Community } from "./community.model";
-import { User } from "./user.model";
+import { Community } from './community.model';
+import { User } from './user.model';
 
 export interface Post {
   id?: string;
@@ -9,7 +9,7 @@ export interface Post {
   creationDate?: Date;
 
   title?: string;
-  media?: string;
+  mediaUrl?: string;
 
   comments?: number;
 

@@ -3,20 +3,37 @@
     <div mat-dialog-content>
       <p class="subtitle">Create a new post</p>
       <mat-divider></mat-divider>
-      <p class="details">Enter the title of the post</p>
+      <mat-form-field class="communities-select" appearance="outline">
+        <mat-label>{{selectedCommunityLabel}}</mat-label>
+        <mat-select [(ngModel)]="selectedCommunity" name="community">
+          <mat-option *ngFor="let community of joinedCommunities" (click)="setCommunity(community.title!)">
+            {{ community.title }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field appearance="outline" class="form-input">
         <mat-label>Title</mat-label>
         <input matInput #title placeholder="Should be something short and suggestive">
       </mat-form-field>
-      <p class="details">Tell everyone what you think</p>
       <mat-form-field appearance="outline" class="form-input">
         <mat-label>Content</mat-label>
         <textarea matInput #description placeholder="Remember to follow the rules and be polite"></textarea>
       </mat-form-field>
+      <div class = "media-input">
+        <button mat-raised-button [disabled]="uploadButtonDisabled" (click)="fileInput.click()">Upload Media</button>
+        <span> OR </span>
+        <mat-form-field appearance="outline" class="form-input form-link">
+          <mat-label>Link to media</mat-label>
+          <textarea matInput #mediaLink placeholder="Should end in .png/.jpg/.mp4, etc" (change)="checkLink(mediaLink.value)"></textarea>
+        </mat-form-field>
+        <input #fileInput style ="display:none" type="file" (change)="getImage($event)" />
+        <p></p>
+      </div>
     </div>
+
     <mat-divider></mat-divider>
     <mat-dialog-actions class="dialog-actions">
-      <button mat-raised-button (click)="createPost(title.value, description.value)">Submit</button>
+      <button mat-raised-button [disabled]="buttonDisabled" (click)="createPost(title.value, description.value)">Submit</button>
       <button mat-raised-button [mat-dialog-close]="'cancel'">Cancel</button>
     </mat-dialog-actions>
 </div>
