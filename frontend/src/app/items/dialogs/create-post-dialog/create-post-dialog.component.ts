@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Community } from '../../../models/community.model';
 import { Router } from '@angular/router';
 import { CommunityService } from '../../../services/community.service';
+import { PostMedia } from '../../../models/post-media.model';
 @Component({
   selector: 'app-create-post-dialog',
   templateUrl: './create-post-dialog.component.html',
@@ -20,10 +21,12 @@ export class CreatePostDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.data.community) {
+    if (this.data.community.id) {
       this.selectedCommunity = this.data.community;
       this.selectedCommunityLabel = this.data.community.title;
       this.buttonDisabled = false;
+    } else {
+      this.buttonDisabled = true;
     }
 
     this.communityService.getJoined().subscribe((communities) => {
@@ -37,7 +40,7 @@ export class CreatePostDialogComponent implements OnInit {
   uploadButtonDisabled: boolean = false;
   post: Post = {};
   mediaFile: File = new File([''], '');
-
+  link: string = '';
   buttonDisabled: boolean = true;
   goToCommunity(title: string) {
     this.router.navigate([`socialapp/community/${title}`]);
@@ -48,7 +51,7 @@ export class CreatePostDialogComponent implements OnInit {
     this.post.content = content;
     this.post.creationDate = new Date();
     const formData = new FormData();
-    formData.append('media', this.mediaFile, 'media.png');
+    formData.append('media', this.mediaFile, this.mediaFile.name);
     formData.append(
       'post',
       new Blob([JSON.stringify(this.post)], { type: 'application/json' })
@@ -83,10 +86,11 @@ export class CreatePostDialogComponent implements OnInit {
   checkLink(link: string) {
     if (link === '') {
       this.uploadButtonDisabled = false;
-      this.post.mediaUrl = '';
     } else {
+      this.link = link;
       this.uploadButtonDisabled = true;
-      this.post.mediaUrl = link;
+      let media: PostMedia = { url: link, type: '', name: '' };
+      this.post.postMedia = media;
     }
   }
 

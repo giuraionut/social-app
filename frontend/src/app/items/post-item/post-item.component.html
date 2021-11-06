@@ -6,7 +6,7 @@
     </mat-card-title>
     <mat-card-subtitle class="clickable" *ngIf = "post.op">{{ post.op.username }}</mat-card-subtitle>
   </mat-card-header>
-  <img *ngIf="!post.mediaHidden" mat-card-image [src]="post.mediaUrl" alt="media"/>
+  <img *ngIf="!post.mediaHidden && post.postMedia && post.postMedia.type === 'image'" mat-card-image [src]="post.postMedia.url" alt="media"/>
   <mat-card-content>
     <p>{{ post.content }}</p>
   </mat-card-content>

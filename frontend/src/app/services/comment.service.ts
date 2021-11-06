@@ -41,7 +41,8 @@ export class CommentService {
       .pipe(
         map((response: APIResponse) => {
           let comments: Array<Comment> = this.owned.value;
-          comments.find(c => c.id === commentId)!.content = "[deleted]";
+          comments = comments.filter(c => c.id != commentId);
+          this.owned.next(comments);
           return response.message!;
         })
       );

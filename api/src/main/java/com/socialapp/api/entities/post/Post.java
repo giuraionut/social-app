@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
 import com.socialapp.api.entities.user.User;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,7 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "posts")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Post {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -26,8 +26,6 @@ public class Post {
     private String content;
 
     private Instant creationDate;
-
-    private String mediaUrl;
 
     private boolean deleted = false;
     @ManyToOne
@@ -44,12 +42,18 @@ public class Post {
     @ManyToMany(mappedBy = "hiddenPosts", fetch = FetchType.LAZY)
     private List<User> hiddenByUsers = new ArrayList<>();
 
-    //getters-----------------------------------------------------------------------------------------------------------
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "post_media_id")
+    private PostMedia postMedia;
 
-
-    public String getMediaUrl() {
-        return mediaUrl;
+    public PostMedia getPostMedia() {
+        return postMedia;
     }
+
+    public void setPostMedia(PostMedia postMedia) {
+        this.postMedia = postMedia;
+    }
+//getters-----------------------------------------------------------------------------------------------------------
 
     @JsonIgnore
     public List<User> getHiddenByUsers() {
@@ -97,10 +101,6 @@ public class Post {
 
     //setters-----------------------------------------------------------------------------------------------------------
 
-
-    public void setMediaUrl(String mediaUrl) {
-        this.mediaUrl = mediaUrl;
-    }
 
     public void setId(String id) {
         this.id = id;

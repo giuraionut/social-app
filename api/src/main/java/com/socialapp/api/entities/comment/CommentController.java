@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "comment")
@@ -140,6 +141,7 @@ public class CommentController {
         User user = this.userService.getById(userId);
 
         List<Comment> comments = user.getOwnedComments();
+        comments = comments.stream().filter(c-> !c.isDeleted()).collect(Collectors.toList());
         if (!comments.isEmpty()) {
             response.setPayload(comments);
             response.setMessage("Owned comments by user obtained successfully");

@@ -29,6 +29,7 @@ public class Comment {
     private Instant creationDate;
 
     private boolean deleted;
+    
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;

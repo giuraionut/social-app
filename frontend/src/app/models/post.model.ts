@@ -1,4 +1,5 @@
 import { Community } from './community.model';
+import { PostMedia } from './post-media.model';
 import { User } from './user.model';
 
 export interface Post {
@@ -9,7 +10,7 @@ export interface Post {
   creationDate?: Date;
 
   title?: string;
-  mediaUrl?: string;
+  postMedia?: PostMedia;
 
   comments?: number;
 

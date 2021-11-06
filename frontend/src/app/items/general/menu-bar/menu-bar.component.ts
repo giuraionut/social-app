@@ -24,7 +24,6 @@ export class MenuBarComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(()=> {
       this.input.nativeElement.blur();
-      console.log("Closed");
     });
   }
 }

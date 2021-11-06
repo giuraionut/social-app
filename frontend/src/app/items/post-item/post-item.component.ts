@@ -23,8 +23,13 @@ export class PostItemComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if(this.post.mediaUrl && !this.post.mediaUrl.match("https://"))
-    this.post.mediaUrl = "assets/"+this.post.mediaUrl;
+    if(this.post.postMedia)
+    {
+      if(!this.post.postMedia.external)
+      {
+        this.post.postMedia.url = "assets/"+this.post.postMedia.url;
+      }
+    }
     this.post.mediaHidden = false;
     this.getVotes();
     this.countComments();
@@ -32,7 +37,6 @@ export class PostItemComponent implements OnInit {
   public goTo() {
     this.router.navigate([`/socialapp/post/${this.post.id}`]);
   }
-
 
 public countComments():void{
   if (this.post.id) this.postService.getCommentsCount(this.post.id).subscribe((c) => {
