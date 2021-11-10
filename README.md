@@ -50,7 +50,7 @@ api/v1/community/{username}/communities
 api/v1/community/{title}/about
 api/v1/community/{title}/{username}
 api/v1/community/{username}/joined
-api/v1/community/top/{quantity}
+api/v1/community/top
 ```  
 ### Put
 ```
@@ -73,7 +73,7 @@ api/v1/post/{postId}/{username}/visibility
 ```  
 ### Get
 ```
-api/v1/post/{communityTitle}
+api/v1/post/{communityTitle}/all
 api/v1/post/{username}/all
 api/v1/post/{username}/feed
 api/v1/post/{postId}
