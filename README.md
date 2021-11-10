@@ -17,7 +17,7 @@ Right now the project has the following features available:
 ## API ENDPOINTS
 ### `User` `api/v1/user`
 ---
-### Post
+### <summary>Post</summary>
 ```
 api/v1/user/register
 api/v1/user/me/logout
