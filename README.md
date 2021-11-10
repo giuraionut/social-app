@@ -18,7 +18,7 @@ Right now the project has the following features available:
 ### `User` `api/v1/user`
 ---
 ### Post
-```html
+```
 api/v1/user/register
 api/v1/user/me/logout
 api/v1/user/me/jwt/refresh
