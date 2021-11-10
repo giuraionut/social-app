@@ -47,7 +47,7 @@ api/v1/community/{title}
 ### Get
 ```
 api/v1/community/{username}/communities
-api/v1/community/{title}
+api/v1/community/{title}/about
 api/v1/community/{title}/{username}
 api/v1/community/{username}/joined
 api/v1/community/top/{quantity}
