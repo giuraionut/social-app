@@ -31,7 +31,8 @@ api/v1/user/email
 ```
 ### Delete
 ```
-api/v1/user/account
+api/v1/user/ac
+
 ```
 ### `Community` `api/v1/community`
 ---
@@ -100,6 +101,6 @@ api/v1/comment/post/{postId}
 api/v1/comment/{commentId}/childs
 api/v1/comment/{username}
 api/v1/comment/{commentId}/childs/count
-api/v1/comment/{commentId}/childs/count
+api/v1/comment/{commentId}/votes/value
 api/v1/comment/voted/all
 ```
