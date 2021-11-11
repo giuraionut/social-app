@@ -4,7 +4,7 @@
 
 # Gallery
 
-![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20015435.png)
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20015435.png?width=300)
 ![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20015746.png)
 ![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20020520.png)
 ![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20020608.png)
