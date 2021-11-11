@@ -88,7 +88,7 @@ api/v1/post/{communityTitle}/all
 api/v1/post/{username}/owned/all
 api/v1/post/{username}/feed
 api/v1/post/{postId}
-api/v1/post/{postId}/votes/{value}
+api/v1/post/{postId}/votes
 api/v1/post/{username}/voted
 api/v1/post/{postId}/comments/count
 api/v1/post/{username}/hidden

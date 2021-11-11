@@ -25,7 +25,7 @@ export class RecentPostsItemComponent implements OnInit {
                     noOfComments;
                 });
               this.postService
-                .getVotes(true, post.id)
+                .getVotes(post.id)
                 .subscribe((noOfVotes) => {
                   this.posts.find((p) => p.id == post.id)!.likes = noOfVotes;
                 });

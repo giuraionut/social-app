@@ -50,7 +50,7 @@ export class PostItemComponent implements OnInit {
 
   public getVotes(): void {
     if (this.post.id)
-      this.postService.getVotes(true, this.post.id).subscribe((v) => {
+      this.postService.getVotes(this.post.id).subscribe((v) => {
         this.post.likes = v;
       });
   }

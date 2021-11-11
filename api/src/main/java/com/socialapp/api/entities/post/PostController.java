@@ -72,14 +72,19 @@ public class PostController {
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        final int limit = Integer.parseInt(parameters.get("limit"));
+
 
         Community community = this.communityService.getByTitle(communityTitle);
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
         List<Post> allPosts = this.postService.getByCommunity(community);
-        List<Post> visibleForUser = allPosts.stream().filter(p -> !p.isHiddenForUser(user)).collect(Collectors.toList()).stream().limit(limit).collect(Collectors.toList());
+        List<Post> visibleForUser = allPosts.stream().filter(p -> !p.isHiddenForUser(user)).collect(Collectors.toList());
 
+        if(parameters.get("limit") != null )
+        {
+            int limit = Integer.parseInt("limit");
+            visibleForUser = visibleForUser.stream().limit(limit).collect(Collectors.toList());
+        }
         if (visibleForUser.isEmpty()) {
             response.setMessage(communityTitle + " has no posts yet");
         } else {
@@ -91,15 +96,19 @@ public class PostController {
 
     @GetMapping(path = "{username}/owned/all")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getOwnedPosts(HttpServletRequest request, @PathVariable("username") String username) {
+    public ResponseEntity<Object> getOwnedPosts(HttpServletRequest request, @PathVariable("username") String username, @RequestParam Map<String, String> parameters) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.findByUsername(username);
-
         List<Post> posts = user.getOwnedPosts().stream().filter(p -> !p.isDeleted()).collect(Collectors.toList());
+        if(parameters.get("limit") != null )
+        {
+            int limit = Integer.parseInt("limit");
+            posts = posts.stream().limit(limit).collect(Collectors.toList());
+        }
         if (!posts.isEmpty()) {
             response.setPayload(posts);
             response.setMessage("Owned posts by user obtained successfully");
@@ -112,7 +121,7 @@ public class PostController {
 
     @GetMapping(path = "{username}/feed")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getFeedPosts(HttpServletRequest request, @PathVariable("username") String username) {
+    public ResponseEntity<Object> getFeedPosts(HttpServletRequest request, @PathVariable("username") String username, @RequestParam Map<String, String> parameters) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -125,6 +134,11 @@ public class PostController {
         List<Post> allPosts = new ArrayList<>();
         joinedCommunities.forEach(community -> allPosts.addAll(community.getPosts()));
         List<Post> visibleForUser = allPosts.stream().filter(p -> !p.isHiddenForUser(user)).filter(p -> !p.isDeleted()).collect(Collectors.toList());
+        final String limit = parameters.get("limit");
+        if (limit != null) {
+            final int l = Integer.parseInt(limit);
+            visibleForUser = visibleForUser.stream().limit(l).collect(Collectors.toList());
+        }
         if (!visibleForUser.isEmpty()) {
             response.setPayload(visibleForUser);
             response.setMessage("Feed obtained successfully");
@@ -178,9 +192,9 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "{postId}/votes/{value}")
+    @GetMapping(path = "{postId}/votes")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getVotes(HttpServletRequest request, @PathVariable("postId") String postId, @PathVariable("value") boolean value) {
+    public ResponseEntity<Object> getVotes(HttpServletRequest request, @PathVariable("postId") String postId) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -192,17 +206,16 @@ public class PostController {
         response.setMessage("Votes obtained successfully");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
     @GetMapping(path = "{username}/voted")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getVotedPosts(HttpServletRequest request) {
+    public ResponseEntity<Object> getVotedPosts(HttpServletRequest request, @PathVariable("username") String username) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
-        User user = this.userService.getById(userId);
+        User user = this.userService.findByUsername(username);
         List<Post> posts = this.postVoteService.votedPosts(true, user);
 
         response.setPayload(posts);
@@ -274,14 +287,20 @@ public class PostController {
 
     @GetMapping(path = "{username}/hidden")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getHiddenPosts(HttpServletRequest request, @PathVariable("username") String username) {
+    public ResponseEntity<Object> getHiddenPosts(HttpServletRequest request, @PathVariable("username") String username, @RequestParam Map<String, String> parameters) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.findByUsername(username);
-        final List<Post> hiddenPosts = user.getHiddenPosts();
+
+
+        List<Post> hiddenPosts = user.getHiddenPosts();
+        if (parameters.get("limit") != null) {
+            final int limit = Integer.parseInt(parameters.get("limit"));
+            hiddenPosts = hiddenPosts.stream().limit(limit).collect(Collectors.toList());
+        }
         if (hiddenPosts.isEmpty()) {
             response.setMessage("User has no hidden posts yet");
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -301,11 +320,8 @@ public class PostController {
         response.setStatus(HttpStatus.OK);
         response.setError("none");
 
-        final String limit = parameters.get("limit");
 
-        final int limitNumber = Integer.parseInt(limit);
-
-        final List<Post> allPosts = this.postService.getAll();
+        List<Post> allPosts = this.postService.getAll();
         allPosts.sort((o1, o2) -> {
             if (o1.getCreationDate().isAfter(o2.getCreationDate())) {
                 return -1;
@@ -315,8 +331,12 @@ public class PostController {
             }
             return 0;
         });
-        final List<Post> limited = allPosts.stream().limit(limitNumber).collect(Collectors.toList());
-        response.setPayload(limited);
+        if (parameters.get("limit") != null) {
+            int limit = Integer.parseInt(parameters.get("limit"));
+            allPosts = allPosts.stream().limit(limit).collect(Collectors.toList());
+        }
+
+        response.setPayload(allPosts);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

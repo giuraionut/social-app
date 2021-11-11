@@ -191,9 +191,9 @@ export class PostService {
       );
   }
 
-  public getVotes(value: boolean, postId: string): Observable<number> {
+  public getVotes(postId: string): Observable<number> {
     return this.http
-      .get(`${this.url}/${postId}/votes/${value}`, {
+      .get(`${this.url}/${postId}/votes`, {
         withCredentials: true,
       })
       .pipe(
