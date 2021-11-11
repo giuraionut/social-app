@@ -5,6 +5,7 @@ Right now the project has the following features available:
 * Create/delete account
 * Create/join communities
 * Create posts in communities
+* Delete comments
 * Comment to posts/reply to comments
 * Show user all his comments/posts/communities and other account information
 * Vote (up vote or down vote) comments and posts.
