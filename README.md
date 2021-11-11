@@ -1,6 +1,11 @@
 # Social Application like [Reddit](https://www.reddit.com/).
 ## Social Application based on [Reddit](https://www.reddit.com/) made with Spring Boot, MariaDB and Angular
 
+
+# Gallery
+
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20015435.png)
+
 Right now the project has the following features available:
 * Create/delete account
 * Create/join communities
