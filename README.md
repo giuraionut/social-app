@@ -5,6 +5,11 @@
 # Gallery
 
 ![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20015435.png)
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20015746.png)
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20020520.png)
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20020608.png)
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20020909.png)
+![Image1](https://github.com/giuraionut/social-app/blob/main/presentation/Screenshot%202021-11-11%20020931.png)
 
 Right now the project has the following features available:
 * Create/delete account
