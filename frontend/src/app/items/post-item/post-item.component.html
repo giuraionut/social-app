@@ -8,7 +8,7 @@
     <mat-card-subtitle class="clickable" *ngIf = "post.op">{{ post.op.username }}</mat-card-subtitle>
   </mat-card-header>
 
-  <img *ngIf="!post.mediaHidden && post.postMedia && post.postMedia.type === 'image'" mat-card-image [src]="post.postMedia.url" alt="media"/>
+  <img class="image-media" *ngIf="!post.mediaHidden && post.postMedia && post.postMedia.type === 'image'" mat-card-image [src]="post.postMedia.url" alt="media"/>
 
   <video *ngIf="!post.mediaHidden && post.postMedia && post.postMedia.type === 'video' && !post.postMedia.external" 
     muted controls mat-card-image>

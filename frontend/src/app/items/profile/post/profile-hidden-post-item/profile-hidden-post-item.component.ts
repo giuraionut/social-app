@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Post } from '../../../../models/post.model';
 import { PostService } from '../../../../services/post.service';
+import { UserInfoTokenDecoder } from '../../../../services/userInfoTokenDecoder.service';
 
 @Component({
   selector: 'app-profile-hidden-post-item',
@@ -13,7 +14,8 @@ export class ProfileHiddenPostsItemComponent implements OnInit {
   constructor(
     private router: Router,
     public snackBar: MatSnackBar,
-    private postService: PostService
+    private postService: PostService,
+    private userInfoService: UserInfoTokenDecoder
   ) {}
 
   @Input() post: Post = {};
@@ -22,7 +24,7 @@ export class ProfileHiddenPostsItemComponent implements OnInit {
 
   public unHide() {
     if (this.post.id)
-      this.postService.unHide(this.post.id).subscribe((message) => {
+      this.postService.unHide(this.post.id, this.userInfoService.getUserInfoFromToken().username!).subscribe((message) => {
         this.snackBar.open(`${message}`, 'Close', {
           duration: 4000,
         });

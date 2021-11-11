@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "comment")
+@RequestMapping(path = "api/v1/comment")
 @AllArgsConstructor
 public class CommentController {
 
@@ -31,7 +31,7 @@ public class CommentController {
     private final UserService userService;
     private CommentVoteService commentVoteService;
 
-    @PostMapping(path = "post/{postId}")
+    @PostMapping(path = "post/{postId}/add_post")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> createComment(@RequestBody Comment comment, @PathVariable("postId") String postId, HttpServletRequest request) {
         Response response = new Response();
@@ -75,7 +75,7 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "reply/{commentId}")
+    @PostMapping(path = "parent_comment/{commentId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> replyToComment(@RequestBody Comment comment, @PathVariable("commentId") String commentId, HttpServletRequest request) {
         Response response = new Response();
@@ -130,15 +130,15 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "owned")
+    @GetMapping(path = "{username}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getOwnedComments(HttpServletRequest request) {
+    public ResponseEntity<Object> getOwnedComments(HttpServletRequest request, @PathVariable("username") String username) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
-        User user = this.userService.getById(userId);
+        User user = this.userService.findByUsername(username);
 
         List<Comment> comments = user.getOwnedComments();
         comments = comments.stream().filter(c-> !c.isDeleted()).collect(Collectors.toList());
@@ -170,9 +170,9 @@ public class CommentController {
     }
 
 
-    @GetMapping(path = "{commentId}/votes/{value}")
+    @GetMapping(path = "{commentId}/votes")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getVotes(HttpServletRequest request, @PathVariable("commentId") String commentId, @PathVariable("value") boolean value) {
+    public ResponseEntity<Object> getVotes(HttpServletRequest request, @PathVariable("commentId") String commentId) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -186,7 +186,6 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
-
 
     @PostMapping(path = "{commentId}/vote/{value}")
     @PreAuthorize("hasAuthority('ROLE_USER')")

@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping(path = "user")
+@RequestMapping(path = "api/v1/user")
 @AllArgsConstructor
 public class UserController {
 
@@ -41,7 +41,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "signout")
+    @PostMapping(path = "me/logout")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> logout(HttpServletResponse HttpResponse) {
 
@@ -71,7 +71,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "delete")
+    @DeleteMapping(path = "account")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> delete(HttpServletRequest request, @RequestBody String password) {
         Response response = new Response();
@@ -89,7 +89,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "password/change")
+    @PutMapping(path = "password")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> changePassword(HttpServletRequest request, @RequestBody Map<String, String> body) {
         Response response = new Response();
@@ -106,7 +106,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "email/change")
+    @PutMapping(path = "email")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> changeEmail(HttpServletRequest request, @RequestBody Map<String, String> body) {
         Response response = new Response();
@@ -123,9 +123,9 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "jwt/refresh")
+    @PostMapping(path = "me/jwt/refresh")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> refreshJWT(HttpServletRequest request, HttpServletResponse httpResponse) throws IOException {
+    public ResponseEntity<Object> refreshJWT(HttpServletRequest request, HttpServletResponse httpResponse) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
@@ -148,7 +148,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "info/token/refresh")
+    @PostMapping(path = "me/uit/refresh")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> refreshUserInfoToken(HttpServletRequest request, HttpServletResponse httpResponse) throws IOException {
         Response response = new Response();

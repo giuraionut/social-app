@@ -4,7 +4,8 @@
     <div class="post">
       <div class="post-content">
         <img
-          src="https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg"
+          *ngIf="post.postMedia"
+          [src]="post.postMedia.url"
           class="post-img"
         />
         <span class="post-text">

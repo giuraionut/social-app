@@ -13,18 +13,27 @@ export class RecentPostsItemComponent implements OnInit {
   ngOnInit(): void {
     this.postService.getRecentPosts(4).subscribe((posts: Array<Post>) => {
       this.posts = posts;
+      posts.forEach((post) => {
+        if (post && post.id) {
+          this.posts.forEach((post) => {
+            if (post && post.id) {
+              this.postService
+                .getCommentsCount(post.id)
+                .subscribe((noOfComments) => {
+                  console.log(post.id);
+                  this.posts.find((p) => p.id == post.id)!.comments =
+                    noOfComments;
+                });
+              this.postService
+                .getVotes(true, post.id)
+                .subscribe((noOfVotes) => {
+                  this.posts.find((p) => p.id == post.id)!.likes = noOfVotes;
+                });
+            }
+          });
+        }
+      });
     });
   }
-  ngOnChanges(): void {
-    this.posts.forEach((post) => {
-      if (post && post.id) {
-        this.postService.getCommentsCount(post.id).subscribe((noOfComments) => {
-          this.posts.find((p) => p.id == post.id)!.comments = noOfComments;
-        });
-        this.postService.getVotes(true, post.id).subscribe((noOfVotes) => {
-          this.posts.find((p) => p.id == post.id)!.likes = noOfVotes;
-        });
-      }
-    });
-  }
+  ngOnChanges(): void {}
 }

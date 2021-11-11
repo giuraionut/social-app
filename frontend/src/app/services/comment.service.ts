@@ -8,7 +8,7 @@ import { Comment } from '../models/comment.model';
 @Injectable({ providedIn: 'root' })
 export class CommentService {
   constructor(private http: HttpClient) {}
-  private url = 'http://localhost:8080/comment';
+  private url = 'http://localhost:8080/api/v1/comment';
 
   //-----------------------------------------------------------------------------------------------
   private owned: BehaviorSubject<Array<Comment>> = new BehaviorSubject(
@@ -21,7 +21,7 @@ export class CommentService {
 
   public create(comment: Comment, postId: string): Observable<Comment> {
     return this.http
-      .post(`${this.url}/post/${postId}`, comment, { withCredentials: true })
+      .post(`${this.url}/post/${postId}/add_post`, comment, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           let comments: Array<Comment> = this.owned.value;
@@ -50,7 +50,7 @@ export class CommentService {
 
   public reply(comment: Comment, parentId: string): Observable<Comment> {
     return this.http
-      .post(`${this.url}/reply/${parentId}`, comment, { withCredentials: true })
+      .post(`${this.url}/parent_comment/${parentId}`, comment, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           let comment: Comment = response.payload;
@@ -75,9 +75,9 @@ export class CommentService {
       );
   }
 
-  public getOwned(): Observable<Array<Comment>> {
+  public getOwned(username: string): Observable<Array<Comment>> {
     return this.http
-      .get(`${this.url}/owned`, {
+      .get(`${this.url}/${username}`, {
         withCredentials: true,
       })
       .pipe(
@@ -105,9 +105,9 @@ export class CommentService {
       );
   }
 
-  public getVotes(value: boolean, commentId: string): Observable<number> {
+  public getVotes(commentId: string): Observable<number> {
     return this.http
-      .get(`${this.url}/${commentId}/votes/${value}`, {
+      .get(`${this.url}/${commentId}/votes`, {
         withCredentials: true,
       })
       .pipe(

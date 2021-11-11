@@ -8,7 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth.service';
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private url = 'http://localhost:8080/user';
+  private url = 'http://localhost:8080/api/v1/user';
 
   constructor(
     private http: HttpClient,
@@ -27,7 +27,7 @@ export class UserService {
 
   public deleteAccount(password: string): Observable<void> {
     return this.http
-      .delete(`${this.url}/delete`, {
+      .delete(`${this.url}/account`, {
         withCredentials: true,
         body: password,
       })
@@ -40,7 +40,7 @@ export class UserService {
 
   public logout(): Observable<void> {
     return this.http
-      .post(`${this.url}/signout`, null, { withCredentials: true })
+      .post(`${this.url}/me/logout`, null, { withCredentials: true })
       .pipe(
         map(() => {
           this.cookieService.delete('loggedIn');
@@ -51,8 +51,8 @@ export class UserService {
 
   public changePassword(oldPass: string, newPass: string): Observable<void> {
     return this.http
-      .post(
-        `${this.url}/password/change`,
+      .put(
+        `${this.url}/password`,
         { oldPassword: oldPass, newPassword: newPass },
         { withCredentials: true }
       )
@@ -61,8 +61,8 @@ export class UserService {
 
   public changeEmail(email: string, pass: string): Observable<void> {
     return this.http
-      .post(
-        `${this.url}/email/change`,
+      .put(
+        `${this.url}/email`,
         { email: email, password: pass },
         { withCredentials: true }
       )
@@ -75,7 +75,7 @@ export class UserService {
 
   public refreshJWT(): Observable<void> {
     return this.http
-      .post(`${this.url}/jwt/refresh`, null, {
+      .post(`${this.url}/me/jwt/refresh`, null, {
         withCredentials: true,
       })
       .pipe(
@@ -87,7 +87,7 @@ export class UserService {
 
   public refreshUserInfoToken(): Observable<void> {
     return this.http
-      .post(`${this.url}/info/token/refresh`, null, {
+      .post(`${this.url}/me/uit/refresh`, null, {
         withCredentials: true,
       })
       .pipe(map(() => {}));

@@ -24,14 +24,14 @@ export class Interceptor implements HttpInterceptor {
           console.log('Debug:', response.message);
           if (response.error === 'wrong credentials') {
             this.snackBar.open(
-              'Autentificarea a esuat, verifica numele de utilizator si parola',
+              'Authentication failed, please check username and password.',
               'Close',
               { duration: 4000 }
             );
           }
           if (response.error === 'duplicate found') {
             this.snackBar.open(
-              'Numele de utilizator sau adresea de email exista deja',
+              'Username or email is already taken.',
               'Close',
               { duration: 4000 }
             );

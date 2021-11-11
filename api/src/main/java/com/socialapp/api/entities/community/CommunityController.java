@@ -14,10 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "community")
+@RequestMapping(path = "api/v1/community")
 @AllArgsConstructor
 public class CommunityController {
 
@@ -25,7 +26,7 @@ public class CommunityController {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-    @PostMapping()
+    @PostMapping(path = "create_community")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> create(@RequestBody Community community, HttpServletRequest request) {
         Response response = new Response();
@@ -44,7 +45,7 @@ public class CommunityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "owned/all")
+    @GetMapping(path = "{username}/communities")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> getOwnedCommunities(HttpServletRequest request) {
         Response response = new Response();
@@ -65,7 +66,7 @@ public class CommunityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "{title}")
+    @GetMapping(path = "{title}/about")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> getByTitle(@PathVariable("title") String title, HttpServletRequest request) {
         Response response = new Response();
@@ -84,66 +85,57 @@ public class CommunityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping()
+    @DeleteMapping(path = "{title}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> delete(@RequestBody Community community) {
+    public ResponseEntity<Object> delete(@PathVariable("title") String communityTitle) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
         response.setMessage("Community deleted successfully");
-        this.communityService.delete(community);
+        this.communityService.deleteByTitle(communityTitle);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping(path = "join")
+    @PutMapping(path = "{title}/{username}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> join(@RequestBody String communityId, HttpServletRequest request) {
+    public ResponseEntity<Object> join(@RequestBody Map<String,String> body, @PathVariable("title") String title, @PathVariable("username") String username, HttpServletRequest request) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
+
         response.setMessage("You joined the community successfully");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
-        User user = this.userService.getById(userId);
-        Community community = this.communityService.getById(communityId);
-        community.addMember(user);
+        User user = this.userService.findByUsername(username);
+        Community community = this.communityService.getByTitle(title);
+
+        final String action = body.get("action");
+        if(action.equals("join"))
+        {
+            community.addMember(user);
+        }
+        if(action.equals("leave"))
+        {
+            community.removeMember(user);
+        }
         Community joinedCommunity = this.communityService.add(community);
         response.setPayload(joinedCommunity);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping(path = "leave")
+    @GetMapping(path = "{title}/{username}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> leave(@RequestBody String communityId, HttpServletRequest request) {
+    public ResponseEntity<Object> checkJoined(HttpServletRequest request, @PathVariable("title") String title) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
-        response.setStatus(HttpStatus.OK);
-        response.setError("none");
-        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
-        User user = this.userService.getById(userId);
-        Community community = this.communityService.getById(communityId);
-        community.removeMember(user);
-        user.removeJoinedCommunity(community);
-        Community leftCommunity = this.communityService.add(community);
-        response.setMessage("You left the community successfully");
-        response.setPayload(leftCommunity);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "{communityId}/joined")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> checkJoined(HttpServletRequest request, @PathVariable("communityId") String communityId) {
-        Response response = new Response();
-        response.setTimestamp(LocalDateTime.now());
-        response.setStatus(HttpStatus.OK);
         response.setError("none");
         String userId = jwtUtils.decodeToken(request, "jwt", "userId");
         User user = this.userService.getById(userId);
 
         List<Community> communities = user.getJoinedCommunities();
         if (!communities.isEmpty()) {
-            if (communities.stream().anyMatch(community -> community.getId().equals(communityId))) {
+            if (communities.stream().anyMatch(community -> community.getTitle().equals(title))) {
                 response.setPayload(true);
                 response.setMessage("User is member of this community");
             }
@@ -154,16 +146,15 @@ public class CommunityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "joined/all")
+    @GetMapping(path = "{username}/joined")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getJoinedCommunities(HttpServletRequest request) {
+    public ResponseEntity<Object> getJoinedCommunities(HttpServletRequest request, @PathVariable("username") String username) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
-        String userId = jwtUtils.decodeToken(request, "jwt", "userId");
-        User user = this.userService.getById(userId);
-
+        String requesterId = jwtUtils.decodeToken(request, "jwt", "userId");
+        final User user = this.userService.findByUsername(username);
         List<Community> communities = user.getJoinedCommunities();
         if (!communities.isEmpty()) {
             response.setMessage("Joined communities by user obtained successfully");
@@ -174,16 +165,17 @@ public class CommunityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("multiple/{quantity}/top")
+    @GetMapping("top")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Object> getTopCommunities(@PathVariable("quantity") Integer quantity, HttpServletRequest request) {
+    public ResponseEntity<Object> getTopCommunities(@RequestParam Map<String, String> parameters, HttpServletRequest request) {
         Response response = new Response();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.OK);
         response.setError("none");
+        final int limit = Integer.parseInt(parameters.get("limit"));
         final List<Community> allCommunities = this.communityService.getAll();
         allCommunities.sort(Comparator.comparingInt(o -> o.getMembers().size()));
-        final List<Community> limited = allCommunities.stream().limit(quantity).collect(Collectors.toList());
+        final List<Community> limited = allCommunities.stream().limit(limit).collect(Collectors.toList());
         response.setPayload(limited);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

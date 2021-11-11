@@ -95,4 +95,8 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
+
+    public User findByUsername(String username) {
+        return this.userRepository.findByUsername(username).orElse(null);
+    }
 }

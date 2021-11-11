@@ -36,4 +36,14 @@ public class CommunityService {
     {
         return this.communityRepository.findAll();
     }
+
+    public void deleteById(String communityId)
+    {
+        this.communityRepository.deleteById(communityId);
+    }
+
+    public void deleteByTitle(String title)
+    {
+        this.communityRepository.deleteByTitle(title);
+    }
 }

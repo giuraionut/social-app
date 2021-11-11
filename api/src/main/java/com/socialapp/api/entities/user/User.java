@@ -2,6 +2,7 @@ package com.socialapp.api.entities.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Joiner;
 import com.socialapp.api.entities.comment.Comment;
 import com.socialapp.api.entities.community.Community;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +30,8 @@ public class User implements UserDetails {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
     private String username;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private Instant dateOfBirth;
     private Instant registrationDate;
@@ -173,7 +177,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     public List<Comment> getOwnedComments() {
-        return ownedComments;
+        return ownedComments.stream().filter(c -> !c.isDeleted()).collect(Collectors.toList());
     }
 
     @JsonIgnore
@@ -183,7 +187,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     public List<Post> getOwnedPosts() {
-        return ownedPosts;
+        return ownedPosts.stream().filter(p -> !p.isDeleted()).collect(Collectors.toList());
     }
 
     @JsonIgnore

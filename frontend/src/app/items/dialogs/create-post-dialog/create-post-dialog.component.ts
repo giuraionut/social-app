@@ -6,6 +6,8 @@ import { Community } from '../../../models/community.model';
 import { Router } from '@angular/router';
 import { CommunityService } from '../../../services/community.service';
 import { PostMedia } from '../../../models/post-media.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserInfoTokenDecoder } from '../../../services/userInfoTokenDecoder.service';
 @Component({
   selector: 'app-create-post-dialog',
   templateUrl: './create-post-dialog.component.html',
@@ -17,7 +19,9 @@ export class CreatePostDialogComponent implements OnInit {
     private postService: PostService,
     public dialogRef: MatDialogRef<CreatePostDialogComponent>,
     private router: Router,
-    private communityService: CommunityService
+    private communityService: CommunityService,
+    public snackBar: MatSnackBar,
+    private userInfoService: UserInfoTokenDecoder
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +33,7 @@ export class CreatePostDialogComponent implements OnInit {
       this.buttonDisabled = true;
     }
 
-    this.communityService.getJoined().subscribe((communities) => {
+    this.communityService.getJoined(this.userInfoService.getUserInfoFromToken().username!).subscribe((communities) => {
       this.joinedCommunities = communities;
     });
   }
@@ -66,7 +70,17 @@ export class CreatePostDialogComponent implements OnInit {
         .create(formData, this.selectedCommunity.title)
         .subscribe((post: Post) => {
           this.dialogRef.close();
-          this.router.navigate([`socialapp/post/${post.id}`]);
+          if (post)
+            this.router.navigate([`socialapp/post/${post.id}`]);
+          else {
+            this.snackBar.open(
+              `Something went wrong, please try again!`,
+              'Close',
+              {
+                duration: 4000,
+              }
+            );
+          }
         });
     }
   }

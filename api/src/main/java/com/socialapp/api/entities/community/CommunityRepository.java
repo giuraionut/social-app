@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, String> {
     Optional<Community> getByTitle(String title);
+
+    void deleteByTitle(String title);
 }

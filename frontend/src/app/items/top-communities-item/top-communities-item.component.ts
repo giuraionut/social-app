@@ -14,7 +14,7 @@ export class TopCommunitiesItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.communityService
-      .getTopCommunities(10)
+      .getTopCommunities(5)
       .subscribe((communities: Array<Community>) => {
         this.communities = communities;
       });

@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { APIResponse } from '../models/api-response.model';
 import { Community } from '../models/community.model';
-import { map, mergeMap, tap } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, empty, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CommunityService {
   constructor(private http: HttpClient) {}
-  private url = 'http://localhost:8080/community';
+  private url = 'http://localhost:8080/api/v1/community';
 
   //-----------------------------------------------------------------------------------------------
   private owned: BehaviorSubject<Array<Community>> = new BehaviorSubject(
@@ -26,7 +26,7 @@ export class CommunityService {
 
   public create(community: Community): Observable<void> {
     return this.http
-      .post(`${this.url}`, community, {
+      .post(`${this.url}/create_community`, community, {
         withCredentials: true,
       })
       .pipe(
@@ -41,9 +41,9 @@ export class CommunityService {
       );
   }
 
-  public getOwned(): Observable<Array<Community>> {
+  public getOwned(username: string): Observable<Array<Community>> {
     return this.http
-      .get(`${this.url}/owned/all`, {
+      .get(`${this.url}/${username}/communities`, {
         withCredentials: true,
       })
       .pipe(
@@ -60,9 +60,9 @@ export class CommunityService {
       );
   }
 
-  public getJoined(): Observable<Array<Community>> {
+  public getJoined(username: string): Observable<Array<Community>> {
     return this.http
-      .get(`${this.url}/joined/all`, {
+      .get(`${this.url}/${username}/joined`, {
         withCredentials: true,
       })
       .pipe(
@@ -78,34 +78,30 @@ export class CommunityService {
       );
   }
 
-  public isJoined(communityId: string): Observable<boolean> {
+  public isJoined(community: Community, username: string): Observable<boolean> {
     return this.http
-      .get(`${this.url}/${communityId}/joined`, {
+      .get(`${this.url}/${community.title}/${username}`, {
         withCredentials: true,
       })
       .pipe(
-        map((response: APIResponse) => {
-          return response.payload;
-        })
+        map((response: APIResponse) => {return response.payload;})
       );
   }
 
-  public deleteOwned(community: Community): Observable<void> {
+  public deleteByTitle(community: Community): Observable<void> {
     return this.http
-      .delete(`${this.url}`, {
+      .delete(`${this.url}/${community.title}`, {
         withCredentials: true,
         body: community,
       })
       .pipe(
-        map(() => {
-          this.owned.next(this.owned.value.filter((c) => c !== community));
-        })
+        map(() => {this.owned.next(this.owned.value.filter((c) => c !== community));})
       );
   }
 
   public getByTitle(title: string): Observable<Community> {
     return this.http
-      .get(`${this.url}/${title}`, { withCredentials: true })
+      .get(`${this.url}/${title}/about`, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           this.community.next(response.payload);
@@ -120,7 +116,7 @@ export class CommunityService {
 
   public getTopCommunities(quantity: number): Observable<Array<Community>> {
     return this.http
-      .get(`${this.url}/multiple/${quantity}/top`, {
+      .get(`${this.url}/top?limit=${quantity}`, {
         withCredentials: true,
       })
       .pipe(
@@ -136,9 +132,9 @@ export class CommunityService {
       );
   }
 
-  public join(communityId: string): Observable<void> {
+  public join(community: Community, username: string): Observable<void> {
     return this.http
-      .put(`${this.url}/join`, communityId, { withCredentials: true })
+      .put(`${this.url}/${community.title}/${username}`,{action: "join"} ,{ withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           let communities: Array<Community> = this.joined.value;
@@ -147,9 +143,9 @@ export class CommunityService {
         })
       );
   }
-  public leave(communityId: string): Observable<void> {
+  public leave(community: Community, username: string): Observable<void> {
     return this.http
-      .put(`${this.url}/leave`, communityId, { withCredentials: true })
+    .put(`${this.url}/${community.title}/${username}`,{action: "leave"} ,{ withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           let communities: Array<Community> = this.joined.value;

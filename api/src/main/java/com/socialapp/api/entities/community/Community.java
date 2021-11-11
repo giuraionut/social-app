@@ -37,6 +37,7 @@ public class Community {
     private List<Post> posts = new ArrayList<>();
 
     //getters-----------------------------------------------------------------------------------------------------------
+    @JsonIgnore
     public User getCreator() {
         return creator;
     }

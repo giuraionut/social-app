@@ -112,7 +112,7 @@ export class CommentItemComponent implements OnInit {
 
   public getVotes(): void {
     if (this.comment.id)
-      this.commentService.getVotes(true, this.comment.id).subscribe((v) => {
+      this.commentService.getVotes(this.comment.id).subscribe((v) => {
         this.comment.likes = v;
       });
   }

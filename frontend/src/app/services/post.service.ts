@@ -4,10 +4,11 @@ import { APIResponse } from '../models/api-response.model';
 import { Post } from '../models/post.model';
 import { map, mergeMap } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Community } from '../models/community.model';
 @Injectable({ providedIn: 'root' })
 export class PostService {
   constructor(private http: HttpClient) {}
-  private url = 'http://localhost:8080/post';
+  private url = 'http://localhost:8080/api/v1/post';
 
   //-----------------------------------------------------------------------------------------------
   private owned: BehaviorSubject<Array<Post>> = new BehaviorSubject(
@@ -36,7 +37,7 @@ export class PostService {
   public create(formData: FormData, communityTitle: string): Observable<Post> {
     console.log(formData.get("post")!.toString);
     return this.http
-      .post(`${this.url}/community/${communityTitle}`, formData, {
+      .post(`${this.url}/${communityTitle}/add_post`, formData, {
         withCredentials: true,
       })
       .pipe(
@@ -63,9 +64,9 @@ export class PostService {
       );
   }
 
-  public getByCommunity(communityId: string): Observable<Array<Post>> {
+  public getByCommunity(community: Community): Observable<Array<Post>> {
     return this.http
-      .get(`${this.url}/community/${communityId}`, { withCredentials: true })
+      .get(`${this.url}/${community.title}/all`, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           this.byCommunity.next(response.payload);
@@ -78,9 +79,9 @@ export class PostService {
       );
   }
 
-  public getOwned(deleted: boolean): Observable<Array<Post>> {
+  public getOwned(username: string): Observable<Array<Post>> {
     return this.http
-      .get(`${this.url}/owned/${deleted}`, {
+      .get(`${this.url}/${username}/owned/all`, {
         withCredentials: true,
       })
       .pipe(
@@ -115,9 +116,9 @@ export class PostService {
         })
       );
   }
-  public getFeed(): Observable<Array<Post>> {
+  public getFeed(username: string): Observable<Array<Post>> {
     return this.http
-      .get(`${this.url}/feed`, {
+      .get(`${this.url}/${username}/feed`, {
         withCredentials: true,
       })
       .pipe(
@@ -136,7 +137,7 @@ export class PostService {
 
   public getById(postId: string): Observable<Post> {
     return this.http
-      .get(`${this.url}/id/${postId}`, { withCredentials: true })
+      .get(`${this.url}/${postId}`, { withCredentials: true })
       .pipe(
         map((response: APIResponse) => {
           this.byId.next(response.payload);
@@ -149,9 +150,9 @@ export class PostService {
       );
   }
 
-  public hide(postId: string): Observable<string> {
+  public hide(postId: string, username: string): Observable<string> {
     return this.http
-      .post(`${this.url}/hide/${postId}`, null, {
+      .put(`${this.url}/${postId}/${username}/visibility`, false, {
         withCredentials: true,
       })
       .pipe(
@@ -164,9 +165,9 @@ export class PostService {
       );
   }
 
-  public unHide(postId: string): Observable<string> {
+  public unHide(postId: string, username: string): Observable<string> {
     return this.http
-      .post(`${this.url}/unHide/${postId}`, null, {
+      .put(`${this.url}/${postId}/${username}/visibility`, true, {
         withCredentials: true,
       })
       .pipe(
@@ -178,9 +179,9 @@ export class PostService {
         })
       );
   }
-  public vote(value: boolean, postId: string): Observable<string> {
+  public vote(postId: string, val: boolean): Observable<string> {
     return this.http
-      .post(`${this.url}/${postId}/vote/${value}`, null, {
+      .put(`${this.url}/${postId}/vote`, {value: val}, {
         withCredentials: true,
       })
       .pipe(
@@ -214,9 +215,9 @@ export class PostService {
       );
   }
 
-  public getVotedPosts(): Observable<Array<Post>> {
+  public getVotedPosts(username: string): Observable<Array<Post>> {
     return this.http
-      .get(`${this.url}/voted/all`, {
+      .get(`${this.url}/${username}/voted`, {
         withCredentials: true,
       })
       .pipe(
@@ -226,9 +227,9 @@ export class PostService {
       );
   }
 
-  public getRecentPosts(quantity: number): Observable<Array<Post>> {
+  public getRecentPosts(limit: number): Observable<Array<Post>> {
     return this.http
-      .get(`${this.url}/multiple/${quantity}/mostRecent`, {
+      .get(`${this.url}/most_recent?limit=${limit}`, {
         withCredentials: true,
       })
       .pipe(

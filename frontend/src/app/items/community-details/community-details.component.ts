@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Community } from '../../models/community.model';
 import { Post } from '../../models/post.model';
 import { CommunityService } from '../../services/community.service';
+import { UserInfoTokenDecoder } from '../../services/userInfoTokenDecoder.service';
 @Component({
   selector: 'app-community-details',
   templateUrl: './community-details.component.html',
@@ -11,51 +12,62 @@ import { CommunityService } from '../../services/community.service';
 export class CommunityDetailsComponent implements OnInit {
   constructor(
     private communityService: CommunityService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private userInfoService: UserInfoTokenDecoder
   ) {}
   @Input() community: Community = {};
 
   joined: boolean = false;
   label: string = 'Join';
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   ngOnChanges(): void {
-    if(this.community.id)
-    this.isJoined(this.community.id);
+    if (this.community.id) this.isJoined();
   }
-  isJoined(communityId: string) {
-    this.communityService.isJoined(communityId).subscribe((j) => {
-      this.joined = j;
-      if(j)
-      {
-        this.label = "Leave";
-      }
-      else
-      {
-        this.label = "Join";
-      }
-    });
+  isJoined() {
+    this.communityService
+      .isJoined(
+        this.community,
+        this.userInfoService.getUserInfoFromToken().username!
+      )
+      .subscribe((j) => {
+        this.joined = j;
+        if (j) {
+          this.label = 'Leave';
+        } else {
+          this.label = 'Join';
+        }
+      });
   }
-  joinCommunity(communityId: string) {
-    this.communityService.join(communityId).subscribe(() => {
-      this.label = 'Leave';
-      this.joined = true;
-    });
+  joinCommunity() {
+    this.communityService
+      .join(
+        this.community,
+        this.userInfoService.getUserInfoFromToken().username!
+      )
+      .subscribe(() => {
+        this.label = 'Leave';
+        this.joined = true;
+      });
   }
-  leaveCommunity(communityId: string) {
-    this.communityService.leave(communityId).subscribe(() => {
-      this.label = 'Join';
-      this.joined = false;
-    });
+  leaveCommunity() {
+    this.communityService
+      .leave(
+        this.community,
+        this.userInfoService.getUserInfoFromToken().username!
+      )
+      .subscribe(() => {
+        this.label = 'Join';
+        this.joined = false;
+      });
   }
 
   public posts: Array<Post> = [];
 
-  action(communityId: string) {
+  action() {
     if (this.joined) {
-      this.leaveCommunity(communityId);
+      this.leaveCommunity();
     } else {
-      this.joinCommunity(communityId);
+      this.joinCommunity();
     }
   }
 }

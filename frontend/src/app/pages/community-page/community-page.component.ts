@@ -28,7 +28,7 @@ export class CommunityPageComponent implements OnInit {
       .pipe(
         mergeMap((community) => {
           this.community = community;
-          return this.postService.getByCommunity(community.title!);
+          return this.postService.getByCommunity(community);
         }))
       .subscribe((posts) => (this.posts = posts));
   }

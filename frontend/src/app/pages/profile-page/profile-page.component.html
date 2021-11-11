@@ -23,20 +23,24 @@
         </mat-card>
 
         <div *ngIf="page === 'posts'">
+          <app-not-found-item *ngIf="!ownedPosts" [entry]="'post'"></app-not-found-item> 
           <app-profile-post-item *ngFor="let post of ownedPosts" [post]="post"></app-profile-post-item>
         </div>
         <div *ngIf="page === 'comments'">
+          <app-not-found-item *ngIf="!ownedComments" [entry]="'comment'"></app-not-found-item> 
           <app-profile-comment-item *ngFor="let comment of ownedComments" [comment]="comment"></app-profile-comment-item>
         </div>
         <div *ngIf="page === 'hidden-posts'">
+          <app-not-found-item *ngIf="!hiddenPosts" [entry]="'hiden post'"></app-not-found-item> 
           <app-profile-hidden-post-item *ngFor="let post of hiddenPosts" [post]="post"></app-profile-hidden-post-item>
         </div>
         <div *ngIf="page === 'up-voted-posts'">
+          <app-not-found-item *ngIf="votedPosts && votedPosts.length==0" [entry]="'voted post'"></app-not-found-item> 
           <app-profile-post-item *ngFor="let post of votedPosts" [post]="post"></app-profile-post-item>
         </div>
 
         <div *ngIf="page ==='communities'">
-          <app-not-found-item *ngIf="ownedCommunities.length === 0" [entry]="'community'"></app-not-found-item> 
+          <app-not-found-item *ngIf="!ownedCommunities" [entry]="'community'"></app-not-found-item> 
           <app-profile-community-item *ngFor="let community of ownedCommunities" [community]="community"></app-profile-community-item>
         </div>
       </div>

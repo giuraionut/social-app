@@ -35,16 +35,20 @@ export class NavbarItemComponent implements OnInit {
   joinedCommunities: Community[] = [];
 
   ngOnInit(): void {
+   
     this.authenticatedUser = this.userInforTokenDecoder.getUserInfoFromToken();
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map((value) => (value.length >= 1 ? this._filter(value) : []))
     );
-
-    this.communityService.getJoined().subscribe((communities) => {
+    this.communityService.getJoined(this.authenticatedUser.username!).subscribe((communities) => {
       this.joinedCommunities = communities;
     });
   }
+
+ngOnChanges(): void {
+
+}
 
   goToCommunity(title: string) {
     this.router.navigate([`socialapp/community/${title}`]);

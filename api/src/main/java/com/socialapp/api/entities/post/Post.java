@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "posts")
@@ -86,7 +87,7 @@ public class Post {
 
     @JsonIgnore
     public List<Comment> getComments() {
-        return comments;
+        return comments.stream().filter(c -> !c.isDeleted()).collect(Collectors.toList());
     }
 
     //is----------------------------------------------------------------------------------------------------------------

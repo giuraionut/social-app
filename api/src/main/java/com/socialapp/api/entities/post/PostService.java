@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +24,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Post create(Post post, MultipartFile media) {
+    public Post create(Post post, MultipartFile media) throws IOException {
 
         final Post savedPost = postRepository.save(post);
         if (!media.isEmpty()) {
@@ -34,31 +33,28 @@ public class PostService {
             if (mediaDirectory.mkdirs()) {
                 return savedPost;
             }
-            try {
-                byte[] mediaBytes = media.getBytes();
-                String postId = savedPost.getId();
-                final String mimeType = media.getContentType();
-                if (mimeType != null) {
-                    final String[] mimeTypeArray = mimeType.split("/");
-                    final String extension = mimeTypeArray[1];
-                    final String fileName = postId + "_media." + extension;
-                    Path path = Paths.get(mediaDirectory.getPath() + "\\" + fileName);
-                    Files.write(path, mediaBytes);
-                    postMedia.setName(media.getOriginalFilename());
-                    postMedia.setType(mimeTypeArray[0]);
-                    postMedia.setUrl(fileName);
-                    postMedia.setExternal(false);
-                    post.setPostMedia(postMedia);
-                } else {
-                    throw new IllegalArgumentException();
-                }
-            } catch (IOException ex) {
-                System.out.println("Exception: " + ex);
+            byte[] mediaBytes = media.getBytes();
+            String postId = savedPost.getId();
+            final String mimeType = media.getContentType();
+            if (mimeType != null) {
+                final String[] mimeTypeArray = mimeType.split("/");
+                final String extension = mimeTypeArray[1];
+                final String fileName = postId + "_media." + extension;
+                Path path = Paths.get(mediaDirectory.getPath() + "\\" + fileName);
+                Files.write(path, mediaBytes);
+                postMedia.setName(media.getOriginalFilename());
+                postMedia.setType(mimeTypeArray[0]);
+                postMedia.setUrl(fileName);
+                postMedia.setExternal(false);
+                post.setPostMedia(postMedia);
+            } else {
+                throw new IllegalArgumentException();
             }
+
         } else {
             PostMedia postMedia = post.getPostMedia();
-            final String urlString = postMedia.getUrl();
-            try {
+            if (postMedia != null) {
+                final String urlString = postMedia.getUrl();
                 URL url = new URL(urlString);
                 File file = new File(url.getFile());
                 final String name = file.getName();
@@ -68,11 +64,6 @@ public class PostService {
                 postMedia.setType(mimeTypeArray[0]);
                 postMedia.setUrl(urlString);
                 postMedia.setExternal(true);
-            } catch (MalformedURLException ex) {
-                System.out.println("Exception: " + ex);
-
-            } catch (IOException exception) {
-                exception.printStackTrace();
             }
         }
         return update(post);
