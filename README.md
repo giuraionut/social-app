@@ -75,7 +75,7 @@ api/v1/post/{postId}/{username}/visibility
 ### Get
 ```
 api/v1/post/{communityTitle}/all
-api/v1/post/{username}/all
+api/v1/post/{username}/owned/all
 api/v1/post/{username}/feed
 api/v1/post/{postId}
 api/v1/post/{postId}/votes/{value}
