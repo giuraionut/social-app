@@ -1,6 +1,13 @@
 # Social Application like [Reddit](https://www.reddit.com/).
-## Social Application based on [Reddit](https://www.reddit.com/) made with Spring Boot, MariaDB and Angular
 
+<p align = "center">
+<img src = "https://img.shields.io/badge/JAVA-blue">
+<img src = "https://img.shields.io/badge/SPRING BOOT-green">
+<img src = "https://img.shields.io/badge/ANGULAR-red">
+<img src = "https://img.shields.io/badge/MARIA DB-darkblue">
+</p>
+
+### Social Application based on [Reddit](https://www.reddit.com/) made with Spring Boot, MariaDB and Angular
 
 # Gallery
 
